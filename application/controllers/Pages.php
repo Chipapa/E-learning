@@ -1,8 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-session_start();
+//defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pages extends CI_Controller {
 
@@ -10,12 +8,13 @@ class Pages extends CI_Controller {
         parent::__construct();
         $this->load->model('loginmodel');
         $this->load->helper('url_helper');
+        $this->load->library('session');
+
+        $this->load->helper('form');
+        $this->load->library('form_validation');
     }
 
     public function index() {
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-
         $this->load->view('pages/loginpage');
     }
 
@@ -24,18 +23,12 @@ class Pages extends CI_Controller {
             // Whoops, we don't have a page for that!
             show_404();
         }
-
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-
         //$data['title'] = ucfirst($page); // Capitalize the first letter
 
         $this->load->view('pages/' . $page);
     }
 
     public function user_login_process() {
-        $this->load->helper('form');
-        $this->load->library('form_validation');
 
         $this->form_validation->set_rules('username', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
@@ -61,16 +54,31 @@ class Pages extends CI_Controller {
                     );
 
                     // Add user data in session
+                    if (!isset($_SESSION)) {
+                        session_start();
+                    }
                     $this->session->set_userdata('logged_in', $session_data);
                     $this->load->view('pages/success');
-                } else {
-                    $data = array(
-                        'error_message' => 'Invalid Username or Password.'
-                    );
-                    $this->load->view('pages/loginpage', $data);
                 }
+            } else {
+                $data = array(
+                    'error_message' => 'Invalid Username or Password.'
+                );
+                $this->load->view('pages/loginpage', $data);
             }
         }
+    }
+
+    public function logout() {
+        $sess_array = array(
+            'username' => ''
+        );
+
+        $this->session->unset_userdata('logged_in', $sess_array);
+
+
+        $data['message_display'] = 'Logged out successfully';
+        $this->load->view('pages/loginpage', $data);
     }
 
 }
