@@ -51,7 +51,7 @@ class Pages extends CI_Controller {
                 $this->load->view('pages/success');
             } else {
                 $data = array(
-                    'error_message' => 'Invalid Username or Password'
+                    'error_message' => 'Invalid Username or Password.'
                 );
                 $this->load->view('pages/loginpage', $data);
             }
