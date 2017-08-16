@@ -18,12 +18,6 @@
 
         <?php include "DesignScript.php"; ?>
 
-<!--        <style>
-            #mainDiv{
-                margin-top: 25px;
-            }
-        </style>-->
-
     </head>
     <body>
 
