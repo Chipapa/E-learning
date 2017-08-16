@@ -73,10 +73,7 @@ class Pages extends CI_Controller {
         $sess_array = array(
             'username' => ''
         );
-
         $this->session->unset_userdata('logged_in', $sess_array);
-
-
         $data['message_display'] = 'Logged out successfully';
         $this->load->view('pages/loginpage', $data);
     }
