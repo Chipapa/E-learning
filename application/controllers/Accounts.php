@@ -22,9 +22,10 @@ class Accounts extends CI_Controller {
         if ($this->form_validation->run() === FALSE) {
             $this->load->view('pages/signuppage');
         } else {
-
+            
+            $data['message_display'] = 'Signup successful!';
             $this->loginmodel->registerUser();
-            $this->load->view('pages/success');
+            $this->load->view('pages/loginpage', $data);
         }
     }
 
