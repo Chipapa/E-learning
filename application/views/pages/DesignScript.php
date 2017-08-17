@@ -8,7 +8,35 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
 <style>
+    #mainDivLogin{
+        margin-top: 10px;
+        width: 450px;
+    }
+    
+    #mainDivSignup{
+        margin-top: 100px;
+        width: 600px;
+    }
+    
     #mainDiv{
-        margin-top: 25px;
+        margin-top: 100px;
+    }
+
+    html {
+        position: relative;
+        min-height: 100%;
+    }
+    body {
+        /* Margin bottom by footer height */
+        margin-bottom: 60px;
+    }
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        /* Set the fixed height of the footer here */
+        height: 60px;
+        line-height: 60px; /* Vertically center the text there */
+        background-color: #f5f5f5;
     }
 </style>

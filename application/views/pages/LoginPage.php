@@ -1,27 +1,18 @@
 <?php
 //defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-    <?php
-    if (isset($this->session->userdata['logged_in'])) {
-
-        header("location: index.php/success");
-    }
-    ?>
-
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Login</title>
 
         <?php include "DesignScript.php"; ?>
+       
+        <?php
+        if (isset($this->session->userdata['logged_in'])) {
 
-    </head>
-    <body>
-
-        <div class="container" id="mainDiv">
+            header("location: index.php/success");
+        }
+        ?>
+        
+        <div class="container" id="mainDivLogin">
             <?php
             echo "<div>";
             if (isset($error_message)) {
@@ -76,7 +67,6 @@
                 </div>
             </div>
         </form>
-
     </div>
-</body>
-</html>
+<!--</body>
+</html>-->

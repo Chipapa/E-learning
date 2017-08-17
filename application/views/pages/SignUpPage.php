@@ -18,7 +18,7 @@
     </head>
 
     <body>
-        <div class="container" id="mainDiv">
+        <div class="container" id="mainDivSignup">
             <?php
             if (validation_errors()) {
                 echo "<div class='alert alert-danger' role='alert'>";
