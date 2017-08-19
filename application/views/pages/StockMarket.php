@@ -1,5 +1,4 @@
-
 <div class="container" id="mainDiv">
-    <p>Failed</p>
+    <p>Stock Market Page</p>
 </div>  
 
