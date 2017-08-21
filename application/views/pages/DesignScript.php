@@ -38,4 +38,8 @@
         line-height: 60px; /* Vertically center the text there */
         background-color: #f5f5f5;
     }
+    
+    .card-body{
+        padding: 10px;
+    }
 </style>

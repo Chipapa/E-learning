@@ -22,7 +22,7 @@
                         <a class="nav-link"  href="<?php echo site_url('pages/view/success');   ?>">Home </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
-                        <a class="nav-link"  href="<?php echo site_url('pages/view/stockmarket');   ?>">Stock Market <span class="sr-only">(current)</span></a>
+                        <a class="nav-link"  href="<?php echo site_url('stockmarket/index');   ?>">Stock Market <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled"  href="#">Disabled</a>
