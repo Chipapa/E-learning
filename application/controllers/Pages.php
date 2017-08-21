@@ -18,7 +18,7 @@ class Pages extends CI_Controller {
         $this->view('loginpage');
     }
 
-    public function view($page = 'logi  npage', $passData = false) {
+    public function view($page = '', $passData = false) {
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
             // Whoops, we don't have a page for that!
             show_404();
