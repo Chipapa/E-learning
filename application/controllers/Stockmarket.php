@@ -45,6 +45,10 @@ Class Stockmarket extends CI_Controller {
 
         $this->view('view_category_page', $data);
     }
+    
+    public function viewQuestion(){
+        $this->view('questionpage');
+    }
 // FIX ME, TIME SINCE SHOULD BE HERE, NOT IN THE VIEW
 //    public function time_since($since) {
 //        $chunks = array(

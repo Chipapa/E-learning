@@ -18,7 +18,7 @@
     }
 
     #mainDiv{
-        margin-top: 100px;
+        margin-top: 125px;
     }
 
     html {
