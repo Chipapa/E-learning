@@ -21,7 +21,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><?php echo $question_item['question']; ?></h4>
-                <h6 class="card-subtitle mb-2 text-muted">Posted <?php echo time_since(time() - strtotime($question_item['date_posted'])); ?> ago</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Asked <?php echo time_since(time() - strtotime($question_item['date_posted'])); ?> ago</h6>
                 <p class="card-text"><?php echo $question_item['question']; ?></p>
                 <p class="card-text text-muted">This question was answered by <?php echo $question_item['num_of_answers'];?> student(s)</p>
                 <a href="#" class="card-link">Answer Question</a>

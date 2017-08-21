@@ -26,9 +26,10 @@ Class Stockmarket extends CI_Controller {
     }
 
     public function index() {
+        $this->QuestionsModel->set_num_answered();
+        $this->QuestionsModel->set_num_unanswered();
         $data['categories'] = $this->QuestionsModel->get_categories();
-        //$data['title'] = 'News archive';
-
+        
         $this->view('stockmarketpage', $data);
     }
 
