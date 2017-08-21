@@ -10,7 +10,7 @@
                             <?php echo $category_item['category']; ?>
                         </a>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4 text-right">
                         Answered: <?php echo $category_item['answered']; ?> |
                         Unanswered: <?php echo $category_item['unanswered']; ?>
                     </div>

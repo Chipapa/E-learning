@@ -4,12 +4,9 @@
         <div class="col-sm-8">
             Page
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 text-right">
             <p><a class="btn btn-large btn-info" href="<?php echo site_url('stockmarket/viewquestion/'); ?>">Ask a Question</a></p>
         </div>
-
-<!--        <p><?php //echo $category_item['question'];          ?> Page</p>
-<p><button type="button" class="btn btn-primary">Ask a Question</button></p>-->
     </div>
 
     <?php foreach ($category_item as $question_item): ?>           
