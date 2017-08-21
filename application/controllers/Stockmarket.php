@@ -7,7 +7,7 @@ Class Stockmarket extends CI_Controller {
         $this->load->model('QuestionsModel');
         $this->load->helper('url_helper');
     }
-    
+
     public function view($page = false, $passData = false) {
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
             // Whoops, we don't have a page for that!
@@ -18,20 +18,20 @@ Class Stockmarket extends CI_Controller {
             $this->load->view('pages/headerLogin');
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
-        }else{
+        } else {
             $this->load->view('pages/headerMain');
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
     }
-    
+
     public function index() {
         $data['categories'] = $this->QuestionsModel->get_categories();
         //$data['title'] = 'News archive';
-        
+
         $this->view('stockmarketpage', $data);
-    }   
-    
+    }
+
     public function viewCategory($slug = NULL) {
         $data['category_item'] = $this->QuestionsModel->get_categories($slug);
 
@@ -44,18 +44,28 @@ Class Stockmarket extends CI_Controller {
 
         $this->view('view_category_page', $data);
     }
-    
-//    public function getQuestion($slug = NULL){
-//        $data['questions'] = $this->QuestionsModel->get_questions();
+// FIX ME, TIME SINCE SHOULD BE HERE, NOT IN THE VIEW
+//    public function time_since($since) {
+//        $chunks = array(
+//            array(60 * 60 * 24 * 365, 'year'),
+//            array(60 * 60 * 24 * 30, 'month'),
+//            array(60 * 60 * 24 * 7, 'week'),
+//            array(60 * 60 * 24, 'day'),
+//            array(60 * 60, 'hour'),
+//            array(60, 'minute'),
+//            array(1, 'second')
+//        );
 //
-////        if (empty($data['category_item'])) {
-////            show_404();
-////            //$this->load->view('pages/about');
-////        }
+//        for ($i = 0, $j = count($chunks); $i < $j; $i++) {
+//            $seconds = $chunks[$i][0];
+//            $name = $chunks[$i][1];
+//            if (($count = floor($since / $seconds)) != 0) {
+//                break;
+//            }
+//        }
 //
-//        //$data['title'] = $data['news_item']['title'];
-//
-//        $this->view('view_category_page', $data);
+//        $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
+//        return $print;
 //    }
 
 }
