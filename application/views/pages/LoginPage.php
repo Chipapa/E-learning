@@ -3,7 +3,7 @@
 ?>
 
 
-        <?php include "DesignScript.php"; ?>
+        <?php //include "DesignScript.php"; ?>
        
         <?php
         if (isset($this->session->userdata['logged_in'])) {
@@ -22,12 +22,16 @@
             }
 
             if (isset($message_display)) {
-                echo "<div class='alert alert-success' role='alert'>";
+                echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+                echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+                echo "<span aria-hidden='true'>&times;</span>";
+                echo "</button>";
                 echo $message_display;
                 echo "</div>";
             }
             if (validation_errors()) {
                 echo "<div class='alert alert-danger' role='alert'>";
+                
                 echo validation_errors();
                 echo "</div>";
             }

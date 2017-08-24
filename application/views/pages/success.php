@@ -23,7 +23,3 @@ if (isset($this->session->userdata['logged_in'])) {
     ?>
     <b><a href="<?php echo site_url('pages/logout'); ?>">Logout</a></b>
 </div>
-
-<!--<div class="container">
-    TANG INA MO GAGO
-</div>-->
