@@ -17,6 +17,18 @@ class Pages extends CI_Controller {
     public function index() {
         $this->view('loginpage');
     }
+    
+    //STILL BUGGY, FIX ME
+    public function set_titlepage($page){
+        if($page == 'loginpage'){
+            $data['title'] = ucfirst('Login');
+        }else if($page == 'signuppage'){
+            $data['title'] = ucfirst('Sign up');
+        }else{
+            $data['title'] = ucfirst('Unknown Page');
+        }     
+        return $data;
+    }
 
     public function view($page = 'loginpage', $passData = false) {
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
@@ -24,12 +36,14 @@ class Pages extends CI_Controller {
             show_404();
         }
         //$data['title'] = ucfirst($page); // Capitalize the first letter
+        $dataTitle = $this->set_titlepage($page);
+        
         if ($page == 'loginpage') {
-            $this->load->view('pages/headerLogin');
+            $this->load->view('pages/headerLogin', $dataTitle);
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }else{
-            $this->load->view('pages/headerMain');
+            $this->load->view('pages/headerMain', $dataTitle);
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
