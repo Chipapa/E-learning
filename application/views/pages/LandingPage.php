@@ -1,14 +1,6 @@
 <div class="container" id="mainDiv">
 
-    <div class="row">
-        <div class="col-sm-8">
-            <h1>Landing Page</h1>
-        </div>
-        <div class="col-sm-4 text-right">
-            <p><a class="btn btn-large btn-info" href="<?php echo site_url('stockmarket/viewquestion/'); ?>">Ask a Question</a></p>
-        </div>
-    </div>
-    
+    <h1>Landing Page</h1>
 
     <div class="row">
         <div class="col">
@@ -45,37 +37,19 @@
         </div>
 
         <!--        style="border:1px solid; -->
-        <div class="col-md-auto rounded card bg-faded" style="padding:20px" >
-            <h4 class="text-center" >Leaderboards</h4>
-            <ol>
+        <div class="col-md-auto rounded bg-faded" style="padding:20px" >
+            <h4>Leaderboards</h4>
+            <ul>
                 <li>
-                    Jesther Casillano
+                    1
                 </li>
                 <li>
-                    John Matthew Quebec
+                    2
                 </li>
                 <li>
-                    John Joseph Vasquez
+                    3
                 </li>
-                <li>
-                    Jesther Casillano
-                </li>
-                <li>
-                    John Matthew Quebec
-                </li>
-                <li>
-                    John Joseph Vasquez
-                </li>
-                <li>
-                    Jesther Casillano
-                </li>
-                <li>
-                    John Matthew Quebec
-                </li>
-                <li>
-                    John Joseph Vasquez
-                </li>
-            </ol>
+            </ul>
         </div>
     </div>
 </div>

@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php echo site_url('pages/view/questionspage');     ?>">Questions </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');     ?>">Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
                         <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market <span class="sr-only">(current)</span></a>
@@ -32,7 +32,7 @@
                     </li>
                 </ul>
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('pages/view/success'); ?>">
+                    <a href="<?php echo site_url('stockmarket/index'); ?>">
                         <img src="<?php echo base_url(); ?>/assets/png/person-3x.png">
                     </a>
                 </div>
