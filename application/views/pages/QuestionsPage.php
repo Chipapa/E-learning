@@ -2,7 +2,7 @@
 
     <div class="row">
         <div class="col-sm-8">
-            <h1>Landing Page</h1>
+            <h1>Questions Page</h1>
         </div>
         <div class="col-sm-4 text-right">
             <p><a class="btn btn-large btn-info" href="<?php echo site_url('stockmarket/viewquestion/'); ?>">Ask a Question</a></p>
@@ -45,7 +45,7 @@
         </div>
 
         <!--        style="border:1px solid; -->
-        <div class="col-md-auto rounded card bg-faded" style="padding:20px" >
+        <div class="col-md-auto rounded bg-faded" style="padding:20px" >
             <h4 class="text-center" >Leaderboards</h4>
             <ol>
                 <li>
@@ -79,4 +79,6 @@
         </div>
     </div>
 </div>
+
+
 
