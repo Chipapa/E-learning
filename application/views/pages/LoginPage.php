@@ -1,33 +1,18 @@
 <?php
 //defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-    <?php
-    if (isset($this->session->userdata['logged_in'])) {
 
-        header("location: index.php/success");
-    }
-    ?>
+        <?php //include "DesignScript.php"; ?>
+       
+        <?php
+        if (isset($this->session->userdata['logged_in'])) {
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Login</title>
-
-        <?php include "DesignScript.php"; ?>
-
-<!--        <style>
-            #mainDiv{
-                margin-top: 25px;
-            }
-        </style>-->
-
-    </head>
-    <body>
-
-        <div class="container" id="mainDiv">
+            header("location: index.php/success");
+        }
+        ?>
+        
+        <div class="container" id="mainDivLogin">
             <?php
             echo "<div>";
             if (isset($error_message)) {
@@ -37,12 +22,16 @@
             }
 
             if (isset($message_display)) {
-                echo "<div class='alert alert-success' role='alert'>";
+                echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+                echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+                echo "<span aria-hidden='true'>&times;</span>";
+                echo "</button>";
                 echo $message_display;
                 echo "</div>";
             }
             if (validation_errors()) {
                 echo "<div class='alert alert-danger' role='alert'>";
+                
                 echo validation_errors();
                 echo "</div>";
             }
@@ -82,7 +71,6 @@
                 </div>
             </div>
         </form>
-
     </div>
-</body>
-</html>
+<!--</body>
+</html>-->
