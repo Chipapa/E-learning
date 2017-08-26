@@ -6,7 +6,7 @@
             <h1>Landing Page</h1>
         </div>
         <div class="col-sm-4 text-right">
-            <p><a class="btn btn-large btn-info" href="<?php echo site_url('stockmarket/viewquestion/'); ?>">Ask a Question</a></p>
+            <p><a class="btn btn-large btn-info" href="<?php echo site_url('questions/index'); ?>">Ask a Question</a></p>
         </div>
     </div>
 
