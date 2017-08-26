@@ -10,7 +10,7 @@
     </head>
     <body>
         <nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
-            <a class="navbar-brand" href="<?php echo site_url('pages/view/landingpage'); ?>">CQV E-Learning</a>
+            <a class="navbar-brand" href="<?php echo site_url('questions/index'); ?>">CQV E-Learning</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon border border-primary"></span>
             </button>
@@ -22,7 +22,7 @@
                         <a class="nav-link"  href="<?php //echo site_url('pages/view/success');     ?>">Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
-                        <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market <span class="sr-only">(current)</span></a>
+                        <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market    <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"  href="<?php //echo site_url('pages/view/success');     ?>">Leaderboards </a>
@@ -38,7 +38,7 @@
                 </div>
                 
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('stockmarket/index'); ?>">
+                    <a href="<?php echo site_url('profile/index'); ?>">
                         <img src="<?php echo base_url(); ?>/assets/png/badge-3x.png">
                     </a>
                 </div>

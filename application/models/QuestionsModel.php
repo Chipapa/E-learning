@@ -77,4 +77,25 @@ class QuestionsModel extends CI_Model {
         }
         
     }
+    
+
+    public function get_questions($slug = FALSE){
+        if ($slug === FALSE) {
+
+            $this->db->select('*');
+            $this->db->from('questions');
+            $this->db->order_by("date_posted","desc");
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        $condition = "id ='" . $slug . "'";
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->where($condition);
+        //$this->db->limit(1);
+        $query = $this->db->get();
+        
+        return $query->result_array();
+    }
+    
 }
