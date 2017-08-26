@@ -10,13 +10,15 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">Type of Question</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>Multiple Choice</option>
-                <option>Coding</option>
-                <option>OOP Identification</option>
+            <select class="form-control" onmousedown="this.value='';" onchange="selectDiv(this.value);">
+                <option value="Multiple Choice">Multiple Choice</option>
+                <option value="Coding">Coding</option>
+                <option value="Identification">OOP Identification</option>
             </select>
         </div>
-        <fieldset class="form-group">
+        
+        <div class="form-group" id="divMultipleChoice">            
+            <fieldset class="form-group">
             <!--            <div class="row">-->
             <legend class="col-form-legend">Select the correct answer to the question.</legend>
             <div class="col-sm-10">
@@ -41,6 +43,23 @@
             </div>
             <!--            </div>-->
         </fieldset>
+        </div>
+        
+        <div class="form-group" id="divCoding">
+            <label>Type the code below.</label>
+            <textarea class="form-control"></textarea>
+        </div>
+        
+        <div class="form-group" id="divIdentification">
+            <label>Select the answer.</label>
+            <select class="form-control">
+                <option>Adapter</option>
+                <option>Composite</option>
+                <option>Decorator</option>
+            </select>
+        </div>
+        
+        
         <div class="form-group row">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">Submit Question</button>
