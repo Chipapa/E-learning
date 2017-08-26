@@ -41,6 +41,27 @@ class QuestionsModel extends CI_Model {
         $query = $this->db->get();
         return $query->num_rows();
     }
+    public function ask_question()
+    {
+      
+ 
+    //    $slug = url_title($this->input->post('title'), 'dash', TRUE);
+
+        $data = array(
+             
+            'category' => $this->input->post('category'),
+            'question' => $this->input->post('question'),
+            'type' => $this->input->post('type'),
+            'date_posted' =>date('Y-m-d H:i:s')
+            
+                
+        );
+        
+     
+            return $this->db->insert('questions', $data);
+           
+        
+    }
     
     public function count_num_unanswered($category){       
         $condition = "category ='" . $category . "' AND num_of_answers = 0";       
@@ -75,6 +96,7 @@ class QuestionsModel extends CI_Model {
             $this->db->where('category', $category['category']);
             $this->db->update('stockmarket', $data);
         }
+        
         
     }
     
