@@ -6,16 +6,17 @@ Class Questions extends CI_Controller {
         parent::__construct();
         $this->load->model('questionsmodel');
         $this->load->helper('url_helper');
-        
+
         $this->load->helper('form');
         $this->load->library('form_validation');
     }
+
     public function index() {
         $data['questions'] = $this->questionsmodel->get_questions();
-                    
+
         $this->view('LandingPage', $data);
     }
-    
+
     public function view($page = false, $passData = false) {
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
             // Whoops, we don't have a page for that!
@@ -32,35 +33,27 @@ Class Questions extends CI_Controller {
             $this->load->view('pages/footer');
         }
     }
-	
-	public function viewAskQuestion(){
-            $this->view('AskQuestionPage');
-	}
-	
-	public function create()
-    {
+
+    public function viewAskQuestion() {
+        $this->view('AskQuestionPage');
+    }
+
+    public function create() {
         $data['title'] = 'Add Question  ';
- 
+
         $this->form_validation->set_rules('title', 'Title', 'required');
         $this->form_validation->set_rules('question', 'Question', 'required');
- 
-        if ($this->form_validation->run() === FALSE)
-        {
-            $this->view("askquestionpage");    
-        }
-        else
-        {
+
+        if ($this->form_validation->run() === FALSE) {
+            $this->view("askquestionpage");
+        } else {
             $this->questionsmodel->ask_question();
-//           $this->load->view('pages/headerMain', $dataTitle);
-//            $this->load->view('pages/' . $page, $passData);
-//            $this->load->view('pages/footer');
-                redirect("questions/index");
-            //echo 'Jesther gwpao';
+            redirect("questions/index");
+
         }
     }
-    
-    
-    public function viewquestion($slug = NULL){
+
+    public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
 
         if (empty($data['question_item'])) {
@@ -72,4 +65,5 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
+
 }

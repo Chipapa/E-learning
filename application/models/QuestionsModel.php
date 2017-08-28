@@ -20,6 +20,7 @@ class QuestionsModel extends CI_Model {
         $this->db->select('*');
         $this->db->from('questions');
         $this->db->where($condition);
+        $this->db->order_by("date_posted","desc");
         //$this->db->limit(1);
         $query = $this->db->get();
         
@@ -31,7 +32,7 @@ class QuestionsModel extends CI_Model {
 //        $this->db->select('COUNT(*)');
 //        $this->db->from('questions');
 //        $this->db->where($condition);
-//        //$this->db->limit(1);
+//        $this->db->limit(1);
 //        $query = $this->db->get();
         
         $this->db->select('*');
@@ -41,6 +42,7 @@ class QuestionsModel extends CI_Model {
         $query = $this->db->get();
         return $query->num_rows();
     }
+    
     public function ask_question()
     {
       
