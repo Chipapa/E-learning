@@ -20,6 +20,7 @@ class QuestionsModel extends CI_Model {
         $this->db->select('*');
         $this->db->from('questions');
         $this->db->where($condition);
+        $this->db->order_by("date_posted","desc");
         //$this->db->limit(1);
         $query = $this->db->get();
         
@@ -31,7 +32,7 @@ class QuestionsModel extends CI_Model {
 //        $this->db->select('COUNT(*)');
 //        $this->db->from('questions');
 //        $this->db->where($condition);
-//        //$this->db->limit(1);
+//        $this->db->limit(1);
 //        $query = $this->db->get();
         
         $this->db->select('*');
@@ -40,6 +41,28 @@ class QuestionsModel extends CI_Model {
         //$this->db->limit(1);
         $query = $this->db->get();
         return $query->num_rows();
+    }
+    
+    public function ask_question()
+    {
+      
+ 
+    //    $slug = url_title($this->input->post('title'), 'dash', TRUE);
+
+        $data = array(
+             
+            'category' => $this->input->post('category'),
+            'question' => $this->input->post('question'),
+            'type' => $this->input->post('type'),
+            'date_posted' =>date('Y-m-d H:i:s')
+            
+                
+        );
+        
+     
+            return $this->db->insert('questions', $data);
+           
+        
     }
     
     public function count_num_unanswered($category){       
@@ -76,5 +99,27 @@ class QuestionsModel extends CI_Model {
             $this->db->update('stockmarket', $data);
         }
         
+        
     }
+    
+
+    public function get_questions($slug = FALSE){
+        if ($slug === FALSE) {
+
+            $this->db->select('*');
+            $this->db->from('questions');
+            $this->db->order_by("date_posted","desc");
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        $condition = "id ='" . $slug . "'";
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->where($condition);
+        //$this->db->limit(1);
+        $query = $this->db->get();
+        
+        return $query->result_array();
+    }
+        
 }

@@ -7,6 +7,7 @@ class Pages extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('loginmodel');
+        $this->load->model('questionsmodel');
         $this->load->helper('url_helper');
         $this->load->library('session');
 
@@ -30,7 +31,7 @@ class Pages extends CI_Controller {
         return $data;
     }
 
-    public function view($page = 'loginpage', $passData = false) {
+    public function view($page = '', $passData = false) {
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
             // Whoops, we don't have a page for that!
             show_404();
@@ -50,7 +51,6 @@ class Pages extends CI_Controller {
     }
 
     public function user_login_process() {
-
         $this->form_validation->set_rules('username', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
@@ -81,10 +81,15 @@ class Pages extends CI_Controller {
                     if (!isset($_SESSION)) {
                         session_start();
                     }
+                    
                     $this->session->set_userdata('logged_in', $session_data);
-
-                    $this->view('success');
-                    //$this->load->view('pages/success');
+                    redirect("questions/index");
+                    //$this->load->view("pages\LandingPage.php");
+//                        $data['questions'] = $this->questionsmodel->get_questions();
+//                          
+//                        $this->load->view('pages/footer');
+//                    $this->view("LandingPage");
+                    //site_url("questions/index");
                 }
             } else {
                 $data = array(
@@ -99,7 +104,7 @@ class Pages extends CI_Controller {
 
     public function logout() {
         $sess_array = array(
-            'username' => ''
+            'username' => ''    
         );
         $this->session->unset_userdata('logged_in', $sess_array);
         $data['message_display'] = 'Logged out successfully';
@@ -107,5 +112,6 @@ class Pages extends CI_Controller {
         $this->view('loginpage', $data);
         //$this->load->view('pages/loginpage', $data);
     }
-
+    
+    
 }
