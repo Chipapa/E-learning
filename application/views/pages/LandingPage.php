@@ -1,6 +1,6 @@
 <div class="container" id="mainDiv">
 
-    
+
     <div class="row">
         <div class="col-sm-8">
             <h1>Landing Page</h1>
@@ -10,26 +10,59 @@
         </div>
     </div>
 
+    <?php
+    echo "<div>";
+    //set session['flash'] here
+    if (isset($this->session->userdata['flash'])) {
+        $flash = $_SESSION['flash'];
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+        echo "<span aria-hidden='true'>&times;</span>";
+        echo "</button>";
+        echo $flash;
+        echo "</div>";
+    }
+    //then session['flash'] is removed immediately
+    unset($_SESSION['flash']);
+    echo "</div>"
+    ?>
+
     <div class="row">
         <div class="col">
             <?php foreach ($questions as $question_item): ?>
+                <!--                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title"><?php //echo $question_item['question'];            ?></h4>
+                                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php //echo time_since(time() - strtotime($question_item['date_posted']));           ?> ago</h6>
+                                        <p class="card-text"><?php //echo $question_item['question'];           ?></p>
+                                        <p class="card-text text-muted">This question was answered by <?php //echo $question_item['num_of_answers'];           ?> student(s)</p>
+                                        <a href="<?php //echo site_url('questions/viewquestion/' . $question_item['id']);           ?>" class="card-link">Answer Question</a>
+                                    </div>
+                                </div>-->
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><?php echo $question_item['question']; ?></h4>
-                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php echo time_since(time() - strtotime($question_item['date_posted'])); ?> ago</h6>
-                        <p class="card-text"><?php echo $question_item['question']; ?></p>
-                        <p class="card-text text-muted">This question was answered by <?php echo $question_item['num_of_answers']; ?> student(s)</p>
-                        <a href="<?php echo site_url('questions/viewquestion/'. $question_item['id']); ?>" class="card-link">Answer Question</a>
+                        <h4 class="card-title"><?php echo $question_item->question; ?></h4>
+                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php echo time_since(time() - strtotime($question_item->date_posted)); ?> ago</h6>
+                        <p class="card-text"><?php echo $question_item->question; ?></p>
+                        <p class="card-text text-muted">This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</p>
+                        <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="card-link">Answer Question</a>
                     </div>
                 </div>
                 <br/>
+            <?php endforeach; ?>   
 
 
-            <?php endforeach; ?>
+            <div>
+                <?php echo $links; ?>
+            </div>
+
+
         </div>       
 
+
+
         <!--        style="border:1px solid; -->
-        <div class="col-md-auto rounded bg-faded card" style="padding:20px" >
+        <div class="col-md-auto rounded bg-faded card" style="padding:20px">
             <h4 class="text-center">Leaderboards</h4>
             <ol>
                 <li>
@@ -45,29 +78,33 @@
 
         </div>
     </div>
-    <?php
+</div>
 
-    function time_since($since) {
-        $chunks = array(
-            array(60 * 60 * 24 * 365, 'year'),
-            array(60 * 60 * 24 * 30, 'month'),
-            array(60 * 60 * 24 * 7, 'week'),
-            array(60 * 60 * 24, 'day'),
-            array(60 * 60, 'hour'),
-            array(60, 'minute'),
-            array(1, 'second')
-        );
 
-        for ($i = 0, $j = count($chunks); $i < $j; $i++) {
-            $seconds = $chunks[$i][0];
-            $name = $chunks[$i][1];
-            if (($count = floor($since / $seconds)) != 0) {
-                break;
-            }
+
+<?php
+
+function time_since($since) {
+    $chunks = array(
+        array(60 * 60 * 24 * 365, 'year'),
+        array(60 * 60 * 24 * 30, 'month'),
+        array(60 * 60 * 24 * 7, 'week'),
+        array(60 * 60 * 24, 'day'),
+        array(60 * 60, 'hour'),
+        array(60, 'minute'),
+        array(1, 'second')
+    );
+
+    for ($i = 0, $j = count($chunks); $i < $j; $i++) {
+        $seconds = $chunks[$i][0];
+        $name = $chunks[$i][1];
+        if (($count = floor($since / $seconds)) != 0) {
+            break;
         }
-
-        $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
-        return $print;
     }
-    ?>    
+
+    $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
+    return $print;
+}
+?>    
 

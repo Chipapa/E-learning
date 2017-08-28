@@ -6,13 +6,51 @@ Class Questions extends CI_Controller {
         parent::__construct();
         $this->load->model('questionsmodel');
         $this->load->helper('url_helper');
+        $this->load->library('session');
+        $this->load->library("pagination");
 
         $this->load->helper('form');
         $this->load->library('form_validation');
     }
 
+//    public function index() {
+//        $data['questions'] = $this->questionsmodel->get_questions();
+//
+//        $this->view('LandingPage', $data);
+//    }
+
     public function index() {
-        $data['questions'] = $this->questionsmodel->get_questions();
+        $config = array();
+        $config["base_url"] = base_url() . "index.php/questions/index";
+        $config["total_rows"] = $this->questionsmodel->record_count();
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+//      $choice = $config["total_rows"] / $config["per_page"];
+//      $config["num_links"] = round($choice);
+//      $config['attributes'] = array('class' => 'page-link');
+
+        $config['prev_link'] = 'Previous';
+        $config['next_link'] = 'Next';
+        $config['full_tag_open'] = '<div class="pagging text-center"><nav><ul class="pagination">';
+        $config['full_tag_close'] = '</ul></nav></div>';
+        $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close'] = '</span></li>';
+        $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close'] = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close'] = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close'] = '</span></li>';
+        $config['first_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close'] = '</span></li>';
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
+        $data["links"] = $this->pagination->create_links();
 
         $this->view('LandingPage', $data);
     }
@@ -48,8 +86,11 @@ Class Questions extends CI_Controller {
             $this->view("askquestionpage");
         } else {
             $this->questionsmodel->ask_question();
-            redirect("questions/index");
 
+            //cannot use view('page', $data) function here because the method is being called instead of the page
+            //so session is used, after calling in the method, session is immediately unset
+            $_SESSION['flash'] = 'Your question has been successfully posted.';
+            redirect("questions/index");
         }
     }
 
