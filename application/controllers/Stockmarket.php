@@ -8,6 +8,8 @@ Class Stockmarket extends CI_Controller {
         $this->load->helper('url_helper');
         
         $this->load->library("pagination");
+        $this->load->helper('form');
+        $this->load->library('form_validation');
     }
 
     public function view($page = false, $passData = false) {
@@ -69,6 +71,7 @@ Class Stockmarket extends CI_Controller {
         $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $data["category_item"] = $this->QuestionsModel->fetch_questions($config["per_page"], $page, $slug);
         $data["links"] = $this->pagination->create_links();
+        $data["slug"] = $slug;
         
         if (empty($data['category_item'])) {
             show_404();
