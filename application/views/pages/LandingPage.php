@@ -50,17 +50,13 @@
                 </div>
                 <br/>
             <?php endforeach; ?>   
-
-
+                
+<!--        pagination-->
             <div>
                 <?php echo $links; ?>
             </div>
 
-
         </div>       
-
-
-
         <!--        style="border:1px solid; -->
         <div class="col-md-auto rounded bg-faded card" style="padding:20px">
             <h4 class="text-center">Leaderboards</h4>

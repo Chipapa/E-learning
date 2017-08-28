@@ -6,6 +6,8 @@ Class Stockmarket extends CI_Controller {
         parent::__construct();
         $this->load->model('QuestionsModel');
         $this->load->helper('url_helper');
+        
+        $this->load->library("pagination");
     }
 
     public function view($page = false, $passData = false) {
@@ -34,15 +36,45 @@ Class Stockmarket extends CI_Controller {
     }
 
     public function viewCategory($slug = NULL) {
-        $data['category_item'] = $this->QuestionsModel->get_categories($slug);
+        //$data['category_item'] = $this->QuestionsModel->get_categories($slug);
+      
+        $config = array();
+        $config["base_url"] = base_url() . "index.php/stockmarket/viewcategory/".$slug;
+        $config["total_rows"] = $this->QuestionsModel->record_count($slug);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 4;
+//      $choice = $config["total_rows"] / $config["per_page"];
+//      $config["num_links"] = round($choice);
+//      $config['attributes'] = array('class' => 'page-link');
 
+        $config['prev_link'] = 'Previous';
+        $config['next_link'] = 'Next';
+        $config['full_tag_open'] = '<div class="pagging text-center"><nav><ul class="pagination">';
+        $config['full_tag_close'] = '</ul></nav></div>';
+        $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['num_tag_close'] = '</span></li>';
+        $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+        $config['cur_tag_close'] = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close'] = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close'] = '</span></li>';
+        $config['first_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close'] = '</span></li>';
+        $config['last_tag_open'] = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close'] = '</span></li>';
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $data["category_item"] = $this->QuestionsModel->fetch_questions($config["per_page"], $page, $slug);
+        $data["links"] = $this->pagination->create_links();
+        
         if (empty($data['category_item'])) {
             show_404();
             //$this->load->view('pages/about');
         }
-
         //$data['title'] = $data['news_item']['title'];
-
         $this->view('view_category_page', $data);
     }
     

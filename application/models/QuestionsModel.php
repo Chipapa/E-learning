@@ -6,15 +6,44 @@ class QuestionsModel extends CI_Model {
         $this->load->database();
     }
 
-    public function record_count() {
-        return $this->db->count_all("questions");
+    public function record_count($category = FALSE) {
+        if ($category === FALSE) {
+            return $this->db->count_all("questions");
+        }
+
+        $condition = "category ='" . $category . "'";
+
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->where($condition);
+        //$this->db->limit(1);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 
     //for pagination
-    public function fetch_questions($limit, $start) {
+    public function fetch_questions($limit, $start, $category = FALSE) {
+        if ($category === FALSE) {
+            $this->db->limit($limit, $start);
+            $this->db->select('*');
+            $this->db->from('questions');
+            $this->db->order_by("date_posted", "desc");
+            $query = $this->db->get();
+
+            if ($query->num_rows() > 0) {
+                foreach ($query->result() as $row) {
+                    $data[] = $row;
+                }
+                return $data;
+            }
+            return false;
+        }
+        
+        $condition = "category ='" . $category . "'";
         $this->db->limit($limit, $start);
         $this->db->select('*');
         $this->db->from('questions');
+        $this->db->where($condition);
         $this->db->order_by("date_posted", "desc");
         $query = $this->db->get();
 
@@ -24,7 +53,6 @@ class QuestionsModel extends CI_Model {
             }
             return $data;
         }
-        return false;
     }
 
     //with slug
