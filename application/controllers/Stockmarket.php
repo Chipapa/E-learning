@@ -73,10 +73,10 @@ Class Stockmarket extends CI_Controller {
         $data["links"] = $this->pagination->create_links();
         $data["slug"] = $slug;
         
-        if (empty($data['category_item'])) {
-            show_404();
-            //$this->load->view('pages/about');
-        }
+//        if (empty($data['category_item'])) {
+//            show_404();
+//            //$this->load->view('pages/about');
+//        }
         //$data['title'] = $data['news_item']['title'];
         $this->view('view_category_page', $data);
     }

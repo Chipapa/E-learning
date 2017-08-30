@@ -29,29 +29,34 @@
 
     <div class="row">
         <div class="col">
-            <?php foreach ($questions as $question_item): ?>
-                <!--                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title"><?php //echo $question_item['question'];            ?></h4>
-                                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php //echo time_since(time() - strtotime($question_item['date_posted']));           ?> ago</h6>
-                                        <p class="card-text"><?php //echo $question_item['question'];           ?></p>
-                                        <p class="card-text text-muted">This question was answered by <?php //echo $question_item['num_of_answers'];           ?> student(s)</p>
-                                        <a href="<?php //echo site_url('questions/viewquestion/' . $question_item['id']);           ?>" class="card-link">Answer Question</a>
-                                    </div>
-                                </div>-->
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"><?php echo $question_item->question; ?></h4>
-                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php echo time_since(time() - strtotime($question_item->date_posted)); ?> ago</h6>
-                        <p class="card-text"><?php echo $question_item->question; ?></p>
-                        <p class="card-text text-muted">This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</p>
-                        <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="card-link">Answer Question</a>
+
+
+            <?php
+            if ($questions != NULL) {
+                foreach ($questions as $question_item):
+                    ?>     
+                    <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
+                    <!-- REPLACED WITH: echo $question_item->question; -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title"><?php echo $question_item->question; ?></h4>
+                            <h6 class="card-subtitle mb-2 text-muted">Asked <?php echo time_since(time() - strtotime($question_item->date_posted)); ?> ago</h6>
+                            <p class="card-text"><?php echo $question_item->question; ?></p>
+                            <p class="card-text text-muted">This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</p>
+                            <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="card-link">Answer Question</a>
+                        </div>
                     </div>
-                </div>
-                <br/>
-            <?php endforeach; ?>   
-                
-<!--        pagination-->
+                    <br/>
+                    <?php
+                endforeach;
+            } else {
+                echo "<div class='text-center' id='mainDiv'>";
+                echo "<h3>There are no posted questions yet.</h3>";
+                echo "</div>";
+            }
+            ?>   
+
+            <!--        pagination-->
             <div>
                 <?php echo $links; ?>
             </div>
