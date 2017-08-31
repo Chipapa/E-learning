@@ -13,9 +13,9 @@
         }
         ?>
 
-<?php echo form_open('questions/create'); ?>
+        <?php echo form_open('questions/create'); ?>
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Type of Question</label>
+            <label for="exampleFormControlSelect1">Question Category</label>
             <select name="category" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);">
                 <option value="Adapter">Adapter</option>
                 <option value="Composite">Composite</option>
@@ -24,7 +24,7 @@
         </div>
 
         <label for="inputEmail3">Title</label>
-        <input type="text" class="form-control" name="title"id="inputEmail3" placeholder="Title of the question">
+        <input type="text" class="form-control" name="title" id="inputEmail3" placeholder="Title of the question">
     </div>
     <div class="form-group">
         <label for="inputPassword3">Question</label>
@@ -32,7 +32,7 @@
     </div>
     <div class="form-group">
         <label for="exampleFormControlSelect1">Type of Question</label>
-        <select name="type" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);">
+        <select name="type" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);" id="questionType">
             <option value="Multiple Choice">Multiple Choice</option>
             <option value="Coding">Coding</option>
             <option value="Identification">OOP Identification</option>
@@ -42,27 +42,53 @@
     <div class="form-group" id="divMultipleChoice">            
         <fieldset class="form-group">
             <!--            <div class="row">-->
-            <legend class="col-form-legend">Select the correct answer to the question.</legend>
+            <legend class="col-form-legend">Enter four potential answers then select the correct answer to the given question.</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                        Option one is this and that&mdash;be sure to include why it's great
-                    </label>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="option1">
+                            </span>
+                            <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice1" id="inputChoice">
+                        </div>
+                    </div>
                 </div>
+
                 <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                        Option two can be something else and selecting it will deselect option one
-                    </label>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios2"  value="option2">
+                            </span>
+                            <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice2" id="inputChoice">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check disabled">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
-                        Option three is disabled
-                    </label>
+
+                <div class="form-check">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios3"  value="option3">
+                            </span>
+                            <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice3" id="inputChoice">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-check">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4"  value="option4">
+                            </span>
+                            <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice4" id="inputChoice">
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <!--            </div>-->
         </fieldset>
     </div>
@@ -84,7 +110,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" id="pindot">Submit Question</button>
+            <button type="submit" class="btn btn-primary" id="submitQuestion">Submit Question</button>
         </div>
     </div>
 </form>

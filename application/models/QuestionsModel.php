@@ -38,7 +38,7 @@ class QuestionsModel extends CI_Model {
             }
             return false;
         }
-        
+
         $condition = "category ='" . $category . "'";
         $this->db->limit($limit, $start);
         $this->db->select('*');
@@ -93,15 +93,23 @@ class QuestionsModel extends CI_Model {
     }
 
     public function ask_question() {
-
-
         //    $slug = url_title($this->input->post('title'), 'dash', TRUE);
+        if (isset($this->session->userdata['logged_in'])) {
+            $username = ($this->session->userdata['logged_in']['username']);
+            //$usertype = ($this->session->userdata['logged_in']['usertype']);
+        }else{
+            $username = "unknown";
+        }
 
         $data = array(
             'category' => $this->input->post('category'),
+            'title' => $this->input->post('title'),
             'question' => $this->input->post('question'),
             'type' => $this->input->post('type'),
-            'date_posted' => date('Y-m-d H:i:s')
+            'date_posted' => date('Y-m-d H:i:s'),
+            'who_posted' => $username,
+            'answer' => $this->input->post('gridRadios'),
+            'choices' => $this->input->post('inputChoice1')
         );
 
 
