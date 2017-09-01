@@ -4,8 +4,10 @@
         <div class="col-sm-8">
             <h2>
                 <?php
-                if (isset($slug)) {
-                    echo ucfirst($slug);
+                if (isset($category_title)) {
+                    echo $category_title['category']; 
+                }else{
+                    echo "Title not found";
                 }
                 ?> 
                 Questions
@@ -17,7 +19,7 @@
     </div>
 
     <?php
-    if (isset($category_item)) {
+    if (isset($category_item)) {       
         foreach ($category_item as $question_item):
             ?>         
             <div class="card">
@@ -37,7 +39,7 @@
         endforeach;
     } else {
         echo "<div class='text-center' id='mainDiv'>";
-        echo "<h3>There are no posted $slug type questions yet.</h3>";
+        echo "<h3>There are no posted " .$category_title['category']. " type questions yet.</h3>";
         echo "</div>";
     }
     ?>   

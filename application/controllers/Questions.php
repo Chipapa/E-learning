@@ -73,29 +73,18 @@ Class Questions extends CI_Controller {
     }
 
     public function viewAskQuestion() {
+        //this $_SESSION['categories'] is unset upon logging out
+        //cannot use view('page', $data) function here because the method is being called instead of the page
+        //so session is used, after calling in the method, session is immediately unset
+        $_SESSION['categories'] = $this->questionsmodel->get_categories();
         $this->view('AskQuestionPage');
     }
 
     public function create() {
         //$data['title'] = 'Add Question  ';
-
+              
         $this->form_validation->set_rules('title', 'Title', 'required');
         $this->form_validation->set_rules('question', 'Question', 'required');
-        
-//        $answer = $this->input->post('gridRadios');
-//        $option1 = $this->input->post('inputChoice1');
-//        
-//        if ($this->form_validation->run() === FALSE) {
-//            //$this->view("askquestionpage");
-//            echo $option1;
-//        } else {
-//            //$this->questionsmodel->ask_question();
-//
-//            //cannot use view('page', $data) function here because the method is being called instead of the page
-//            //so session is used, after calling in the method, session is immediately unset
-////            $_SESSION['flash'] = 'Your question has been successfully posted.';
-////            redirect("questions/index");
-//        }
 
         if ($this->form_validation->run() === FALSE) {
             $this->view("askquestionpage");
@@ -105,6 +94,7 @@ Class Questions extends CI_Controller {
             //cannot use view('page', $data) function here because the method is being called instead of the page
             //so session is used, after calling in the method, session is immediately unset
             $_SESSION['flash'] = 'Your question has been successfully posted.';
+
             redirect("questions/index");
         }
     }

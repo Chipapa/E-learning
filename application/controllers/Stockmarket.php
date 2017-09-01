@@ -6,7 +6,7 @@ Class Stockmarket extends CI_Controller {
         parent::__construct();
         $this->load->model('QuestionsModel');
         $this->load->helper('url_helper');
-        
+
         $this->load->library("pagination");
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -33,15 +33,16 @@ Class Stockmarket extends CI_Controller {
         $this->QuestionsModel->set_num_answered();
         $this->QuestionsModel->set_num_unanswered();
         $data['categories'] = $this->QuestionsModel->get_categories();
-        
+
         $this->view('stockmarketpage', $data);
     }
 
     public function viewCategory($slug = NULL) {
         //$data['category_item'] = $this->QuestionsModel->get_categories($slug);
-      
+        //$slug = url_title($slugParam, 'dash', TRUE);
+        
         $config = array();
-        $config["base_url"] = base_url() . "index.php/stockmarket/viewcategory/".$slug;
+        $config["base_url"] = base_url() . "index.php/stockmarket/viewcategory/" . $slug;
         $config["total_rows"] = $this->QuestionsModel->record_count($slug);
         $config["per_page"] = 10;
         $config["uri_segment"] = 4;
@@ -71,8 +72,7 @@ Class Stockmarket extends CI_Controller {
         $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $data["category_item"] = $this->QuestionsModel->fetch_questions($config["per_page"], $page, $slug);
         $data["links"] = $this->pagination->create_links();
-        $data["slug"] = $slug;
-        
+        $data["category_title"] = $this->QuestionsModel->get_categories($slug);
 //        if (empty($data['category_item'])) {
 //            show_404();
 //            //$this->load->view('pages/about');
@@ -80,10 +80,11 @@ Class Stockmarket extends CI_Controller {
         //$data['title'] = $data['news_item']['title'];
         $this->view('view_category_page', $data);
     }
-    
-    public function viewQuestion(){
+
+    public function viewQuestion() {
         $this->view('askquestionpage');
     }
+
 // FIX ME, TIME SINCE SHOULD BE HERE, NOT IN THE VIEW
 //    public function time_since($since) {
 //        $chunks = array(
@@ -107,5 +108,4 @@ Class Stockmarket extends CI_Controller {
 //        $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
 //        return $print;
 //    }
-
 }

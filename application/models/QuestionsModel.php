@@ -62,18 +62,27 @@ class QuestionsModel extends CI_Model {
             return $query->result_array();
         }
 
-//        $query = $this->db->get_where('questions', array('category' => $slug));
-//        return $query->row_array();
+        $query = $this->db->get_where('stockmarket', array('category' => $slug));
+        return $query->row_array();
+        
+//        $query = $this->db->get_where('stockmarket', array('category' => $slug));
+//        
+//        if ($query->num_rows() > 0) {
+//            foreach ($query->result() as $row) {
+//                $data[] = $row;
+//            }
+//            return $data;
+//        }
 
-        $condition = "category ='" . $slug . "'";
-        $this->db->select('*');
-        $this->db->from('questions');
-        $this->db->where($condition);
-        $this->db->order_by("date_posted", "desc");
-        //$this->db->limit(1);
-        $query = $this->db->get();
-
-        return $query->result_array();
+//        $condition = "category ='" . $slug . "'";
+//        $this->db->select('category');
+//        $this->db->from('stockmarket');
+//        $this->db->where($condition);
+//        //$this->db->order_by("date_posted", "desc");
+//        //$this->db->limit(1);
+//        $query = $this->db->get();
+//
+//        return $query->row();
     }
 
     public function count_num_answered($category) {

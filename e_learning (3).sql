@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2017 at 11:17 AM
+-- Generation Time: Aug 31, 2017 at 12:28 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -31,25 +31,23 @@ SET time_zone = "+00:00";
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL,
   `category` text NOT NULL,
+  `title` text NOT NULL,
   `question` text NOT NULL,
   `type` text NOT NULL,
   `date_posted` datetime NOT NULL,
-  `num_of_answers` int(11) NOT NULL
+  `num_of_answers` int(11) NOT NULL,
+  `who_posted` text NOT NULL,
+  `answer` text NOT NULL,
+  `choices` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `questions`
 --
 
-INSERT INTO `questions` (`id`, `category`, `question`, `type`, `date_posted`, `num_of_answers`) VALUES
-(1, 'Adapter', 'How old are you?', 'multiple choice', '2017-08-19 00:00:00', 3),
-(2, 'Adapter', 'Sino ka?', 'multiple choice', '2017-08-19 00:00:00', 2),
-(3, 'Adapter', 'Gago ba you?', 'multiple choice', '2017-08-17 00:00:00', 0),
-(4, 'Composite', 'sino ka?', 'multiple choice', '2017-08-15 00:00:00', 0),
-(5, 'Composite', 'Who you?', 'multiple choice', '2017-08-19 00:00:00', 0),
-(6, 'Composite', 'Bakit bilog ang buwan?', 'multiple choice', '2017-08-11 00:00:00', 6),
-(7, 'Adapter', 'wew?', 'multiple choice', '2017-08-10 00:00:00', 8),
-(8, 'Decorator', 'qaqu?', 'multiple choice', '2017-08-22 00:00:00', 0);
+INSERT INTO `questions` (`id`, `category`, `title`, `question`, `type`, `date_posted`, `num_of_answers`, `who_posted`, `answer`, `choices`) VALUES
+(2, 'Composite', 'Composite Title', 'Composite Question?', 'Multiple Choice', '2017-08-31 12:04:53', 0, 'b@b.com', 'option2', 'wow1'),
+(3, 'Adapter', 'Test', 'test????', 'Multiple Choice', '2017-08-31 12:18:45', 0, 'a@a.com', 'option2', '4');
 
 -- --------------------------------------------------------
 
@@ -70,8 +68,8 @@ CREATE TABLE `stockmarket` (
 --
 
 INSERT INTO `stockmarket` (`id`, `category`, `slug`, `answered`, `unanswered`) VALUES
-(1, 'Adapter', 'adapter', 0, 0),
-(2, 'Composite', 'composite', 0, 0),
+(1, 'Adapter', 'adapter', 0, 1),
+(2, 'Composite', 'composite', 0, 1),
 (3, 'Decorator', 'decorator', 0, 0);
 
 -- --------------------------------------------------------
@@ -145,12 +143,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `stockmarket`
 --
 ALTER TABLE `stockmarket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `users`
 --

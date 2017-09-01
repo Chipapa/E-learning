@@ -1,8 +1,5 @@
 <div class="container" id="mainDiv">
 
-
-
-
     <div class="form-group">
         <?php
         if (validation_errors()) {
@@ -13,13 +10,15 @@
         }
         ?>
 
-        <?php echo form_open('questions/create'); ?>
+        <?php echo form_open('questions/create'); ?>     
+
+        <?php $categories = $_SESSION['categories'];?>     
         <div class="form-group">
             <label for="exampleFormControlSelect1">Question Category</label>
             <select name="category" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);">
-                <option value="Adapter">Adapter</option>
-                <option value="Composite">Composite</option>
-                <option value="Decorator">Decorator</option>
+                <?php foreach ($categories as $category_item): ?>
+                    <option><?php echo $category_item['category']; ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
 
@@ -48,7 +47,7 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="option1">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="option1" checked>
                             </span>
                             <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice1" id="inputChoice">
                         </div>
