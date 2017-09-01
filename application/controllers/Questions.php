@@ -82,9 +82,20 @@ Class Questions extends CI_Controller {
 
     public function create() {
         //$data['title'] = 'Add Question  ';
-              
+
         $this->form_validation->set_rules('title', 'Title', 'required');
         $this->form_validation->set_rules('question', 'Question', 'required');
+
+        if ($this->input->post('type') === "Multiple Choice") {
+            $this->form_validation->set_rules('inputChoice1', 'Choice 1', 'required');
+            $this->form_validation->set_rules('inputChoice2', 'Choice 2', 'required');
+            $this->form_validation->set_rules('inputChoice3', 'Choice 3', 'required');
+            $this->form_validation->set_rules('inputChoice4', 'Choice 4', 'required');
+        } else if ($this->input->post('type') === "Coding") {
+            $this->form_validation->set_rules('codingAnswer', 'Code Text Area', 'required');
+        } else if ($this->input->post('type') === "Identification") {
+            $this->form_validation->set_rules('identificationAnswer', 'Answer to Identification', 'required');
+        }
 
         if ($this->form_validation->run() === FALSE) {
             $this->view("askquestionpage");
@@ -94,9 +105,23 @@ Class Questions extends CI_Controller {
             //cannot use view('page', $data) function here because the method is being called instead of the page
             //so session is used, after calling in the method, session is immediately unset
             $_SESSION['flash'] = 'Your question has been successfully posted.';
-
             redirect("questions/index");
         }
+        
+//          TESTING PART      
+//        if ($this->input->post('title') == "") {
+//            $message = "You can't send empty text";
+//        } else {
+//            $message = $this->input->post('title');
+//        }
+//        echo $message;
+//        
+//         $data = array(
+//            'title' => $this->input->post('title')
+//        );
+//
+////Either you can print value or you can send value to database
+//        echo json_encode($data);
     }
 
     public function viewquestion($slug = NULL) {

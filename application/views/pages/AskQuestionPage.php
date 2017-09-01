@@ -1,5 +1,7 @@
 <div class="container" id="mainDiv">
 
+    <!--<form>-->
+
     <div class="form-group">
         <?php
         if (validation_errors()) {
@@ -10,9 +12,20 @@
         }
         ?>
 
-        <?php echo form_open('questions/create'); ?>     
+        <?php
+        echo form_open('questions/create');
+        //echo form_open();
+        ?>     
 
-        <?php $categories = $_SESSION['categories'];?>     
+        <!--        TEST DIV FOR JSON, REMOVE ME-->
+        <div id="testJson" style="display: none">
+            <div id="titleValue">
+
+            </div>
+        </div>
+
+
+        <?php $categories = $_SESSION['categories']; ?>     
         <div class="form-group">
             <label for="exampleFormControlSelect1">Question Category</label>
             <select name="category" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);">
@@ -23,7 +36,7 @@
         </div>
 
         <label for="inputEmail3">Title</label>
-        <input type="text" class="form-control" name="title" id="inputEmail3" placeholder="Title of the question">
+        <input type="text" class="form-control" name="title" id="inputTitle" placeholder="Title of the question">
     </div>
     <div class="form-group">
         <label for="inputPassword3">Question</label>
@@ -34,7 +47,7 @@
         <select name="type" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);" id="questionType">
             <option value="Multiple Choice">Multiple Choice</option>
             <option value="Coding">Coding</option>
-            <option value="Identification">OOP Identification</option>
+            <option value="Identification">Identification</option>
         </select>
     </div>
 
@@ -94,16 +107,12 @@
 
     <div class="form-group" id="divCoding">
         <label>Type the code below.</label>
-        <textarea class="form-control"></textarea>
+        <textarea class="form-control" name="codingAnswer"></textarea>
     </div>
 
     <div class="form-group" id="divIdentification">
-        <label>Select the answer.</label>
-        <select class="form-control">
-            <option>Adapter</option>
-            <option>Composite</option>
-            <option>Decorator</option>
-        </select>
+        <label>Enter the answer to the question.</label>
+        <input type="text" class="form-control" name="identificationAnswer" placeholder="Answer to the question">   
     </div>
 
 

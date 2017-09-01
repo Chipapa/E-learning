@@ -64,25 +64,6 @@ class QuestionsModel extends CI_Model {
 
         $query = $this->db->get_where('stockmarket', array('category' => $slug));
         return $query->row_array();
-        
-//        $query = $this->db->get_where('stockmarket', array('category' => $slug));
-//        
-//        if ($query->num_rows() > 0) {
-//            foreach ($query->result() as $row) {
-//                $data[] = $row;
-//            }
-//            return $data;
-//        }
-
-//        $condition = "category ='" . $slug . "'";
-//        $this->db->select('category');
-//        $this->db->from('stockmarket');
-//        $this->db->where($condition);
-//        //$this->db->order_by("date_posted", "desc");
-//        //$this->db->limit(1);
-//        $query = $this->db->get();
-//
-//        return $query->row();
     }
 
     public function count_num_answered($category) {
@@ -106,23 +87,53 @@ class QuestionsModel extends CI_Model {
         if (isset($this->session->userdata['logged_in'])) {
             $username = ($this->session->userdata['logged_in']['username']);
             //$usertype = ($this->session->userdata['logged_in']['usertype']);
-        }else{
+        } else {
             $username = "unknown";
         }
+        if ($this->input->post('type') === "Multiple Choice") {
+            $data = array(
+                'category' => $this->input->post('category'),
+                'title' => $this->input->post('title'),
+                'question' => $this->input->post('question'),
+                'type' => $this->input->post('type'),
+                'date_posted' => date('Y-m-d H:i:s'),
+                'who_posted' => $username,
+                'answer' => $this->input->post('gridRadios')
+            );
+            $this->db->insert('questions', $data);
 
-        $data = array(
-            'category' => $this->input->post('category'),
-            'title' => $this->input->post('title'),
-            'question' => $this->input->post('question'),
-            'type' => $this->input->post('type'),
-            'date_posted' => date('Y-m-d H:i:s'),
-            'who_posted' => $username,
-            'answer' => $this->input->post('gridRadios'),
-            'choices' => $this->input->post('inputChoice1')
-        );
-
-
-        return $this->db->insert('questions', $data);
+            $currentQuestionId = $this->db->insert_id();
+            $dataChoices = array(
+                'questionID' => $currentQuestionId,
+                'choice1' => $this->input->post('inputChoice1'),
+                'choice2' => $this->input->post('inputChoice2'),
+                'choice3' => $this->input->post('inputChoice3'),
+                'choice4' => $this->input->post('inputChoice4')
+            );
+            $this->db->insert('choices', $dataChoices);
+        } else if ($this->input->post('type') === "Identification") {
+            $dataIdentification = array(
+                'category' => $this->input->post('category'),
+                'title' => $this->input->post('title'),
+                'question' => $this->input->post('question'),
+                'type' => $this->input->post('type'),
+                'date_posted' => date('Y-m-d H:i:s'),
+                'who_posted' => $username,
+                'answer' => $this->input->post('identificationAnswer')
+            );
+            $this->db->insert('questions', $dataIdentification);
+        } else if ($this->input->post('type') === "Coding") {
+            $dataCoding = array(
+                'category' => $this->input->post('category'),
+                'title' => $this->input->post('title'),
+                'question' => $this->input->post('question'),
+                'type' => $this->input->post('type'),
+                'date_posted' => date('Y-m-d H:i:s'),
+                'who_posted' => $username,
+                'answer' => $this->input->post('codingAnswer')
+            );
+            $this->db->insert('questions', $dataCoding);
+        }
     }
 
     public function count_num_unanswered($category) {
