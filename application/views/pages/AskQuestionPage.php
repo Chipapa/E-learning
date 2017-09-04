@@ -31,7 +31,12 @@
             <select name="category" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);">
                 <?php foreach ($categories as $category_item): ?>
                     <option><?php echo $category_item['category']; ?></option>
-                <?php endforeach; ?>
+
+                    <?php
+                endforeach;
+                unset($_SESSION['categories']);
+                ?>
+
             </select>
         </div>
 

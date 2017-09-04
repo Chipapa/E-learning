@@ -101,14 +101,16 @@ Class Questions extends CI_Controller {
             $this->view("askquestionpage");
         } else {
             $this->questionsmodel->ask_question();
+            
+            $this->questionsmodel->set_points();
 
             //cannot use view('page', $data) function here because the method is being called instead of the page
             //so session is used, after calling in the method, session is immediately unset
             $_SESSION['flash'] = 'Your question has been successfully posted.';
             redirect("questions/index");
         }
-        
-//          TESTING PART      
+
+//          TESTING PART AJAX     
 //        if ($this->input->post('title') == "") {
 //            $message = "You can't send empty text";
 //        } else {

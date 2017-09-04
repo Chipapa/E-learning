@@ -13,13 +13,13 @@
     $(document).ready(function () {
         $('#divCoding').hide();
         $('#divIdentification').hide();
-        
+
 //        $(".submit").click(function (event) {
 //            event.preventDefault();
 //            var title = $("#inputTitle").val();
 //            jQuery.ajax({
 //                type: "POST",
-//                url: "<?php //echo base_url(); ?>" + "index.php/questions/create",
+//                url: "<?php //echo base_url();     ?>" + "index.php/questions/create",
 //                dataType: 'json',
 //                data: {inputTitle: title},
 //                success: function (res) {
@@ -32,7 +32,6 @@
 //                }
 //            });
 //        });
-
     });
 
     function selectDiv(value) {
@@ -51,32 +50,35 @@
         }
     }
 
-//    $("#submitQuestion").click(function () {
-//        if ($("#questionType").val() === "Multiple Choice") {
-//            var values = [];
-//            $("input[id='inputChoice']").each(function () {
-//                values.push($.trim($(this).val()));
-//            });
-//
-//            var dups = false;
-//            var emptyChoices = false;
-//            for (var i = 0; i < values.length - 1; i++) {
-//                if (values[i + 1] === values[i]) {
-//                    //results.push(values[i]);
-//                    dups = true;
-//                }
-//                if (values[i] === "") {
-//                    emptyChoices = true;
-//                }
-//            }
-//            //alert(results.join("\n"));
-////            if (emptyChoices === true) {
-////                alert("Choices cannot have blank answers.");
-////            } else
-//            if (dups === true && emptyChoices === false) {
-//                alert("Choices cannot have duplicates.");
-//            }
-//        }
+    $("#submitQuestion").click(function () {
+        if ($("#questionType").val() === "Multiple Choice") {
+            var values = [];
+            $("input[id='inputChoice']").each(function () {
+                values.push($.trim($(this).val()));
+            });
+
+            var dups = false;
+            var emptyChoices = false;
+            for (var i = 0; i < values.length - 1; i++) {
+                if (values[i + 1] === values[i]) {
+                    //results.push(values[i]);
+                    dups = true;
+                }
+                if (values[i] === "") {
+                    emptyChoices = true;
+                }
+            }
+            //alert(results.join("\n"));
+//            if (emptyChoices === true) {
+//                alert("Choices cannot have blank answers.");
+//            } else
+            if (dups === true && emptyChoices === false) {
+                alert("Choices cannot have duplicates.");
+
+                //var javascriptVariable = "John";
+                //window.location.href = "<?php //echo base_url(); ?>" + "index.php/questions/create?dups=" + dups;
+            }
+        }
 
 //        $.ajax({
 //            type: "POST",
@@ -90,13 +92,13 @@
 
 //        $.ajax({
 //            type: "POST",
-//            url: "<?php //echo base_url(); ?>" + "index.php/questions/create",
+//            url: "<?php //echo base_url();     ?>" + "index.php/questions/create",
 //            data: {title: $("#input").val()},
 //            success: function (result) {
 //                alert(result);
 //            }
 //        });
-//    });
+    });
 </script>
 
 </body>

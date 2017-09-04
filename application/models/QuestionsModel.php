@@ -4,6 +4,8 @@ class QuestionsModel extends CI_Model {
 
     public function __construct() {
         $this->load->database();
+
+        $this->load->library('session');
     }
 
     public function record_count($category = FALSE) {
@@ -87,6 +89,9 @@ class QuestionsModel extends CI_Model {
         if (isset($this->session->userdata['logged_in'])) {
             $username = ($this->session->userdata['logged_in']['username']);
             //$usertype = ($this->session->userdata['logged_in']['usertype']);
+            $fname = ($this->session->userdata['logged_in']['fname']);
+            $lname = ($this->session->userdata['logged_in']['lname']);
+            $full_name = $fname . " " . $lname;
         } else {
             $username = "unknown";
         }
@@ -97,7 +102,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $username,
+                'who_posted' => $full_name,
                 'answer' => $this->input->post('gridRadios')
             );
             $this->db->insert('questions', $data);
@@ -118,7 +123,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $username,
+                'who_posted' => $full_name,
                 'answer' => $this->input->post('identificationAnswer')
             );
             $this->db->insert('questions', $dataIdentification);
@@ -129,11 +134,47 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $username,
+                'who_posted' => $full_name,
                 'answer' => $this->input->post('codingAnswer')
             );
             $this->db->insert('questions', $dataCoding);
         }
+    }
+
+    public function set_points() {
+        if (isset($this->session->userdata['logged_in'])) {
+            $username = ($this->session->userdata['logged_in']['username']);
+        } else {
+            $username = "unknown";
+        }
+
+        $POINTS_FROM_ASKING = 2;
+
+        $this->db->set('ask_points', 'ask_points + ' . (int) $POINTS_FROM_ASKING, FALSE);
+        $this->db->where('username', $username);
+        $this->db->update('users');
+
+        //update session data for current points
+        //FIX ME: MUST ONLY UPDATE A SINGLE SESSION VARIABLE, NOT ENTIRE SESSION DATA
+        $condition = "username =" . "'" . $username . "'";
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where($condition);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        
+        $query_point = $query->row();
+        
+        $session_data = array(
+                        'username' => $query_point->username,
+                        'usertype' => $query_point->userType,
+                        'fname' => $query_point->fname,
+                        'lname' => $query_point->lname,
+                        'ask_points' => $query_point->ask_points,
+                        'answer_points' => $query_point->answer_points 
+                    );
+                    
+                    $this->session->set_userdata('logged_in', $session_data);
     }
 
     public function count_num_unanswered($category) {
