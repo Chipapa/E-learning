@@ -2,16 +2,18 @@
     if (isset($this->session->userdata['logged_in'])) {
         $username = ($this->session->userdata['logged_in']['username']);
         $usertype = ($this->session->userdata['logged_in']['usertype']);
+        $fname = ($this->session->userdata['logged_in']['fname']);
+        $lname = ($this->session->userdata['logged_in']['lname']);        
+        $full_name = $fname." ".$lname;
     } else {
         header("location: loginpage");
     }
 ?>
 <div class="container" id="mainDiv">
 
-
     <div class="row">
         <div class="col-sm-8">
-            <h1>Landing Page</h1>
+            <h3>Landing Page</h3>
         </div>
         <div class="col-sm-4 text-right">
             <p><a class="btn btn-large btn-info" href="<?php echo site_url('questions/viewAskQuestion'); ?>">Ask a Question</a></p>
@@ -40,10 +42,38 @@
 
 
             <?php
+//            if ($questions != NULL) {
+//                foreach ($questions as $question_item):
+//                    
+            ?>     
+            <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
+            <!-- REPLACED WITH: echo $question_item->question; -->
+            <!--                    <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title"><?php //echo $question_item->title;   ?></h4>
+                                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php //echo time_since(time() - strtotime($question_item->date_posted));   ?> ago by <?php //echo $question_item->who_posted; ?></h6>
+                                        <p class="card-text"><?php //echo $question_item->question;   ?></p>
+                                        <p class="card-text text-muted">This question was answered by <?php //echo $question_item->num_of_answers;   ?> student(s)</p>
+                                        <p class="card-text text-muted">Category: <?php //echo $question_item->category;   ?></p>
+                                        <a href="<?php //echo site_url('questions/viewquestion/' . $question_item->id);   ?>" class="card-link">Answer Question</a>
+                                    </div>
+                                </div>
+                                <br/>-->
+            <?php
+//                endforeach;
+//            } else {
+//                echo "<div class='text-center' id='mainDiv'>";
+//                echo "<h3>There are no posted questions yet.</h3>";
+//                echo "</div>";
+//            }
+//            
+            ?>   
+
+            <?php
             if ($questions != NULL) {
                 foreach ($questions as $question_item):
                     //Questions posted by the logged in user will display a different time_asked and link_question format
-                    if($question_item->who_posted == $username) {
+                    if($question_item->who_posted === $full_name) {
                         $time_asked = "You posted this question ".time_since(time() - strtotime($question_item->date_posted))." ago";
                         $link_question = "View Question";
                     }
@@ -54,16 +84,21 @@
                     ?>     
                     <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
                     <!-- REPLACED WITH: echo $question_item->question; -->
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title"><?php echo $question_item->title; ?></h4>
-                            <h6 class="card-subtitle mb-2 text-muted"><?php echo $time_asked; ?></h6>
-                            <p class="card-text"><?php echo $question_item->question; ?></p>
-                            <p class="card-text text-muted">This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</p>
-                            <p class="card-text text-muted">Category: <?php echo $question_item->category; ?></p>
-                            <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="card-link"><?php echo $link_question; ?></a>
-                        </div>
-                    </div>
+                    <div class="list-group">
+                        <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
+                                <small> <?php //echo time_since(time() - strtotime($question_item->date_posted)); ?>  <?php echo $time_asked ?></small>
+                            </div>
+                            <p class="mb-1"><?php echo $question_item->question; ?></p>
+                            
+                            <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          
+                            <div>
+                                <span class="badge badge-default "><?php echo $question_item->category; ?> </span>
+                                <span class="badge badge-default"><?php echo $question_item->type; ?> </span>
+                            </div>
+                        </a>
+                    </div>                  
                     <br/>
                     <?php
                 endforeach;
@@ -72,7 +107,7 @@
                 echo "<h3>There are no posted questions yet.</h3>";
                 echo "</div>";
             }
-            ?>   
+            ?>  
 
             <!--        pagination-->
             <div>
