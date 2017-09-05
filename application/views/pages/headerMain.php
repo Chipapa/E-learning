@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -6,6 +7,9 @@
 <!--        <title>Login</title>-->
 
         <?php include "DesignScript.php"; ?>         
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
     </head>
     <body>
@@ -19,16 +23,16 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');     ?>">Questions </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');       ?>">Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
                         <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market    <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');     ?>">Leaderboards </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');       ?>">Leaderboards </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');     ?>">Rewards  <?php //echo base_url();     ?></a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');       ?>">Rewards  <?php //echo base_url();       ?></a>
                     </li>
                 </ul>
                 <div id="iconHeaderMargin">
@@ -36,7 +40,7 @@
                         <img src="<?php echo base_url(); ?>/assets/png/person-3x.png">
                     </a>
                 </div>
-                
+
                 <div id="iconHeaderMargin">
                     <a href="<?php echo site_url('profile/index'); ?>">
                         <img src="<?php echo base_url(); ?>/assets/png/badge-3x.png">

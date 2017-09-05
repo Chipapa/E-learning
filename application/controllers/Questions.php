@@ -138,5 +138,11 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
+    
+    public function answerquestion() {
+        $data = $this->input->post('user');
+        echo $data;
+        
+    }
 
 }
