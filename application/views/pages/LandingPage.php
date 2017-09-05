@@ -1,3 +1,11 @@
+<?php
+    if (isset($this->session->userdata['logged_in'])) {
+        $username = ($this->session->userdata['logged_in']['username']);
+        $usertype = ($this->session->userdata['logged_in']['usertype']);
+    } else {
+        header("location: loginpage");
+    }
+?>
 <div class="container" id="mainDiv">
 
     <div class="row">
@@ -61,6 +69,15 @@
             <?php
             if ($questions != NULL) {
                 foreach ($questions as $question_item):
+                    //Questions posted by the logged in user will display a different time_asked and link_question format
+                    if($question_item->who_posted == $username) {
+                        $time_asked = "You posted this question ".time_since(time() - strtotime($question_item->date_posted))." ago";
+                        $link_question = "View Question";
+                    }
+                    else {
+                        $time_asked = "Asked ".time_since(time() - strtotime($question_item->date_posted))." ago by ".$question_item->who_posted;
+                        $link_question = "Answer Question";
+                    }
                     ?>     
                     <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
                     <!-- REPLACED WITH: echo $question_item->question; -->
@@ -91,7 +108,7 @@
 
             <!--        pagination-->
             <div>
-                <?php echo $links; ?>
+<?php echo $links; ?>
             </div>
 
         </div>       
