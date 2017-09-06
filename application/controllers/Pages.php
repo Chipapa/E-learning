@@ -73,6 +73,7 @@ class Pages extends CI_Controller {
                 $result = $this->loginmodel->read_user_information($username);
                 if ($result != false) {
                     $session_data = array(
+                        'id' => $result[0]->id,
                         'username' => $result[0]->username,
                         'usertype' => $result[0]->userType,
                         'fname' => $result[0]->fname,

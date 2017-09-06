@@ -40,12 +40,17 @@ class QuestionsModel extends CI_Model {
             }
             return false;
         }
+              //  $this->db->select('users.fname','users.lname','questions.question','questions.title','questions.type','questions.date_posted','questions.category');    
+                  $this->db->select('*');
+                  $this->db->from('users');
+                $this->db->join('questions');
 
-        $condition = "category ='" . $category . "'";
-        $this->db->limit($limit, $start);
-        $this->db->select('*');
-        $this->db->from('questions');
-        $this->db->where($condition);
+
+//        $condition = "category ='" . $category . "'";
+//        $this->db->limit($limit, $start);
+//        $this->db->select('*');
+//        $this->db->from('questions');
+//        $this->db->where($condition);
         $this->db->order_by("date_posted", "desc");
         $query = $this->db->get();
 
@@ -91,6 +96,7 @@ class QuestionsModel extends CI_Model {
             //$usertype = ($this->session->userdata['logged_in']['usertype']);
             $fname = ($this->session->userdata['logged_in']['fname']);
             $lname = ($this->session->userdata['logged_in']['lname']);
+            $id = ($this->session->userdata['logged_in']['id']);
             $full_name = $fname . " " . $lname;
         } else {
             $username = "unknown";
@@ -102,7 +108,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $full_name,
+                'who_posted' => $id,
                 'answer' => $this->input->post('gridRadios')
             );
             $this->db->insert('questions', $data);
@@ -123,7 +129,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $full_name,
+                'who_posted' => $id,
                 'answer' => $this->input->post('identificationAnswer')
             );
             $this->db->insert('questions', $dataIdentification);
@@ -134,7 +140,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $full_name,
+                'who_posted' => $id,
                 'answer' => $this->input->post('codingAnswer')
             );
             $this->db->insert('questions', $dataCoding);
@@ -166,6 +172,7 @@ class QuestionsModel extends CI_Model {
         $query_point = $query->row();
         
         $session_data = array(
+                        'id' => $query_point->id,
                         'username' => $query_point->username,
                         'usertype' => $query_point->userType,
                         'fname' => $query_point->fname,

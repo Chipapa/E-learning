@@ -5,6 +5,8 @@
         $fname = ($this->session->userdata['logged_in']['fname']);
         $lname = ($this->session->userdata['logged_in']['lname']);        
         $full_name = $fname." ".$lname;
+         
+            
     } else {
         header("location: loginpage");
     }
@@ -78,7 +80,8 @@
                         $link_question = "View Question";
                     }
                     else {
-                        $time_asked = "Asked ".time_since(time() - strtotime($question_item->date_posted))." ago by ".$question_item->who_posted;
+                        //new post ID get from user tabele 
+                        $time_asked = "Asked ".time_since(time() - strtotime($question_item->date_posted))." ago by ".$question_item->fname;
                         $link_question = "Answer Question";
                     }
                     ?>     
