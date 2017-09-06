@@ -110,10 +110,10 @@ class QuestionsModel extends CI_Model {
             $currentQuestionId = $this->db->insert_id();
             $dataChoices = array(
                 'questionID' => $currentQuestionId,
-                'choice1' => $this->input->post('inputChoice1'),
-                'choice2' => $this->input->post('inputChoice2'),
-                'choice3' => $this->input->post('inputChoice3'),
-                'choice4' => $this->input->post('inputChoice4')
+                'option1' => $this->input->post('inputChoice1'),
+                'option2' => $this->input->post('inputChoice2'),
+                'option3' => $this->input->post('inputChoice3'),
+                'option4' => $this->input->post('inputChoice4')
             );
             $this->db->insert('choices', $dataChoices);
         } else if ($this->input->post('type') === "Identification") {
@@ -162,19 +162,19 @@ class QuestionsModel extends CI_Model {
         $this->db->where($condition);
         $this->db->limit(1);
         $query = $this->db->get();
-        
+
         $query_point = $query->row();
-        
+
         $session_data = array(
-                        'username' => $query_point->username,
-                        'usertype' => $query_point->userType,
-                        'fname' => $query_point->fname,
-                        'lname' => $query_point->lname,
-                        'ask_points' => $query_point->ask_points,
-                        'answer_points' => $query_point->answer_points 
-                    );
-                    
-                    $this->session->set_userdata('logged_in', $session_data);
+            'username' => $query_point->username,
+            'usertype' => $query_point->userType,
+            'fname' => $query_point->fname,
+            'lname' => $query_point->lname,
+            'ask_points' => $query_point->ask_points,
+            'answer_points' => $query_point->answer_points
+        );
+
+        $this->session->set_userdata('logged_in', $session_data);
     }
 
     public function count_num_unanswered($category) {
@@ -228,6 +228,23 @@ class QuestionsModel extends CI_Model {
         $query = $this->db->get();
 
         return $query->result_array();
+    }
+
+    public function get_multiple_choices($questionID) {
+        $condition = "questions.id ='" . $questionID . "'";
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->join('choices', 'choices.questionID = questions.id');
+        $this->db->where_in('questions.id', $questionID);
+        
+        
+        $query = $this->db->get();
+        return $query->result();
+        
+//        $arrayChoices = array(
+//            'correctAnwer' => $data[0]['answer']
+//        );
+        //return $arrayChoices;
     }
 
 }

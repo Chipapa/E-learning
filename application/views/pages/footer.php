@@ -8,6 +8,18 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        
+        var codeQuestion = $(".codemirror-textarea-question")[0];
+        var codeAnswer = $(".codemirror-textarea-answer")[0];
+        var editorQuestion = CodeMirror.fromTextArea(codeQuestion, {
+            lineNumbers: true,
+            mode: "vb",
+            readOnly: true
+        });
+        var editorAnswer = CodeMirror.fromTextArea(codeAnswer, {
+            lineNumbers: true,
+            mode: "vb"
+        });
         $('#divCoding').hide();
         $('#divIdentification').hide();
 //        $(".submit").click(function (event) {

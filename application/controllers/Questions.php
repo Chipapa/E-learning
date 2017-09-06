@@ -101,7 +101,7 @@ Class Questions extends CI_Controller {
             $this->view("askquestionpage");
         } else {
             $this->questionsmodel->ask_question();
-            
+
             $this->questionsmodel->set_points();
 
             //cannot use view('page', $data) function here because the method is being called instead of the page
@@ -138,11 +138,12 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
-    
-    public function answerquestion() {
-        $data = $this->input->post('user');
-        echo $data;
-        
+
+    public function fetch_choices() {
+        $data = $this->input->post('questionID');
+        $dataArray['result'] = $this->questionsmodel->get_multiple_choices($data);
+        echo json_encode($dataArray['result']);
+
     }
 
 }

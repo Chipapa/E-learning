@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 <link rel="stylesheet" href="<?php echo base_url();?>/assets/css/open-iconic-bootstrap.min.css">
-
+<link rel="stylesheet"  href="<?php echo base_url();?>assets/plugin/codemirror/lib/codemirror.css">
 <style>
     #mainDivLogin{
         margin-top: 10px;

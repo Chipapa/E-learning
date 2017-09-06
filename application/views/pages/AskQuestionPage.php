@@ -34,7 +34,7 @@
 
                     <?php
                 endforeach;
-                unset($_SESSION['categories']);
+                //unset($_SESSION['categories']);
                 ?>
 
             </select>
@@ -112,7 +112,7 @@
 
     <div class="form-group" id="divCoding">
         <label>Type the code below.</label>
-        <textarea class="form-control" name="codingAnswer"></textarea>
+        <textarea class="form-control codemirror-textarea" name="codingAnswer"></textarea>
     </div>
 
     <div class="form-group" id="divIdentification">
