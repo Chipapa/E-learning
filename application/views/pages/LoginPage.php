@@ -55,7 +55,7 @@
 
             <div class="form-group row">
                 <div class="col-sm-10">
-                    Stay Logged in? <input type="checkbox", name="stayLoggedIn", value="1">
+                    Stay Logged in? <input type="checkbox" name="stayLoggedIn" value="1">
                 </div>
             </div>
 

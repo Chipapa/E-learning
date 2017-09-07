@@ -11,7 +11,7 @@
 <div class="container" id="mainDiv">
     <div class="row">
         <div class="col-sm-4">
-            <img src="<?php echo base_url(); ?>/assets/png/avatar.png"">
+            <img src="<?php echo base_url(); ?>/assets/png/avatar.png">
             <p align="" Avatong </p>
         </div>
         <div class="col-sm-8">
