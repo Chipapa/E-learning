@@ -47,9 +47,13 @@ Class Questions extends CI_Controller {
         $config['last_tagl_close'] = '</span></li>';
 
         $this->pagination->initialize($config);
-
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        
+       
         $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
+       // $sampleData = $data["questions"];
+        //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
+        $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
         $data["links"] = $this->pagination->create_links();
 
         $this->view('LandingPage', $data);
