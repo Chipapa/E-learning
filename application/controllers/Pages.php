@@ -75,6 +75,10 @@ class Pages extends CI_Controller {
                     $session_data = array(
                         'username' => $result[0]->username,
                         'usertype' => $result[0]->userType,
+                        'fname' => $result[0]->fname,
+                        'lname' => $result[0]->lname,
+                        'ask_points' => $result[0]->ask_points,
+                        'answer_points' => $result[0]->answer_points 
                     );
 
                     // Add user data in session
@@ -107,11 +111,12 @@ class Pages extends CI_Controller {
             'username' => ''    
         );
         $this->session->unset_userdata('logged_in', $sess_array);
+        
+        unset($_SESSION['categories']);
+        
         $data['message_display'] = 'Logged out successfully';
 
         $this->view('loginpage', $data);
         //$this->load->view('pages/loginpage', $data);
-    }
-    
-    
+    }   
 }
