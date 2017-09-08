@@ -124,10 +124,10 @@ class QuestionsModel extends CI_Model {
             $currentQuestionId = $this->db->insert_id();
             $dataChoices = array(
                 'questionID' => $currentQuestionId,
-                'choice1' => $this->input->post('inputChoice1'),
-                'choice2' => $this->input->post('inputChoice2'),
-                'choice3' => $this->input->post('inputChoice3'),
-                'choice4' => $this->input->post('inputChoice4')
+                'option1' => $this->input->post('inputChoice1'),
+                'option2' => $this->input->post('inputChoice2'),
+                'option3' => $this->input->post('inputChoice3'),
+                'option4' => $this->input->post('inputChoice4')
             );
             $this->db->insert('choices', $dataChoices);
         } else if ($this->input->post('type') === "Identification") {
