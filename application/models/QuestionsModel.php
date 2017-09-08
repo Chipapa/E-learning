@@ -87,6 +87,7 @@ class QuestionsModel extends CI_Model {
     public function ask_question() {
         //    $slug = url_title($this->input->post('title'), 'dash', TRUE);
         if (isset($this->session->userdata['logged_in'])) {
+            $id = ($this->session->userdata['logged_in']['id']);
             $username = ($this->session->userdata['logged_in']['username']);
             //$usertype = ($this->session->userdata['logged_in']['usertype']);
             $fname = ($this->session->userdata['logged_in']['fname']);
@@ -102,7 +103,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $full_name,
+                'who_posted' => $id,
                 'answer' => $this->input->post('gridRadios')
             );
             $this->db->insert('questions', $data);
@@ -123,7 +124,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $full_name,
+                'who_posted' => $id,
                 'answer' => $this->input->post('identificationAnswer')
             );
             $this->db->insert('questions', $dataIdentification);
@@ -134,7 +135,7 @@ class QuestionsModel extends CI_Model {
                 'question' => $this->input->post('question'),
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
-                'who_posted' => $full_name,
+                'who_posted' => $id,
                 'answer' => $this->input->post('codingAnswer')
             );
             $this->db->insert('questions', $dataCoding);
@@ -166,6 +167,7 @@ class QuestionsModel extends CI_Model {
         $query_point = $query->row();
 
         $session_data = array(
+            'id' => $query_point->id,
             'username' => $query_point->username,
             'usertype' => $query_point->userType,
             'fname' => $query_point->fname,
@@ -230,6 +232,17 @@ class QuestionsModel extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_fullname_by_id($userID) {
+        //$condition = "questions.id ='" . $questionID . "'";
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->join('questions', 'questions.who_posted = users.id');
+        $this->db->where_in('users.id', $userID);
+
+
+        $query = $this->db->get();
+        return $query->row_array();
+    }
     public function get_multiple_choices($questionID) {
         $condition = "questions.id ='" . $questionID . "'";
         $this->db->select('*');
@@ -248,3 +261,4 @@ class QuestionsModel extends CI_Model {
     }
 
 }
+    

@@ -34,7 +34,7 @@
 
                     <?php
                 endforeach;
-                //unset($_SESSION['categories']);
+                unset($_SESSION['categories']);
                 ?>
 
             </select>
