@@ -6,9 +6,9 @@ Class Profile extends CI_Controller {
         parent::__construct();
         $this->load->model('ProfileModel');
         $this->load->helper('url_helper');
-         $this->load->library('session');
+        $this->load->library('session');
     }
- 
+
     public function index() {
         $this->view('profilepage');
     }
@@ -31,18 +31,31 @@ Class Profile extends CI_Controller {
     }
 
     public function viewProfile($slug = NULL) {
-        $id = ($this->session->userdata['logged_in']['id']);
-        $data['userinfo'] = $this->ProfileModel->read_user_info_byID($id);
-        $data['test'] = $slug;
-        $username = ($this->session->userdata['logged_in']['username']);
-        $data['myQuestions'] = $this->ProfileModel->getQuestionByID($username);
+        
+        //$id = ($this->session->userdata['logged_in']['id']);
+        $id = $slug;
+        //$username = ($this->session->userdata['logged_in']['username']);
+        $data['id'] = $id;
+        $data['userInfo'] = $this->ProfileModel->read_user_info_byID($id);
+        $data['userQuestions'] = $this->ProfileModel->getQuestionByID($id);
+        $data['num_of_question'] = $this->ProfileModel->count_answers_by_user($id);
+        
+        if (empty($slug) || empty($data['userInfo'])) {
+            show_404();
+            //$this->load->view('pages/about');
+        }
+
         $this->view('ProfilePage', $data);
     }
 
-    public function getMyQuestion(){
-        $username = ($this->session->userdata['logged_in']['username']);
-        $data['myQuestions'] = $this->ProfileModel->getQuestionByID($username);
-        $this->view('ProfilePage', $data);
+    public function viewQuestions($slug = NULL) {
         
     }
+
+//    public function getMyQuestion() {
+//        $username = ($this->session->userdata['logged_in']['username']);
+//        $data['myQuestions'] = $this->ProfileModel->getQuestionByID($username);
+//        $this->view('ProfilePage', $data);
+//    }
+
 }

@@ -43,14 +43,20 @@ if (isset($this->session->userdata['logged_in'])) {
                     </li>
                 </ul>
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('profile/viewprofile/'.$full_name); ?>">
+                    <a href="<?php echo site_url('profile/viewprofile/'.$id); ?>" data-toggle="tooltip" data-placement="bottom" title="Profile">
                         <img src="<?php echo base_url(); ?>/assets/png/person-3x.png">
                     </a>
                 </div>
 
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('pages/view/success'); ?>">
+                    <a href="<?php echo site_url('pages/view/success'); ?>" data-toggle="tooltip" data-placement="bottom" title="Rewards">
                         <img src="<?php echo base_url(); ?>/assets/png/badge-3x.png">
+                    </a>
+                </div>
+                
+                <div id="iconHeaderMargin">
+                    <a href="<?php echo site_url('pages/logout'); ?>" data-toggle="tooltip" data-placement="bottom" title="Logout">
+                        <img src="<?php echo base_url(); ?>/assets/png/account-logout-3x.png">
                     </a>
                 </div>
                 <!--                <form class="form-inline my-2 my-lg-0">

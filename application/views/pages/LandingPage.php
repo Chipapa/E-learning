@@ -39,7 +39,7 @@ if (isset($this->session->userdata['logged_in'])) {
     ?>
 
     <div class="row">
-        <div class="col-sm-9 blog-main">  
+        <div class="col-sm-auto col-sm-9 blog-main">  
 <!--            <pre>
                
             </pre>-->
