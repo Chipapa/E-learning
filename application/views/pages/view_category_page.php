@@ -1,3 +1,14 @@
+<?php
+    if (isset($this->session->userdata['logged_in'])) {
+        $username = ($this->session->userdata['logged_in']['username']);
+        $usertype = ($this->session->userdata['logged_in']['usertype']);
+        $fname = ($this->session->userdata['logged_in']['fname']);
+        $lname = ($this->session->userdata['logged_in']['lname']);        
+        $full_name = $fname." ".$lname;
+    } else {
+        header("location: loginpage");
+    }
+?>
 <div class="container" id="mainDiv">
 
     <div class="row">
@@ -21,6 +32,13 @@
     <?php
     if (isset($category_item)) {
         foreach ($category_item as $question_item):
+
+            //Questions posted by the logged in user will display a different time_asked and link_question format
+            if ($question_item->who_posted === $full_name) {
+                $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
+            } else {
+                $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
+            }
             ?>
             <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
             <!-- REPLACED WITH: echo $question_item->question; -->
@@ -28,7 +46,7 @@
                 <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
-                        <small>Asked <?php echo time_since(time() - strtotime($question_item->date_posted)); ?> ago by <?php echo $question_item->who_posted; ?></small>
+                        <small><?php echo $time_asked; ?></small>
                     </div>
                     <p class="mb-1"><?php echo $question_item->question; ?></p>
                     <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          

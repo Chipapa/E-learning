@@ -1,21 +1,19 @@
 <?php
-    if (isset($this->session->userdata['logged_in'])) {
-        $username = ($this->session->userdata['logged_in']['username']);
-        $usertype = ($this->session->userdata['logged_in']['usertype']);
-        $fname = ($this->session->userdata['logged_in']['fname']);
-        $lname = ($this->session->userdata['logged_in']['lname']);        
-        $full_name = $fname." ".$lname;
-         
-            
-    } else {
-        header("location: loginpage");
-    }
+if (isset($this->session->userdata['logged_in'])) {
+    $username = ($this->session->userdata['logged_in']['username']);
+    $usertype = ($this->session->userdata['logged_in']['usertype']);
+    $fname = ($this->session->userdata['logged_in']['fname']);
+    $lname = ($this->session->userdata['logged_in']['lname']);
+    $full_name = $fname . " " . $lname;
+} else {
+    header("location: loginpage");
+}
 ?>
 <div class="container" id="mainDiv">
 
     <div class="row">
         <div class="col-sm-8">
-            <h3>Landing Page</h3>
+            <h3>Most Recent Questions</h3>
         </div>
         <div class="col-sm-4 text-right">
             <p><a class="btn btn-large btn-info" href="<?php echo site_url('questions/viewAskQuestion'); ?>">Ask a Question</a></p>
@@ -40,49 +38,16 @@
     ?>
 
     <div class="row">
-        <div class="col">
-
-
-            <?php
-//            if ($questions != NULL) {
-//                foreach ($questions as $question_item):
-//                    
-            ?>     
-            <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
-            <!-- REPLACED WITH: echo $question_item->question; -->
-            <!--                    <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title"><?php //echo $question_item->title;   ?></h4>
-                                        <h6 class="card-subtitle mb-2 text-muted">Asked <?php //echo time_since(time() - strtotime($question_item->date_posted));   ?> ago by <?php //echo $question_item->who_posted; ?></h6>
-                                        <p class="card-text"><?php //echo $question_item->question;   ?></p>
-                                        <p class="card-text text-muted">This question was answered by <?php //echo $question_item->num_of_answers;   ?> student(s)</p>
-                                        <p class="card-text text-muted">Category: <?php //echo $question_item->category;   ?></p>
-                                        <a href="<?php //echo site_url('questions/viewquestion/' . $question_item->id);   ?>" class="card-link">Answer Question</a>
-                                    </div>
-                                </div>
-                                <br/>-->
-            <?php
-//                endforeach;
-//            } else {
-//                echo "<div class='text-center' id='mainDiv'>";
-//                echo "<h3>There are no posted questions yet.</h3>";
-//                echo "</div>";
-//            }
-//            
-            ?>   
+        <div class="col-sm-9 blog-main">  
 
             <?php
             if ($questions != NULL) {
                 foreach ($questions as $question_item):
                     //Questions posted by the logged in user will display a different time_asked and link_question format
-                    if($question_item->who_posted === $full_name) {
-                        $time_asked = "You posted this question ".time_since(time() - strtotime($question_item->date_posted))." ago";
-                        $link_question = "View Question";
-                    }
-                    else {
-                        //new post ID get from user tabele 
-                        $time_asked = "Asked ".time_since(time() - strtotime($question_item->date_posted))." ago by ".$question_item->fname;
-                        $link_question = "Answer Question";
+                    if ($question_item->who_posted === $full_name) {
+                        $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
+                    } else {
+                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
                     }
                     ?>     
                     <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
@@ -91,10 +56,10 @@
                         <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
-                                <small> <?php //echo time_since(time() - strtotime($question_item->date_posted)); ?>  <?php echo $time_asked ?></small>
+                                <small><?php echo $time_asked; ?></small>
                             </div>
                             <p class="mb-1"><?php echo $question_item->question; ?></p>
-                            
+
                             <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          
                             <div>
                                 <span class="badge badge-default "><?php echo $question_item->category; ?> </span>
@@ -111,29 +76,56 @@
                 echo "</div>";
             }
             ?>  
-
-            <!--        pagination-->
+            <!--test-->
+            <?php
+            print_r($name);
+                foreach ($name as $name_item):
+                    echo $name_item['id'];
+                endforeach;
+            ?>
+            <!--pagination-->
             <div>
-<?php echo $links; ?>
+                <?php echo $links; ?>
             </div>
 
         </div>       
         <!--        style="border:1px solid; -->
-        <div class="col-md-auto rounded bg-faded card" style="padding:20px">
-            <h4 class="text-center">Leaderboards</h4>
-            <ol>
-                <li>
-                    Jesther Casillano
-                </li>
-                <li>
-                    John Matthew Quebec
-                </li>
-                <li>
-                    John Joseph Vasquez
-                </li>
-            </ol>
+        <!--        <div class="col-md-auto rounded bg-faded card" style="padding:15px">
+                    <h4 class="text-center">Leaderboards</h4>
+                    <ol>
+                        <li>
+                            Jesther Casillano
+                        </li>
+                        <li>
+                            John Matthew Quebec
+                        </li>
+                        <li>
+                            John Joseph Vasquez
+                        </li>
+                    </ol>
+                </div>-->
 
-        </div>
+        <div class="col-sm-auto offset-sm-1 blog-sidebar">
+            <hr>
+            <div class="sidebar-module">
+                <h4>Leaderboards</h4>
+                <ol class="list-unstyled">
+                    <li><a href="#">Jesther Casillano</a></li>
+                    <li><a href="#">John Matthew Quebec</a></li>
+                    <li><a href="#">John Joseph Vasquez</a></li>
+                    <li><a href="#">December 2013</a></li>
+                    <li><a href="#">November 2013</a></li>
+                    <li><a href="#">October 2013</a></li>
+                    <li><a href="#">September 2013</a></li>
+                    <li><a href="#">August 2013</a></li>
+                    <li><a href="#">July 2013</a></li>
+                    <li><a href="#">June 2013</a></li>
+                    <li><a href="#">May 2013</a></li>
+                    <li><a href="#">April 2013</a></li>
+                </ol>
+            </div>
+        </div><!-- /.blog-sidebar -->
+
     </div>
 </div>
 
