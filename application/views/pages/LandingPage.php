@@ -1,5 +1,6 @@
 <?php
 if (isset($this->session->userdata['logged_in'])) {
+    $session_id = ($this->session->userdata['logged_in']['id']);
     $username = ($this->session->userdata['logged_in']['username']);
     $usertype = ($this->session->userdata['logged_in']['usertype']);
     $fname = ($this->session->userdata['logged_in']['fname']);
@@ -39,15 +40,20 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <div class="row">
         <div class="col-sm-9 blog-main">  
-
+<!--            <pre>
+               
+            </pre>-->
+          
             <?php
             if ($questions != NULL) {
                 foreach ($questions as $question_item):
+                $full_name_db = $question_item->fname." ".$question_item->lname;
                     //Questions posted by the logged in user will display a different time_asked and link_question format
-                    if ($question_item->who_posted === $full_name) {
+                    if ($question_item->who_posted === $session_id) {
                         $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
                     } else {
-                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
+//                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
+                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $full_name_db;
                     }
                     ?>     
                     <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
@@ -77,13 +83,7 @@ if (isset($this->session->userdata['logged_in'])) {
             }
             ?>  
             <!--test-->
-            <?php
-            print_r($name);
-                foreach ($name as $name_item):
-                    echo $name_item['id'];
-                endforeach;
-            ?>
-            <!--pagination-->
+           
             <div>
                 <?php echo $links; ?>
             </div>

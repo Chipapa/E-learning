@@ -32,12 +32,12 @@
     <?php
     if (isset($category_item)) {
         foreach ($category_item as $question_item):
-
+             $full_name_db = $question_item->fname." ".$question_item->lname;
             //Questions posted by the logged in user will display a different time_asked and link_question format
             if ($question_item->who_posted === $full_name) {
                 $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
             } else {
-                $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
+                $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $full_name_db;
             }
             ?>
             <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->

@@ -1,5 +1,15 @@
 <!DOCTYPE html>
+<?php
+if (isset($this->session->userdata['logged_in'])) {
+    $fname = ($this->session->userdata['logged_in']['fname']);
+    $lname = ($this->session->userdata['logged_in']['lname']);
+    $id = ($this->session->userdata['logged_in']['id']);
+    $full_name = $fname . "." . $lname;
 
+} else {
+    header("location: loginpage");
+}
+?>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -32,26 +42,26 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');       ?>">Questions </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
                         <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market    <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');       ?>">Leaderboards </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Leaderboards </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');       ?>">Rewards  <?php //echo base_url();       ?></a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Rewards  <?php //echo base_url();      ?></a>
                     </li>
                 </ul>
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('pages/view/success'); ?>">
+                    <a href="<?php echo site_url('profile/viewprofile/'.$full_name); ?>">
                         <img src="<?php echo base_url(); ?>/assets/png/person-3x.png">
                     </a>
                 </div>
 
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('profile/index'); ?>">
+                    <a href="<?php echo site_url('pages/view/success'); ?>">
                         <img src="<?php echo base_url(); ?>/assets/png/badge-3x.png">
                     </a>
                 </div>

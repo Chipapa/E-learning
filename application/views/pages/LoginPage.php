@@ -9,6 +9,8 @@
         if (isset($this->session->userdata['logged_in'])) {
 
             header("location: index.php/success");
+       
+             
         }
         ?>
         
@@ -40,6 +42,7 @@
              
             <?php echo form_open('pages/user_login_process'); ?>
             <div class="form-group row">
+               
                 <label for="username" class="col-sm-2 col-form-label">Username</label>
                 <div class="col-sm-10">
                     <input type="email" name="username" placeholder= "Your email" class="form-control">
