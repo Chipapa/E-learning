@@ -105,26 +105,21 @@ if (isset($this->session->userdata['logged_in'])) {
                     </ol>
                 </div>-->
 
-        <div class="col-sm-auto offset-sm-1 blog-sidebar">
-            <hr>
-            <div class="sidebar-module">
-                <h4>Leaderboards</h4>
-                <ol class="list-unstyled">
-                    <li><a href="#">Jesther Casillano</a></li>
-                    <li><a href="#">John Matthew Quebec</a></li>
-                    <li><a href="#">John Joseph Vasquez</a></li>
-                    <li><a href="#">December 2013</a></li>
-                    <li><a href="#">November 2013</a></li>
-                    <li><a href="#">October 2013</a></li>
-                    <li><a href="#">September 2013</a></li>
-                    <li><a href="#">August 2013</a></li>
-                    <li><a href="#">July 2013</a></li>
-                    <li><a href="#">June 2013</a></li>
-                    <li><a href="#">May 2013</a></li>
-                    <li><a href="#">April 2013</a></li>
-                </ol>
-            </div>
-        </div><!-- /.blog-sidebar -->
+          <div class="col-sm-auto offset-sm-1 blog-sidebar">
+                <hr>
+                <div class="sidebar-module col-sm-auto">
+                    <h4>Leaderboards</h4>
+                    <div class="list-group col-sm-auto">
+
+                        <?php
+                        foreach ($leaderboard as $test_item) {
+                            echo "<a href='#' class='list-group-item list-group-item-action'>" . $test_item[0]."-".$test_item[1] . "</a>";
+                        }
+                        ?>      
+
+                    </div>
+                </div>
+            </div><!-- /.blog-sidebar -->
 
     </div>
 </div>
