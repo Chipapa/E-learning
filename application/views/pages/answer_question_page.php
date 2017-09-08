@@ -62,9 +62,9 @@
 
         <!-- Coding -->
         <div class="form-group" id="divCodingAnswer">
-            <textarea class="form-control codemirror-textarea-question" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
+            <textarea class="form-control codemirror-textarea-answer" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
             Coding
-            <textarea class="form-control codemirror-textarea-answer" id="codeAnswer"></textarea>
+            <textarea class="form-control codemirror-textarea-question" id="codeAnswer"></textarea>
         </div>
 
         <!-- Identification -->

@@ -77,7 +77,7 @@ class QuestionsModel extends CI_Model {
         }
 
         $query = $this->db->get_where('stockmarket', array('category' => $slug));
-        return $query->row_array();
+            return $query->row_array();
     }
 
     public function count_num_answered($category) {

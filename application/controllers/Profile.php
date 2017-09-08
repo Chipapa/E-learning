@@ -45,4 +45,17 @@ Class Profile extends CI_Controller {
         $this->view('ProfilePage', $data);
         
     }
+    public function getleaderboard()
+    {
+        //$data = $this->input->post('sampleData');
+       // $username = ($this->session->userdata['logged_in']['username']);
+        $data['leaderboard'] = $this->ProfileModel->getTopTen();
+        
+        //echo json_encode($data['Leaderboards']);    
+        //$this->view('LandingPage', $data);  
+        //while($myQuestions != null)
+        $this->view('LandingPage', $data);
+        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+       
+    }
 }

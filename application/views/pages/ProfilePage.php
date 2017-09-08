@@ -26,10 +26,8 @@ $full_name = $fname . " " . $lname;
             <section class="row text-center placeholders">
                 <div class="col-6 col-sm-3 placeholder">
 <!--                    <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">-->
-                    <h1><?php
-                        echo $ask_points;
-                        ?></h1>
-                    <div class="text-muted">Asking Points</div>
+                    <h>Asking Points</h1>
+                    <span class="text-muted"> <?php echo $answer_points?> </span>
                 </div>
                 <div class="col-6 col-sm-3 placeholder">
                     <h1><?php echo $answer_points ?></h1>

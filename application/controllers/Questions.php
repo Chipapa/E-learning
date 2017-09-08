@@ -5,6 +5,7 @@ Class Questions extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('questionsmodel');
+        $this->load->model('profilemodel');
         $this->load->helper('url_helper');
         $this->load->library('session');
         $this->load->library("pagination");
@@ -55,7 +56,7 @@ Class Questions extends CI_Controller {
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
        // $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
         $data["links"] = $this->pagination->create_links();
-
+        $data["leaderboard"] = $this->profilemodel->getTopTen();
         $this->view('LandingPage', $data);
     }
 

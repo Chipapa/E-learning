@@ -112,7 +112,7 @@
 
     <div class="form-group" id="divCoding">
         <label>Type the code below.</label>
-        <textarea class="form-control codemirror-textarea" name="codingAnswer"></textarea>
+        <textarea class="form-control codemirror-textarea-question" name="codingAnswer"></textarea>
     </div>
 
     <div class="form-group" id="divIdentification">
