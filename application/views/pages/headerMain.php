@@ -56,7 +56,7 @@ if (isset($this->session->userdata['logged_in'])) {
                 
                 <div id="iconHeaderMargin">
                     <a href="<?php echo site_url('pages/logout'); ?>" data-toggle="tooltip" data-placement="bottom" title="Logout">
-                        <img src="<?php echo base_url(); ?>/assets/png/account-logout-3x.png">
+                        <img src="<?php echo base_url(); ?>/assets/png/account-logout-2x.png">
                     </a>
                 </div>
                 <!--                <form class="form-inline my-2 my-lg-0">

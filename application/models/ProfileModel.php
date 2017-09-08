@@ -30,6 +30,7 @@ class ProfileModel extends CI_Model {
         $queryUser = $this->db->get();
         $userID = $queryUser->row();
 
+        //if userId is not set, prevent page from showing up errors
         if (isset($userID)) {
             $condition = "who_posted =" . "'" . $userID->id . "'";
             $this->db->select('*');
@@ -50,6 +51,7 @@ class ProfileModel extends CI_Model {
         $queryUser = $this->db->get();
         $userID = $queryUser->row();
 
+        //if userId is not set, prevent page from showing up errors
         if (isset($userID)) {
             $condition = "who_posted ='" . $userID->id . "'";
             $this->db->select('*');
