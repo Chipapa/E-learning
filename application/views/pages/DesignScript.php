@@ -19,6 +19,7 @@
 
     #mainDiv{
         margin-top: 125px;
+        margin-bottom: 100px;
     }
     
     #iconHeaderMargin{
