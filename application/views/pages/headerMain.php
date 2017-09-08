@@ -4,7 +4,7 @@ if (isset($this->session->userdata['logged_in'])) {
     $fname = ($this->session->userdata['logged_in']['fname']);
     $lname = ($this->session->userdata['logged_in']['lname']);
     $id = ($this->session->userdata['logged_in']['id']);
-    $full_name = $fname . "." . $lname;
+    $slug_fullname = $fname . "." . $lname;
 
 } else {
     header("location: loginpage");
@@ -43,7 +43,7 @@ if (isset($this->session->userdata['logged_in'])) {
                     </li>
                 </ul>
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('profile/viewprofile/'.$id); ?>" data-toggle="tooltip" data-placement="bottom" title="Profile">
+                    <a href="<?php echo site_url('profile/viewprofile/'.$slug_fullname); ?>" data-toggle="tooltip" data-placement="bottom" title="Profile">
                         <img src="<?php echo base_url(); ?>/assets/png/person-3x.png">
                     </a>
                 </div>

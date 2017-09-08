@@ -17,7 +17,8 @@ $full_name = $fname . " " . $lname;
 <div class="container" id="mainDiv">
     <main class="ml-sm-auto pt-3" role="main">
         <h1><?php //echo $full_name; 
-        echo $full_name; ?></h1> 
+echo $full_name;
+?></h1> 
         <br>
         <br>
         <section class="row text-center placeholders">
@@ -38,13 +39,20 @@ $full_name = $fname . " " . $lname;
         <br>
         <br>
         <h2>Most Recent Questions <span class="text-muted"> <small><?php echo "(" . $num_of_question . ")"; ?> </small></span></h2>
+        <br>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Number of answers</th>
-                        <th>Title of the Question</th>
-                        <th>Date Posted</th>
+                        <?php
+                        if ($num_of_question === 0) {
+                            echo "<h2 class='text-center card' style='padding: 30px'>No posted questions yet.</h2>";                         
+                        } else {
+                            echo "<th>Number of answers</th>";
+                            echo "<th>Title of the Question</th>";
+                            echo "<th>Date Posted</th>";
+                        }
+                        ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,16 +71,12 @@ $full_name = $fname . " " . $lname;
                     </tr>
                 </tbody>
             </table>
+
             <?php
             if ($num_of_question > 10) {
-                echo "<a href=".site_url('profile/viewquestions/'.$id)."> View all questions.</a>";
-            } else {
-                echo "<a href='#'> (test) less than ten</a>";
+                echo "<a href=" . site_url('profile/viewquestions/' . $id) . "> View all questions.</a>";
             }
             ?>
-            <br>
-            <br>
-            <b><a href="<?php echo site_url('pages/logout'); ?>">Logout</a></b>
         </div>
     </main>
 </div>

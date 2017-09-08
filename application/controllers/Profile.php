@@ -36,9 +36,9 @@ Class Profile extends CI_Controller {
         $id = $slug;
         //$username = ($this->session->userdata['logged_in']['username']);
         $data['id'] = $id;
-        $data['userInfo'] = $this->ProfileModel->read_user_info_byID($id);
-        $data['userQuestions'] = $this->ProfileModel->getQuestionByID($id);
-        $data['num_of_question'] = $this->ProfileModel->count_answers_by_user($id);
+        $data['userInfo'] = $this->ProfileModel->read_user_info_by_slug($slug);
+        $data['userQuestions'] = $this->ProfileModel->getQuestionBySlug($slug);
+        $data['num_of_question'] = $this->ProfileModel->count_questions_by_user($id);
         
         if (empty($slug) || empty($data['userInfo'])) {
             show_404();
