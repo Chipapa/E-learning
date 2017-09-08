@@ -21,8 +21,8 @@ class ProfileModel extends CI_Model {
     }
     
     public function getQuestionByID($username){
-        
-        $condition = "who_posted =" . "'" . $username . "'";
+        $id = ($this->session->userdata['logged_in']['id']);
+        $condition = "who_posted =" . "'" . $id . "'";
         $this->db->select('*');
         $this->db->from('questions');
         $this->db->where($condition);

@@ -27,8 +27,14 @@ class QuestionsModel extends CI_Model {
     public function fetch_questions($limit, $start, $category = FALSE) {
         if ($category === FALSE) {
             $this->db->limit($limit, $start);
-            $this->db->select('*');
-            $this->db->from('questions');
+
+           // $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
+           $this->db->select('*');
+            $this->db->from('users');
+            $this->db->join('questions', 'questions.who_posted = users.id');
+//        
+//            $this->db->select('*');
+//            $this->db->from('questions');
             $this->db->order_by("date_posted", "desc");
             $query = $this->db->get();
 
@@ -40,17 +46,18 @@ class QuestionsModel extends CI_Model {
             }
             return false;
         }
-              //  $this->db->select('users.fname','users.lname','questions.question','questions.title','questions.type','questions.date_posted','questions.category');    
-                  $this->db->select('*');
-                  $this->db->from('users');
-                $this->db->join('questions');
+//        $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
+        
 
 
-//        $condition = "category ='" . $category . "'";
-//        $this->db->limit($limit, $start);
-//        $this->db->select('*');
-//        $this->db->from('questions');
-//        $this->db->where($condition);
+        $condition = "category ='" . $category . "'";
+        $this->db->limit($limit, $start);
+         $this->db->select('*');
+        $this->db->from('users');
+        $this->db->join('questions', 'questions.who_posted = users.id');
+       // $this->db->select('*');
+      //  $this->db->from('questions');
+        $this->db->where($condition);
         $this->db->order_by("date_posted", "desc");
         $query = $this->db->get();
 
@@ -240,7 +247,7 @@ class QuestionsModel extends CI_Model {
 
     public function get_fullname_by_id($userID) {
         //$condition = "questions.id ='" . $questionID . "'";
-        $this->db->select('*');
+        $this->db->select('fname, lname');
         $this->db->from('users');
         $this->db->join('questions', 'questions.who_posted = users.id');
         $this->db->where_in('users.id', $userID);
@@ -249,5 +256,5 @@ class QuestionsModel extends CI_Model {
         $query = $this->db->get();
         return $query->row_array();
     }
+
 }
-    

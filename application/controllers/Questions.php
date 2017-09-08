@@ -53,7 +53,7 @@ Class Questions extends CI_Controller {
         $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
        // $sampleData = $data["questions"];
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
-        $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
+       // $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
         $data["links"] = $this->pagination->create_links();
 
         $this->view('LandingPage', $data);
