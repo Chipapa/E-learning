@@ -10,7 +10,7 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
-    
+
     $(document).ready(function () {
 
         var codeQuestion = $(".codemirror-textarea-question")[0];
@@ -25,28 +25,11 @@
             mode: "vb",
             readOnly: true
         });
+    });
+    $document.ready(function () {
         $('#divCoding').hide();
         $('#divIdentification').hide();
-//        $(".submit").click(function (event) {
-//            event.preventDefault();
-//            var title = $("#inputTitle").val();
-//            jQuery.ajax({
-//                type: "POST",
-//                url: "<?php //echo base_url();     ?>" + "index.php/questions/create",
-//                dataType: 'json',
-//                data: {inputTitle: title},
-//                success: function (res) {
-//                    if (res)
-//                    {
-//                        // Show Entered Value
-//                        jQuery("div#testJson").show();
-//                        jQuery("div#titleValue").html(res.title);
-//                    }
-//                }
-//            });
-//        });
     });
-
     function selectDiv(value) {
         if (value === "Multiple Choice") {
             $('#divMultipleChoice').show();
@@ -89,7 +72,7 @@
                 alert("Choices cannot have duplicates.");
 
                 //var javascriptVariable = "John";
-                //window.location.href = "<?php //echo base_url(); ?>" + "index.php/questions/create?dups=" + dups;
+                //window.location.href = "<?php //echo base_url();  ?>" + "index.php/questions/create?dups=" + dups;
             }
         }
 
@@ -105,7 +88,7 @@
 
 //        $.ajax({
 //            type: "POST",
-//            url: "<?php //echo base_url();     ?>" + "index.php/questions/create",
+//            url: "<?php //echo base_url();      ?>" + "index.php/questions/create",
 //            data: {title: $("#input").val()},
 //            success: function (result) {
 //                alert(result);
