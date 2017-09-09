@@ -68,35 +68,6 @@ class ProfileModel extends CI_Model {
         }
         return $arrayFinal;
     }
-    public function getTopTen() {
-        $this->db->select('*');
-        $this->db->from('users');
-        $query = $this->db->get();
-
-        $arrayNames = array();
-        $arrayFinal = array();
-        foreach ($query->result_array() as $data) {
-            $fullname = $data['fname'] . " " . $data["lname"];
-            $totalpoints = $data['ask_points'] + $data['answer_points'];
-            $arrayNames[] = array($fullname, $totalpoints);
-        }
-        //$fullname=
-        array_multisort(array_column($arrayNames, 1), SORT_DESC, $arrayNames);
-        $j=0;
-        for ($i = 0; $i < 10; $i++) {   
-            if ($arrayNames[$i][1] != 0) {
-                
-                $arrayFinal[$j] = $arrayNames[$i];
-                $j++;
-            }
-            
-        }
-
-       
-        return $arrayFinal;
-//        
-//       return $query->result_array();
-    }
 
 }
     
