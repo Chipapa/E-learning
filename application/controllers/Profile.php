@@ -51,11 +51,4 @@ Class Profile extends CI_Controller {
     public function viewQuestions($slug = NULL) {
         
     }
-
-//    public function getMyQuestion() {
-//        $username = ($this->session->userdata['logged_in']['username']);
-//        $data['myQuestions'] = $this->ProfileModel->getQuestionByID($username);
-//        $this->view('ProfilePage', $data);
-//    }
-
 }

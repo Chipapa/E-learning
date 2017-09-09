@@ -5,6 +5,7 @@ Class Questions extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('questionsmodel');
+        $this->load->model('profilemodel');
         $this->load->helper('url_helper');
         $this->load->library('session');
         $this->load->library("pagination");
@@ -45,17 +46,17 @@ Class Questions extends CI_Controller {
         $config['first_tagl_close'] = '</span></li>';
         $config['last_tag_open'] = '<li class="page-item"><span class="page-link">';
         $config['last_tagl_close'] = '</span></li>';
-
+        
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         
-       
+        $data['leaderboard'] = $this->profilemodel->getTopTen();
         $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
        // $sampleData = $data["questions"];
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
        // $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
         $data["links"] = $this->pagination->create_links();
-
+        $data["leaderboard"] = $this->profilemodel->getTopTen();
         $this->view('LandingPage', $data);
     }
 
@@ -105,9 +106,9 @@ Class Questions extends CI_Controller {
             $this->view("askquestionpage");
         } else {
             $this->questionsmodel->ask_question();
-            
-            $this->questionsmodel->set_points();
 
+            $this->questionsmodel->set_points();
+                
             //cannot use view('page', $data) function here because the method is being called instead of the page
             //so session is used, after calling in the method, session is immediately unset
             $_SESSION['flash'] = 'Your question has been successfully posted.';
@@ -120,7 +121,7 @@ Class Questions extends CI_Controller {
 //        } else {
 //            $message = $this->input->post('title');
 //        }
-//        echo $message;
+//        echo $message; 
 //        
 //         $data = array(
 //            'title' => $this->input->post('title')
@@ -132,7 +133,7 @@ Class Questions extends CI_Controller {
 
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
-
+        //$data['test_data'] = $this->questionsmodel->test_func($slug);
         if (empty($data['question_item'])) {
             show_404();
             //$this->load->view('pages/about');
@@ -142,5 +143,19 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
+     public function getleaderboard()
+    {
+        //$data = $this->input->post('sampleData');
+       // $username = ($this->session->userdata['logged_in']['username']);
+        
+        
+        //echo json_encode($data['Leaderboards']);    
+        //$this->view('LandingPage', $data);  
+        //while($myQuestions != null)
+        $this->view('LandingPage', $data);
+        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+       
+    }
+
 
 }
