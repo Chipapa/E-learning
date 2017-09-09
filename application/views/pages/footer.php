@@ -10,7 +10,7 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
-
+    
     $(document).ready(function () {
 
         var codeQuestion = $(".codemirror-textarea-question")[0];
@@ -26,6 +26,7 @@
             readOnly: true
         });
     });
+    
     $document.ready(function () {
         $('#divCoding').hide();
         $('#divIdentification').hide();

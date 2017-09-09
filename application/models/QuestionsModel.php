@@ -98,6 +98,7 @@ class QuestionsModel extends CI_Model {
 
     public function ask_question() {
         //    $slug = url_title($this->input->post('title'), 'dash', TRUE);
+        $questionCategory = $this->input->post('category');
         if (isset($this->session->userdata['logged_in'])) {
             $id = ($this->session->userdata['logged_in']['id']);
             $username = ($this->session->userdata['logged_in']['username']);
@@ -153,6 +154,13 @@ class QuestionsModel extends CI_Model {
             );
             $this->db->insert('questions', $dataCoding);
         }
+        $this->update_stock_market($questionCategory);
+    }
+
+    public function update_stock_market($questionCategory) {
+        $this->db->set('unanswered', 'unanswered+1', FALSE);
+        $this->db->where('category', $questionCategory);
+        $this->db->update('stockmarket');
     }
 
     public function set_points() {
@@ -246,12 +254,13 @@ class QuestionsModel extends CI_Model {
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
+            $questionArray[0]['answer'] = $questionArray[0][$questionArray[0]['answer']];
             return $questionArray;
         } else {
-            $questionArray[0]['option1']=null;
-            $questionArray[0]['option2']=null;
-            $questionArray[0]['option3']=null;
-            $questionArray[0]['option4']=null;
+            $questionArray[0]['option1'] = null;
+            $questionArray[0]['option2'] = null;
+            $questionArray[0]['option3'] = null;
+            $questionArray[0]['option4'] = null;
             return $questionArray;
         }
         //return $query->result_array();
@@ -288,6 +297,54 @@ class QuestionsModel extends CI_Model {
 
         $query = $this->db->get();
         return $query->row_array();
+    }
+
+    public function set_answer() {
+        $id = ($this->session->userdata['logged_in']['id']);
+        $questionArray = $_SESSION['currentQuestion'];
+        unset($_SESSION['currentQuestion']);
+        if ($questionArray[0]['type'] === "Multiple Choice") {
+            $dataAnsweredBy = array(
+                'userID' => $id,
+                'questionID' => $questionArray[0]['id'],
+                'answer' => $this->input->post('gridRadiosAnswer'),
+                'answeredWhen' => date('Y-m-d H:i:s')
+            );
+        }
+//        else if ($question_item[0]['type'] === "Coding") {
+//            $dataAnsweredBy = array(
+//                'userID' => $id,
+//                'questionID' => $question_item[0]['id'],
+//                'answer' => $this->input->post('gridRadiosAnswer'),
+//                'answeredWhen' => date('Y-m-d H:i:s')
+//            );
+//        }
+//        else if ($question_item[0]['type'] === "Identification") {
+//            $dataAnsweredBy = array(
+//                'userID' => $id,
+//                'questionID' => $question_item[0]['id'],
+//                'answer' => $this->input->post('gridRadiosAnswer'),
+//                'answeredWhen' => date('Y-m-d H:i:s')
+//            );
+//        }
+
+        $this->db->insert('answered_by', $dataAnsweredBy);
+        $this->update_answer($questionArray);
+    }
+
+    public function update_answer($questionArray) {
+        $this->db->set('num_of_answers', 'num_of_answers+1', FALSE);
+        $this->db->where('id', $questionArray[0]['id']);
+        $this->db->update('questions');
+
+//        $stockUpdate = array(
+//            'answered' => 'answered+1',
+//            'unanswered' => 'unanswered-1'
+//        );
+        $this->db->set('answered', 'answered+1', FALSE);
+        $this->db->set('unanswered', 'unanswered-1', FALSE);
+        $this->db->where('category', $questionArray[0]['category']);
+        $this->db->update('stockmarket', $stockUpdate);
     }
 
 }
