@@ -1,4 +1,4 @@
-<form type="post">
+<form type="post" onsubmit="return confirm('Do you really want to submit the form?');">
     <div class="container" id="mainDiv">
         <?php //print_r($question_item[0]['type']) ?>
         <div class="form-group">
@@ -91,13 +91,26 @@
         } else if (questionType === "Identification") {
             $('#divIdentificationAnswer').show();
         }
+        var answerArray = <?php echo json_encode($question_item); ?>;
+        $.ajax({
+            type: 'post',
+            url: '<?php echo base_url(); ?>'+'index.php/questions/setAnswer',
+            data: answerArray,
+            dataType: 'json',
+            success: function (data) {
+                alert("Gumana qaqo");
+            },
+            error: function () {
+                alert("Ayaw");
+            }
+        });
     });
-    
-    $("#submit").click(function () {
-        var val = $('input[type="radio"]:checked').val();
-        alert(val);
-        //alert(val);
-    });
+
+//    $("#submit").click(function () {
+//        var val = $('input[type="radio"]:checked').val();
+//        alert(val);
+//        //alert(val);
+//    });
 </script>
 
 <?php

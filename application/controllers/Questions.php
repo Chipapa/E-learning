@@ -143,19 +143,16 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
-     public function getleaderboard()
-    {
-        //$data = $this->input->post('sampleData');
-       // $username = ($this->session->userdata['logged_in']['username']);
-        
-        
-        //echo json_encode($data['Leaderboards']);    
-        //$this->view('LandingPage', $data);  
-        //while($myQuestions != null)
-        $this->view('LandingPage', $data);
-        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
-       
-    }
 
+    
+    public function setAnswer(){
+        $questionInfo = $this->input->post('type');
+        $userAnswer;
+        //$this->questionsmodel->set_answer();
+        //$data['confirmation']="Test";
+        echo $questionInfo;
+        //$_SESSION['flash'] = 'You have successfully submited your answer.';
+       // redirect("questions/index");
+    }
 
 }
