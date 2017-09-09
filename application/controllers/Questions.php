@@ -121,7 +121,7 @@ Class Questions extends CI_Controller {
 //        } else {
 //            $message = $this->input->post('title');
 //        }
-//        echo $message;
+//        echo $message; 
 //        
 //         $data = array(
 //            'title' => $this->input->post('title')
@@ -133,7 +133,7 @@ Class Questions extends CI_Controller {
 
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
-
+        //$data['test_data'] = $this->questionsmodel->test_func($slug);
         if (empty($data['question_item'])) {
             show_404();
             //$this->load->view('pages/about');
@@ -157,11 +157,5 @@ Class Questions extends CI_Controller {
        
     }
 
-    public function fetch_choices() {
-        $data = $this->input->post('questionID');
-        $dataArray['result'] = $this->questionsmodel->get_multiple_choices($data);
-        echo json_encode($dataArray['result']);
-
-    }
 
 }

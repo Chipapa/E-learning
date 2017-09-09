@@ -28,8 +28,8 @@ class QuestionsModel extends CI_Model {
         if ($category === FALSE) {
             $this->db->limit($limit, $start);
 
-           // $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
-           $this->db->select('*');
+            // $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
+            $this->db->select('*');
             $this->db->from('users');
             $this->db->join('questions', 'questions.who_posted = users.id');
 //        
@@ -47,16 +47,16 @@ class QuestionsModel extends CI_Model {
             return false;
         }
 //        $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
-        
+
 
 
         $condition = "category ='" . $category . "'";
         $this->db->limit($limit, $start);
-         $this->db->select('*');
+        $this->db->select('*');
         $this->db->from('users');
         $this->db->join('questions', 'questions.who_posted = users.id');
-       // $this->db->select('*');
-      //  $this->db->from('questions');
+        // $this->db->select('*');
+        //  $this->db->from('questions');
         $this->db->where($condition);
         $this->db->order_by("date_posted", "desc");
         $query = $this->db->get();
@@ -77,7 +77,7 @@ class QuestionsModel extends CI_Model {
         }
 
         $query = $this->db->get_where('stockmarket', array('category' => $slug));
-            return $query->row_array();
+        return $query->row_array();
     }
 
     public function count_num_answered($category) {
@@ -235,14 +235,47 @@ class QuestionsModel extends CI_Model {
             $query = $this->db->get();
             return $query->result_array();
         }
+
         $condition = "id ='" . $slug . "'";
         $this->db->select('*');
         $this->db->from('questions');
         $this->db->where($condition);
         //$this->db->limit(1);
         $query = $this->db->get();
+        $questionArray = $query->result_array();
+        $questionType = $questionArray[0]['type'];
+        if ($questionType === "Multiple Choice") {
+            $questionArray = $this->get_multiple_choice($slug);
+            return $questionArray;
+        } else {
+            $questionArray[0]['option1']=null;
+            $questionArray[0]['option2']=null;
+            $questionArray[0]['option3']=null;
+            $questionArray[0]['option4']=null;
+            return $questionArray;
+        }
+        //return $query->result_array();
+    }
 
-        return $query->result_array();
+    public function get_multiple_choice($questionID) {
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->join('choices', 'choices.questionID = questions.id');
+        $this->db->where("questions.id = '" . $questionID . "'");
+        $query = $this->db->get();
+        $mcQuestion = $query->result_array();
+        $choicesArray = array(
+            "option1" => $mcQuestion[0]['option1'],
+            "option2" => $mcQuestion[0]['option1'],
+            "option3" => $mcQuestion[0]['option3'],
+            "option4" => $mcQuestion[0]['option4']
+        );
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $mcQuestion;
     }
 
     public function get_fullname_by_id($userID) {

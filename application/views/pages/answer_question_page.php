@@ -18,9 +18,9 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="option1" checked>
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="<?php echo $question_item[0]['option1']; ?>" checked>
                             </span>
-                            <label type="text" class="form-control" name="choice1" id="answerChoice1"> TestData
+                            <label type="text" class="form-control" name="choice1" id="answerChoice1"> <?php echo $question_item[0]['option1']; ?>
                         </div>
                     </div>
                 </div>
@@ -29,9 +29,9 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios2"  value="option2">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios2"  value="<?php echo $question_item[0]['option2']; ?>">
                             </span>
-                            <label type="text" class="form-control" name="choice2" id="answerChoice2"> TestData
+                            <label type="text" class="form-control" name="choice2" id="answerChoice2"> <?php echo $question_item[0]['option2']; ?>
                         </div>
                     </div>
                 </div>
@@ -40,9 +40,9 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios3"  value="option3">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios3"  value="<?php echo $question_item[0]['option3']; ?>">
                             </span>
-                            <label type="text" class="form-control" name="choice3" id="answerChoice3"> 
+                            <label type="text" class="form-control" name="choice3" id="answerChoice3"> <?php echo $question_item[0]['option3']; ?>
                         </div>
                     </div>
                 </div>
@@ -51,9 +51,9 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4"  value="option4">
+                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4"  value="<?php echo $question_item[0]['option4']; ?>">
                             </span>
-                            <label type="text" class="form-control" name="choice4" id="answerChoice4"> TestData
+                            <label type="text" class="form-control" name="choice4" id="answerChoice4"> <?php echo $question_item[0]['option4']; ?>
                         </div>
                     </div>
                 </div>
@@ -73,13 +73,13 @@
             Identification
             <input type="text" id="textAnswer" class="form-control"> </text>
         </div>
-        <input  type="submit" id="submitwew"></input>
+        <input  type="submit" id="submit"></input>
     </div>
 </form>
 <script type="text/javascript">
     $(document).ready(function () {
-        var choicesAnswer = new Array();
-        var answer;
+        //var choicesAnswer = new Array();
+        //var answer;
         $("#divMultipleChoiceAnswer").hide();
         $("#divCodingAnswer").hide();
         $("#divIdentificationAnswer").hide();
@@ -88,68 +88,20 @@
             $('#divCodingAnswer').show();
         } else if (questionType === "Multiple Choice") {
             $('#divMultipleChoiceAnswer').show();
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url(); ?>" + "index.php/questions/fetch_choices",
-                dataType: 'json',
-                data: {questionID: <?php echo $question_item[0]['id'] ?>},
-                success: function (data) {
-                    var correctOption = data[0]['answer'];
-                    answer = data[0][correctOption];
-                    choicesAnswer = [data[0]['option1'], data[0]['option2'], data[0]['option3'], data[0]['option1']];
-                    choicesAnswer = shuffle(choicesAnswer);
-                    console.log(choicesAnswer);
-                    //foreach display choices in Radio buttons
-                }
-            });
-            //fetchChoices();
         } else if (questionType === "Identification") {
             $('#divIdentificationAnswer').show();
         }
-
-
-    }
-    );
-    function shuffle(a) {
-        var j, x, i;
-        for (i = a.length; i; i--) {
-            j = Math.floor(Math.random() * i);
-            x = a[i - 1];
-            a[i - 1] = a[j];
-            a[j] = x;
-        }
-        return a;
-    }
-    function fetchChoices() {
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url(); ?>" + "index.php/questions/fetch_choices",
-            dataType: 'text',
-            data: {questionID: <?php echo $question_item[0]['id'] ?>},
-            success: function (data) {
-                alert(data);
-            }
-        });
-    }
-
-// Ajax post
-    $("#submitwew").click(function (event) {
-        event.preventDefault();
-//        $.ajax({
-//            type: "POST",
-//            url: "<?php echo base_url(); ?>" + "index.php/questions/answerquestion",
-//            dataType: 'text',
-//            data: {name: $("#testInput").val()},
-//            success: function (res) {
-//                alert(res);
-//            }
-//        });
     });
-
+    
+    $("#submit").click(function () {
+        var val = $('input[type="radio"]:checked').val();
+        alert(val);
+        //alert(val);
+    });
 </script>
 
 <?php
+echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
 
 function time_since($since) {
     $chunks = array(
