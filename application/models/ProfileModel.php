@@ -21,16 +21,53 @@ class ProfileModel extends CI_Model {
         }
     }
 
-    public function getQuestionByID($username) {
-        $id = ($this->session->userdata['logged_in']['id']);
+    public function getQuestionByID($id) {
+        //$id = ($this->session->userdata['logged_in']['id']);
         $condition = "who_posted =" . "'" . $id . "'";
         $this->db->select('*');
         $this->db->from('questions');
         $this->db->where($condition);
+        $this->db->order_by("date_posted", "desc");
+        $this->db->limit(10);
         $query = $this->db->get();
         return $query->result_array();
     }
 
+    public function count_answers_by_user($id) {
+        $condition = "who_posted ='" . $id . "'";
+
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->where($condition);
+        //$this->db->limit(1);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function getTopTen() {
+        $this->db->select('*');
+        $this->db->from('users');
+        $query = $this->db->get();
+
+        $arrayNames = array();
+        $arrayFinal = array();
+        foreach ($query->result_array() as $data) {
+            $fullname = $data['fname'] . " " . $data["lname"];
+            $totalpoints = $data['ask_points'] + $data['answer_points'];
+            $arrayNames[] = array($fullname, $totalpoints);
+        }
+        //$fullname=
+        array_multisort(array_column($arrayNames, 1), SORT_DESC, $arrayNames);
+        $j = 0;
+        for ($i = 0; $i < 10; $i++) {
+            if ($arrayNames[$i][1] != 0) {
+
+                $arrayFinal[$j] = $arrayNames[$i];
+                $j++;
+            }
+        }
+        return $arrayFinal;
+    }
     public function getTopTen() {
         $this->db->select('*');
         $this->db->from('users');
@@ -62,3 +99,4 @@ class ProfileModel extends CI_Model {
     }
 
 }
+    

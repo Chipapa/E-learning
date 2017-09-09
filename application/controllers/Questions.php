@@ -46,11 +46,11 @@ Class Questions extends CI_Controller {
         $config['first_tagl_close'] = '</span></li>';
         $config['last_tag_open'] = '<li class="page-item"><span class="page-link">';
         $config['last_tagl_close'] = '</span></li>';
-
+        
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         
-       
+        $data['leaderboard'] = $this->profilemodel->getTopTen();
         $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
        // $sampleData = $data["questions"];
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
@@ -108,7 +108,7 @@ Class Questions extends CI_Controller {
             $this->questionsmodel->ask_question();
 
             $this->questionsmodel->set_points();
-
+                
             //cannot use view('page', $data) function here because the method is being called instead of the page
             //so session is used, after calling in the method, session is immediately unset
             $_SESSION['flash'] = 'Your question has been successfully posted.';
@@ -142,6 +142,19 @@ Class Questions extends CI_Controller {
         //$data['title'] = $data['news_item']['title'];
 
         $this->view('answer_question_page', $data);
+    }
+     public function getleaderboard()
+    {
+        //$data = $this->input->post('sampleData');
+       // $username = ($this->session->userdata['logged_in']['username']);
+        
+        
+        //echo json_encode($data['Leaderboards']);    
+        //$this->view('LandingPage', $data);  
+        //while($myQuestions != null)
+        $this->view('LandingPage', $data);
+        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+       
     }
 
     public function fetch_choices() {
