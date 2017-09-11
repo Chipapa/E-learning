@@ -28,13 +28,20 @@ class QuestionsModel extends CI_Model {
         if ($category === FALSE) {
             $this->db->limit($limit, $start);
 
-            // $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
-            $this->db->select('*');
+            //$this->db->select('*');
+            $this->db->select(
+                    'users.fname, '
+                    . 'users.lname, '
+                    . 'questions.id, '
+                    . 'questions.title,  '
+                    . 'questions.question, '
+                    . 'questions.type, questions.who_posted, '
+                    . 'questions.date_posted, '
+                    . 'questions.num_of_answers, '
+                    . 'questions.category');
+
             $this->db->from('users');
             $this->db->join('questions', 'questions.who_posted = users.id');
-//        
-//            $this->db->select('*');
-//            $this->db->from('questions');
             $this->db->order_by("date_posted", "desc");
             $query = $this->db->get();
 
@@ -48,11 +55,19 @@ class QuestionsModel extends CI_Model {
         }
 //        $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
 
-
-
         $condition = "category ='" . $category . "'";
         $this->db->limit($limit, $start);
-        $this->db->select('*');
+        $this->db->select(
+                'users.fname, '
+                . 'users.lname, '
+                . 'questions.id, '
+                . 'questions.title,  '
+                . 'questions.question, '
+                . 'questions.type, questions.who_posted, '
+                . 'questions.date_posted, '
+                . 'questions.num_of_answers, '
+                . 'questions.category');
+
         $this->db->from('users');
         $this->db->join('questions', 'questions.who_posted = users.id');
         // $this->db->select('*');
@@ -103,10 +118,9 @@ class QuestionsModel extends CI_Model {
             $id = ($this->session->userdata['logged_in']['id']);
             $username = ($this->session->userdata['logged_in']['username']);
             //$usertype = ($this->session->userdata['logged_in']['usertype']);
-            $fname = ($this->session->userdata['logged_in']['fname']);
-            $lname = ($this->session->userdata['logged_in']['lname']);
-            $id = ($this->session->userdata['logged_in']['id']);
-            $full_name = $fname . " " . $lname;
+//            $fname = ($this->session->userdata['logged_in']['fname']);
+//            $lname = ($this->session->userdata['logged_in']['lname']);
+            //$full_name = $fname . " " . $lname;
         } else {
             $username = "unknown";
         }
@@ -244,10 +258,27 @@ class QuestionsModel extends CI_Model {
             return $query->result_array();
         }
 
-        $condition = "id ='" . $slug . "'";
+        $condition = "questions.id ='" . $slug . "'";
         $this->db->select('*');
+//        $this->db->from('questions');
+//        $this->db->join('users', 'questions.who_posted = users.id');       
+//        $this->db->where($condition);
+//        $this->db->select(
+//                'users.fname, '
+//                . 'users.lname, '
+//                . 'questions.title, '
+//                . 'questions.question, '
+//                . 'questions.date_posted, '
+//                . 'questions.category, '
+//                . 'questions.type, '
+//                . 'questions.who_posted, '
+//                . 'questions.answer');
+
         $this->db->from('questions');
+        $this->db->join('users', 'users.id = questions.who_posted');
         $this->db->where($condition);
+
+        //$this->db->join('users', 'users.id = questions.who_posted');
         //$this->db->limit(1);
         $query = $this->db->get();
         $questionArray = $query->result_array();
@@ -287,16 +318,28 @@ class QuestionsModel extends CI_Model {
         return $mcQuestion;
     }
 
-    public function get_fullname_by_id($userID) {
-        //$condition = "questions.id ='" . $questionID . "'";
-        $this->db->select('fname, lname');
-        $this->db->from('users');
-        $this->db->join('questions', 'questions.who_posted = users.id');
-        $this->db->where_in('users.id', $userID);
+    public function get_fullname_by_id($questionID) {
+//        $condition = "id ='" . $questionID . "'";
+//        $this->db->select('users.fname, users.lname');
+//        $this->db->from('users');
+//        $this->db->join('questions', 'questions.who_posted = users.id');
+//        $this->db->where_in('users.id', $userID);
 
-
+        $condition = "id ='" . $questionID . "'";
+        $this->db->select('who_posted');
+        $this->db->from('questions');
+        $this->db->where($condition);
         $query = $this->db->get();
-        return $query->row_array();
+        $userId = $query->row();
+
+        if (isset($userId)) {
+            $condition = "id ='" . $userId->who_posted . "'";
+            $this->db->select('fname, lname');
+            $this->db->from('users');
+            $this->db->where($condition);
+            $query = $this->db->get();
+            return $query->row_array();
+        }
     }
 
     public function set_answer() {

@@ -1,5 +1,4 @@
 <?php
-
 Class Questions extends CI_Controller {
 
     public function __construct() {
@@ -49,12 +48,12 @@ Class Questions extends CI_Controller {
 
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-     
+
         //$sampleData = $data["questions"];
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
-        
-        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);       
+
+        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
         //$data["leaderboard"] = $this->profilemodel->getTopTen();
         $this->view('LandingPage', $data);
@@ -85,10 +84,9 @@ Class Questions extends CI_Controller {
         $this->view('AskQuestionPage');
     }
 
-    public function setanswer() {
+    public function setAnswer() {
         $this->questionsmodel->set_answer();
-
-        $_SESSION['flash'] = 'Your question has been successfully posted.';
+        $_SESSION['flash'] = 'Your answer has been submitted for checking and verification.';
         redirect("questions/index");
     }
 
@@ -143,7 +141,8 @@ Class Questions extends CI_Controller {
 
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
-        
+        $data['full_name_db'] = $this->questionsmodel->get_fullname_by_id($slug);
+
         $_SESSION['currentQuestion'] = $data['question_item'];
 
         //$data['test_data'] = $this->questionsmodel->test_func($slug);

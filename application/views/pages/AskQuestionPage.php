@@ -128,7 +128,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" id="submitQuestion" ng-disabled="askForm.title.$touched && askForm.title.$invalid">
+            <button type="submit" class="btn btn-primary" id="submitQuestion" ng-disabled="askForm.title.$touched && askForm.title.$invalid">
                 Submit Question
             </button>
         </div>

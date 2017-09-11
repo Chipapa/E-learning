@@ -41,9 +41,6 @@ if (isset($this->session->userdata['logged_in'])) {
 
         <div class="row">
             <div class="col-sm-9 blog-main">  
-    <!--            <pre>
-                   
-                </pre>-->
 
                 <?php
                 if ($questions != NULL) {
@@ -65,7 +62,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                     <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
                                     <small><?php echo $time_asked; ?></small>
                                 </div>
-                                <p class="mb-1"><?php echo $question_item->question; ?></p>
+        <!--                                <p class="mb-1"><?php //echo $question_item->question;    ?></p>-->
 
                                 <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          
                                 <div>
@@ -124,52 +121,56 @@ if (isset($this->session->userdata['logged_in'])) {
                 </div>
             </div><!-- /.blog-sidebar -->
 
+            <pre>
+                <?php //print_r($questions) ?>
+            </pre>
         </div>
     </div>
-</form>
+
+    <?php echo '</form>'; ?>
 <!--<script type="text/javascript">
-    $(document).ready(function () {
-        //alert();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url(); ?>" + "index.php/profile/getleaderboard",
-            dataType: 'json',
-            data: {sampleData: 'HELLO'},
-            success: function (data) {
-                console.log(data);
-                //foreach display choices in Radio buttons
-            },
-            error: function (){
-                alert("HINDI GUMANA");
-            }
-        });
+$(document).ready(function () {
+    //alert();
+    $.ajax({
+        type: "POST",
+        url: "<?php //echo base_url();  ?>" + "index.php/profile/getleaderboard",
+        dataType: 'json',
+        data: {sampleData: 'HELLO'},
+        success: function (data) {
+            console.log(data);
+            //foreach display choices in Radio buttons
+        },
+        error: function (){
+            alert("HINDI GUMANA");
+        }
     });
+});
 </script>-->
 
 
-<?php
+    <?php
 
-function time_since($since) {
-    $chunks = array(
-        array(60 * 60 * 24 * 365, 'year'),
-        array(60 * 60 * 24 * 30, 'month'),
-        array(60 * 60 * 24 * 7, 'week'),
-        array(60 * 60 * 24, 'day'),
-        array(60 * 60, 'hour'),
-        array(60, 'minute'),
-        array(1, 'second')
-    );
+    function time_since($since) {
+        $chunks = array(
+            array(60 * 60 * 24 * 365, 'year'),
+            array(60 * 60 * 24 * 30, 'month'),
+            array(60 * 60 * 24 * 7, 'week'),
+            array(60 * 60 * 24, 'day'),
+            array(60 * 60, 'hour'),
+            array(60, 'minute'),
+            array(1, 'second')
+        );
 
-    for ($i = 0, $j = count($chunks); $i < $j; $i++) {
-        $seconds = $chunks[$i][0];
-        $name = $chunks[$i][1];
-        if (($count = floor($since / $seconds)) != 0) {
-            break;
+        for ($i = 0, $j = count($chunks); $i < $j; $i++) {
+            $seconds = $chunks[$i][0];
+            $name = $chunks[$i][1];
+            if (($count = floor($since / $seconds)) != 0) {
+                break;
+            }
         }
-    }
 
-    $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
-    return $print;
-}
-?>    
+        $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
+        return $print;
+    }
+    ?>    
 

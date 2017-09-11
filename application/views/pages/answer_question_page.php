@@ -1,6 +1,21 @@
+<?php
+if (isset($this->session->userdata['logged_in'])) {
+    $session_id = ($this->session->userdata['logged_in']['id']);
+    $username = ($this->session->userdata['logged_in']['username']);
+    $usertype = ($this->session->userdata['logged_in']['usertype']);
+    $fname = ($this->session->userdata['logged_in']['fname']);
+    $lname = ($this->session->userdata['logged_in']['lname']);
+} else {
+    header("location: loginpage");
+}
+?>
 
 <div class="container" id="mainDiv">
-    <?php //print_r($question_item[0]['type']) ?>
+
+    <pre>
+        <?php //print_r($question_item); //print_r($full_name_db);?>
+    </pre>
+
     <div class="form-group">
         <?php
 //        if (validation_errors()) {
@@ -10,18 +25,37 @@
 //            echo "</div>";
 //        }
         ?>
-        <?php echo form_open('questions/setanswer');?>  
+
+        <?php
+        $full_name = $full_name_db['fname'] . " " . $full_name_db['lname'];
+        //Questions posted by the logged in user will display a different time_asked format
+        if ($question_item[0]['who_posted'] === $session_id) {
+            $who_posted_message = "You posted this question " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago.";
+        } else {
+//                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
+            $who_posted_message = "Asked " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago by " . $full_name;
+        }
+        ?>
+
+        <?php echo form_open('questions/setAnswer'); ?>  
         <h5 class="mb-1"><?php echo $question_item[0]['title']; ?></h5>
-        <small> <?php echo "Posted " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago."; ?></br>  </small>
+        <small> <?php echo $who_posted_message; ?></br>  </small>
+
         <span class="badge badge-default "><?php echo $question_item[0]['category']; ?> </span>
         <span class="badge badge-default"><?php echo $question_item[0]['type'] ?> </span>
 
     </div>
 
+    <label for="questionTitle">The Question</label>
+    <div class="card">      
+        <div class="card-body bg-faded">
+            <?php echo $question_item[0]['question']; ?>
+        </div>
+    </div>
+    <br>
     <!-- Multiple Choice -->
     <div class="form-group" id="divMultipleChoiceAnswer">
-        <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
-        Multiple Choice
+        <label for="answerInstruction">Select the correct answer to the question.</label>
         <div class="col-sm-10">
             <div class="form-check">
                 <div class="col-lg-6">
@@ -71,8 +105,8 @@
 
     <!-- Coding -->
     <div class="form-group" id="divCodingAnswer">
-        <textarea class="form-control codemirror-textarea-answer" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
-        Coding
+        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
+        Type the code here.
         <textarea class="form-control codemirror-textarea-question" id="codeAnswer"></textarea>
     </div>
 
@@ -80,11 +114,35 @@
     <div class="form-group" id="divIdentificationAnswer">
         <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
         Identification
-        <input type="text" id="textAnswer" class="form-control"> </text>
+        <input type="text" id="textAnswer" class="form-control">
     </div>
-    <input  type="submit" id="submit"></input>
-</div>
-</form>
+    <br>
+    <button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit Answer</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Rate This Question</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    PLS. RATE ME DADY
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Rate and Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--end main container div-->
+
+<?php echo '</form>'; ?>
+
 <script type="text/javascript">
     //var answerArray = <?php echo json_encode($question_item); ?>;
     $(document).ready(function () {
@@ -109,7 +167,7 @@
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();  ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();           ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);
@@ -147,4 +205,3 @@ function time_since($since) {
     $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
     return $print;
 }
-?>   
