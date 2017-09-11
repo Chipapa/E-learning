@@ -49,14 +49,14 @@ Class Questions extends CI_Controller {
 
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
-        $data['leaderboard'] = $this->profilemodel->getTopTen();
-        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
-        // $sampleData = $data["questions"];
+     
+        //$sampleData = $data["questions"];
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
-        // $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
+        //$data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
+        
+        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);       
         $data["links"] = $this->pagination->create_links();
-        $data["leaderboard"] = $this->profilemodel->getTopTen();
+        //$data["leaderboard"] = $this->profilemodel->getTopTen();
         $this->view('LandingPage', $data);
     }
 
@@ -106,9 +106,15 @@ Class Questions extends CI_Controller {
         } else if ($this->input->post('type') === "Identification") {
             $this->form_validation->set_rules('identificationAnswer', 'Answer to Identification', 'required');
         }
-
         if ($this->form_validation->run() === FALSE) {
             $this->view("askquestionpage");
+//            $data = array(
+//                'title' => form_error('title'),
+//                'question' => form_error('question')
+//            );
+////            $data['titlePHP'] = $this->input->post('inputTitle');
+//            echo json_encode($data);
+//            echo validation_errors();
         } else {
             $this->questionsmodel->ask_question();
 
@@ -119,7 +125,6 @@ Class Questions extends CI_Controller {
             $_SESSION['flash'] = 'Your question has been successfully posted.';
             redirect("questions/index");
         }
-
 //          TESTING PART AJAX     
 //        if ($this->input->post('title') == "") {
 //            $message = "You can't send empty text";
@@ -151,4 +156,15 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
+
+    public function getleaderboard() {
+        //$data = $this->input->post('sampleData');
+        // $username = ($this->session->userdata['logged_in']['username']);
+        //echo json_encode($data['Leaderboards']);    
+        //$this->view('LandingPage', $data);  
+        //while($myQuestions != null)
+        $this->view('LandingPage', $data);
+        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+    }
+
 }

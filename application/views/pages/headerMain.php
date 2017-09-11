@@ -25,13 +25,12 @@ if (isset($this->session->userdata['logged_in'])) {
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script text="type/javascript" src="<?php echo base_url();?>assets/plugin/codemirror/lib/codemirror.js" ></script>
         <script text="type/javascript" src="<?php echo base_url();?>assets/plugin/codemirror/mode/vb/vb.js" ></script>
-        
-        
-        
-        
+<!--        <script text="type/javascript" src="<?php //echo base_url();?>assets/js/validator.js" ></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> 
+                       
         
     </head>
-    <body>
+    <body ng-app="">
         <nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
             <a class="navbar-brand" href="<?php echo site_url('questions/index'); ?>">CQV E-Learning</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">

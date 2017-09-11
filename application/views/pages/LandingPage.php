@@ -39,20 +39,20 @@ if (isset($this->session->userdata['logged_in'])) {
         echo "</div>"
         ?>
 
-    <div class="row">
-        <div class="col-sm-9 blog-main">  
-<!--            <pre>
-               
-            </pre>-->
-          
-            <?php
-            if ($questions != NULL) {
-                foreach ($questions as $question_item):
-                $full_name_db = $question_item->fname." ".$question_item->lname;
-                    //Questions posted by the logged in user will display a different time_asked and link_question format
-                    if ($question_item->who_posted === $session_id) {
-                        $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
-                    } else {
+        <div class="row">
+            <div class="col-sm-9 blog-main">  
+    <!--            <pre>
+                   
+                </pre>-->
+
+                <?php
+                if ($questions != NULL) {
+                    foreach ($questions as $question_item):
+                        $full_name_db = $question_item->fname . " " . $question_item->lname;
+                        //Questions posted by the logged in user will display a different time_asked and link_question format
+                        if ($question_item->who_posted === $session_id) {
+                            $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
+                        } else {
 //                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
                             $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $full_name_db;
                         }
@@ -113,8 +113,10 @@ if (isset($this->session->userdata['logged_in'])) {
                     <div class="list-group col-sm-auto">
 
                         <?php
-                        foreach ($leaderboard as $test_item) {
-                            echo "<a href='#' class='list-group-item list-group-item-action'>" . $test_item[0]."-".$test_item[1] . "</a>";
+                        if (isset($leaderboard)) {
+                            foreach ($leaderboard as $test_item) {
+                                echo "<a href='#' class='list-group-item list-group-item-action'>" . $test_item[0] . "-" . $test_item[1] . "</a>";
+                            }
                         }
                         ?>      
 

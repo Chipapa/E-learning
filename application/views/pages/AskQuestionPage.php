@@ -13,17 +13,17 @@
         ?>
 
         <?php
-        echo form_open('questions/create');
-        //echo form_open();
+        //$attributes = array('novalidate' => '', 'id' => 'needs-validation');
+        echo form_open('questions/create', 'id="needs-validation" name="askForm" novalidate');
         ?>     
 
-        <!--        TEST DIV FOR JSON, REMOVE ME-->
-        <div id="testJson" style="display: none">
-            <div id="titleValue">
-
-            </div>
-        </div>
-
+        <?php
+        //TEXT JSON, REMOVE ME
+        echo '<div id="testJson" style="display: none" class="alert alert-danger" role="alert">';
+        echo '<div id="titleValue">';
+        echo '</div>';
+        echo '</div>';
+        ?>
 
         <?php $categories = $_SESSION['categories']; ?>     
         <div class="form-group">
@@ -34,19 +34,24 @@
 
                     <?php
                 endforeach;
-                unset($_SESSION['categories']);
                 ?>
 
             </select>
         </div>
 
         <label for="inputEmail3">Title</label>
-        <input type="text" class="form-control" name="title" id="inputTitle" placeholder="Title of the question">
+        <input type="text" class="form-control" name="title" id="inputTitle" placeholder="Title of the question" ng-model="title" required>
+        <span style="color:red" ng-show="askForm.title.$invalid && askForm.title.$touched">
+            <span ng-show="askForm.title.$error.required">Title is required.</span>
+        </span>
+        
     </div>
+
     <div class="form-group">
         <label for="inputPassword3">Question</label>
-        <textarea class="form-control" name="question" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <textarea class="form-control" name="question" id="inputQuestion" rows="3"></textarea>
     </div>
+
     <div class="form-group">
         <label for="exampleFormControlSelect1">Type of Question</label>
         <select name="type" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);" id="questionType">
@@ -123,8 +128,97 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" id="submitQuestion">Submit Question</button>
+            <button type="submit" id="submitQuestion" ng-disabled="askForm.title.$touched && askForm.title.$invalid">
+                Submit Question
+            </button>
         </div>
     </div>
-</form>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+//        (function ()  {
+//            "use strict";
+//            window.addEventListener("load", function () {
+//                var form = document.getElementById("needs-validation");
+//                form.addEventListener("submit", function (event) {
+//                    if (form.checkValidity() === false) {
+//                        event.preventDefault();
+//                        event.stopPropagation();
+//                    }
+//                    form.classList.add("was-validated");
+//                }, false);
+//            }, false);
+//        }());
+
+//        $("#submitQuestion").click(function (event) {
+//            if ($("#questionType").val() === "Multiple Choice") {
+//                var values = [];
+//                $("input[id='inputChoice']").each(function () {
+//                    values.push($.trim($(this).val()));
+//                });
+//
+//                var dups = false;
+//                var emptyChoices = false;
+//                for (var i = 0; i < values.length - 1; i++) {
+//                    if (values[i + 1] === values[i]) {
+//                        //results.push(values[i]);
+//                        dups = true;
+//                    }
+//                    if (values[i] === "") {
+//                        emptyChoices = true;
+//                    }
+//                }
+//                //alert(results.join("\n"));
+////            if (emptyChoices === true) {
+////                alert("Choices cannot have blank answers.");
+////            } else
+//                if (dups === true && emptyChoices === true) {                   
+//                    event.preventDefault();
+//                    jQuery("div#testJson").show();
+//                    //alert("Choices cannot have duplicates.");
+//                    //var javascriptVariable = "John";
+//                    //window.location.href = "<?php //echo base_url();                    ?>" + "index.php/questions/create?dups=" + dups;
+//                }
+//            }
+//        });
+
+//        $("#submitQuestion").click(function (event) {
+//            //alert("test alert");        
+//           // event.preventDefault();            
+//            var title = $("#inputTitle").val();
+//            var question = $("#inputQuestion").val();
+//            jQuery.ajax({
+//                type: "POST",
+//                url: "<?php //echo base_url();           ?>" + "index.php/questions/create",
+//                dataType: 'json',
+//                data: {
+//                    inputTitle: title, 
+//                    inputQuestion: question
+//                },
+//                success: function (res) {
+//                    if (res)
+//                    {
+//                        // Show Entered Value 
+//                        jQuery("div#testJson").show();
+//                        jQuery("div#titleValue").html(res);
+//                    }
+//                }
+//            });
+
+//            jQuery.ajax({
+//                type: "POST",
+//                url: "<?php //echo base_url();          ?>" + "index.php/questions/create",
+//                dataType: 'json',
+//                data: {
+//                    inputTitle: title, 
+//                    inputQuestion: question
+//                },
+//                success: function (data) {
+//                    alert(data.question);
+//                }
+//            });
+//        });
+    </script>
+
+    <?php echo '</form>'; ?>
 </div>

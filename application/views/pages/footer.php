@@ -6,18 +6,20 @@
 </footer>
 
 
-<script type="text/javascript">
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-    
-    $(document).ready(function () {
 
+<script type="text/javascript">
+    //$('#needs-validation').validator();
+    
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $(document).ready(function () {
         var codeQuestion = $(".codemirror-textarea-question")[0];
         var codeAnswer = $(".codemirror-textarea-answer")[0];
         var editorQuestion = CodeMirror.fromTextArea(codeQuestion, {
             lineNumbers: true,
-            mode: "vb",
+            mode: "vb"
 
         });
         var editorAnswer = CodeMirror.fromTextArea(codeAnswer, {
@@ -26,8 +28,8 @@
             readOnly: true
         });
     });
-    
-    $document.ready(function () {
+
+    $(document).ready(function () {
         $('#divCoding').hide();
         $('#divIdentification').hide();
     });
@@ -94,9 +96,12 @@
 //            success: function (result) {
 //                alert(result);
 //            }
-//        });
-    });
+//        }
+//    });
+
 </script>
+
+
 
 </body>
 </html>
