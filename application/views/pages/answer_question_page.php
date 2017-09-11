@@ -1,82 +1,92 @@
-<form type="post">
-    <div class="container" id="mainDiv">
-        <?php //print_r($question_item[0]['type']) ?>
-        <div class="form-group">
-            <h5 class="mb-1"><?php echo $question_item[0]['title']; ?></h5>
-            <small> <?php echo "Posted " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago."; ?></br>  </small>
-            <span class="badge badge-default "><?php echo $question_item[0]['category']; ?> </span>
-            <span class="badge badge-default"><?php echo $question_item[0]['type'] ?> </span>
 
-        </div>
+<div class="container" id="mainDiv">
+    <?php //print_r($question_item[0]['type']) ?>
+    <div class="form-group">
+        <?php
+//        if (validation_errors()) {
+//            echo "<div class='alert alert-danger' role='alert'>";
+//
+//            echo validation_errors();
+//            echo "</div>";
+//        }
+        ?>
+        <?php echo form_open('questions/setanswer');?>  
+        <h5 class="mb-1"><?php echo $question_item[0]['title']; ?></h5>
+        <small> <?php echo "Posted " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago."; ?></br>  </small>
+        <span class="badge badge-default "><?php echo $question_item[0]['category']; ?> </span>
+        <span class="badge badge-default"><?php echo $question_item[0]['type'] ?> </span>
 
-        <!-- Multiple Choice -->
-        <div class="form-group" id="divMultipleChoiceAnswer">
-            <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
-            Multiple Choice
-            <div class="col-sm-10">
-                <div class="form-check">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="<?php echo $question_item[0]['option1']; ?>" checked>
-                            </span>
-                            <label type="text" class="form-control" name="choice1" id="answerChoice1"> <?php echo $question_item[0]['option1']; ?>
-                        </div>
+    </div>
+
+    <!-- Multiple Choice -->
+    <div class="form-group" id="divMultipleChoiceAnswer">
+        <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
+        Multiple Choice
+        <div class="col-sm-10">
+            <div class="form-check">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" aria-label="Radio button for following text input" name="gridRadiosAnswer" id="gridRadios1" value="<?php echo $question_item[0]['option1']; ?>" checked>
+                        </span>
+                        <label type="text" class="form-control" name="choice1" id="answerChoice1"> <?php echo $question_item[0]['option1']; ?>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-check">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios2"  value="<?php echo $question_item[0]['option2']; ?>">
-                            </span>
-                            <label type="text" class="form-control" name="choice2" id="answerChoice2"> <?php echo $question_item[0]['option2']; ?>
-                        </div>
+            <div class="form-check">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" aria-label="Radio button for following text input" name="gridRadiosAnswer" id="gridRadios2"  value="<?php echo $question_item[0]['option2']; ?>">
+                        </span>
+                        <label type="text" class="form-control" name="choice2" id="answerChoice2"> <?php echo $question_item[0]['option2']; ?>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-check">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios3"  value="<?php echo $question_item[0]['option3']; ?>">
-                            </span>
-                            <label type="text" class="form-control" name="choice3" id="answerChoice3"> <?php echo $question_item[0]['option3']; ?>
-                        </div>
+            <div class="form-check">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" aria-label="Radio button for following text input" name="gridRadiosAnswer" id="gridRadios3"  value="<?php echo $question_item[0]['option3']; ?>">
+                        </span>
+                        <label type="text" class="form-control" name="choice3" id="answerChoice3"> <?php echo $question_item[0]['option3']; ?>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-check">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4"  value="<?php echo $question_item[0]['option4']; ?>">
-                            </span>
-                            <label type="text" class="form-control" name="choice4" id="answerChoice4"> <?php echo $question_item[0]['option4']; ?>
-                        </div>
+            <div class="form-check">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4"  value="<?php echo $question_item[0]['option4']; ?>">
+                        </span>
+                        <label type="text" class="form-control" name="choice4" id="answerChoice4"> <?php echo $question_item[0]['option4']; ?>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Coding -->
-        <div class="form-group" id="divCodingAnswer">
-            <textarea class="form-control codemirror-textarea-answer" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
-            Coding
-            <textarea class="form-control codemirror-textarea-question" id="codeAnswer"></textarea>
-        </div>
-
-        <!-- Identification -->
-        <div class="form-group" id="divIdentificationAnswer">
-            <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
-            Identification
-            <input type="text" id="textAnswer" class="form-control"> </text>
-        </div>
-        <input  type="submit" id="submit"></input>
     </div>
+
+    <!-- Coding -->
+    <div class="form-group" id="divCodingAnswer">
+        <textarea class="form-control codemirror-textarea-answer" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
+        Coding
+        <textarea class="form-control codemirror-textarea-question" id="codeAnswer"></textarea>
+    </div>
+
+    <!-- Identification -->
+    <div class="form-group" id="divIdentificationAnswer">
+        <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
+        Identification
+        <input type="text" id="textAnswer" class="form-control"> </text>
+    </div>
+    <input  type="submit" id="submit"></input>
+</div>
 </form>
 <script type="text/javascript">
+    //var answerArray = <?php echo json_encode($question_item); ?>;
     $(document).ready(function () {
         //var choicesAnswer = new Array();
         //var answer;
@@ -91,17 +101,29 @@
         } else if (questionType === "Identification") {
             $('#divIdentificationAnswer').show();
         }
+
+        //console.log(answerArray);
+
     });
-    
-    $("#submit").click(function () {
-        var val = $('input[type="radio"]:checked').val();
-        alert(val);
-        //alert(val);
-    });
+
+//    $("#submit").click(function () {
+//        $.ajax({
+//            type: "post",
+//            url: "<?php //echo base_url();  ?>"+"index.php/questions/setanswer",
+//            data: {arrayAnswer: answerArray},
+//            success: function (data) {
+//                alert(data);
+//            },
+//            error: function () {
+//                alert("Ayaw");
+//            }
+//        });
+//    });
 </script>
 
 <?php
-echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
+
+//echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
 
 function time_since($since) {
     $chunks = array(
