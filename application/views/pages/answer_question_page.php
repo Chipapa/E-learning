@@ -13,7 +13,10 @@ if (isset($this->session->userdata['logged_in'])) {
 <div class="container" id="mainDiv">
 
     <pre>
-        <?php //print_r($question_item); //print_r($full_name_db);?>
+        <?php
+            $test = $_SESSION['currentQuestion'];
+            print_r($test); //print_r($full_name_db);
+        ?>
     </pre>
 
     <div class="form-group">
@@ -107,14 +110,14 @@ if (isset($this->session->userdata['logged_in'])) {
     <div class="form-group" id="divCodingAnswer">
         <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
         Type the code here.
-        <textarea class="form-control codemirror-textarea-question" id="codeAnswer"></textarea>
+        <textarea class="form-control codemirror-textarea-question" id="codeAnswer" name="codeAnswer"></textarea>
     </div>
 
     <!-- Identification -->
     <div class="form-group" id="divIdentificationAnswer">
         <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
         Identification
-        <input type="text" id="textAnswer" class="form-control">
+        <input type="text" id="textAnswer" name="textAnswer" class="form-control">
     </div>
     <br>
     <button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit Answer</button>
@@ -167,7 +170,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();           ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();            ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);

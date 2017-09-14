@@ -53,7 +53,6 @@ class QuestionsModel extends CI_Model {
             }
             return false;
         }
-//        $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
 
         $condition = "category ='" . $category . "'";
         $this->db->limit($limit, $start);
@@ -117,10 +116,6 @@ class QuestionsModel extends CI_Model {
         if (isset($this->session->userdata['logged_in'])) {
             $id = ($this->session->userdata['logged_in']['id']);
             $username = ($this->session->userdata['logged_in']['username']);
-            //$usertype = ($this->session->userdata['logged_in']['usertype']);
-//            $fname = ($this->session->userdata['logged_in']['fname']);
-//            $lname = ($this->session->userdata['logged_in']['lname']);
-            //$full_name = $fname . " " . $lname;
         } else {
             $username = "unknown";
         }
@@ -136,6 +131,7 @@ class QuestionsModel extends CI_Model {
             );
             $this->db->insert('questions', $data);
 
+            //get id of the last insert then use as FK to the next table
             $currentQuestionId = $this->db->insert_id();
             $dataChoices = array(
                 'questionID' => $currentQuestionId,
@@ -251,11 +247,11 @@ class QuestionsModel extends CI_Model {
     public function get_questions($slug = FALSE) {
         if ($slug === FALSE) {
 
-            $this->db->select('*');
-            $this->db->from('questions');
-            $this->db->order_by("date_posted", "desc");
-            $query = $this->db->get();
-            return $query->result_array();
+//            $this->db->select('*');
+//            $this->db->from('questions');
+//            $this->db->order_by("date_posted", "desc");
+//            $query = $this->db->get();
+//            return $query->result_array();
         }
 
         $condition = "questions.id ='" . $slug . "'";
@@ -282,6 +278,7 @@ class QuestionsModel extends CI_Model {
         //$this->db->limit(1);
         $query = $this->db->get();
         $questionArray = $query->result_array();
+        
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
@@ -293,6 +290,9 @@ class QuestionsModel extends CI_Model {
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
             return $questionArray;
+        }
+        if($questionType === "Identification"){
+            
         }
         //return $query->result_array();
     }
@@ -346,6 +346,7 @@ class QuestionsModel extends CI_Model {
         $id = ($this->session->userdata['logged_in']['id']);
         $questionArray = $_SESSION['currentQuestion'];
         unset($_SESSION['currentQuestion']);
+        
         if ($questionArray[0]['type'] === "Multiple Choice") {
             $dataAnsweredBy = array(
                 'userID' => $id,
@@ -354,30 +355,30 @@ class QuestionsModel extends CI_Model {
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
         }
-//        else if ($question_item[0]['type'] === "Coding") {
-//            $dataAnsweredBy = array(
-//                'userID' => $id,
-//                'questionID' => $question_item[0]['id'],
-//                'answer' => $this->input->post('gridRadiosAnswer'),
-//                'answeredWhen' => date('Y-m-d H:i:s')
-//            );
-//        }
-//        else if ($question_item[0]['type'] === "Identification") {
-//            $dataAnsweredBy = array(
-//                'userID' => $id,
-//                'questionID' => $question_item[0]['id'],
-//                'answer' => $this->input->post('gridRadiosAnswer'),
-//                'answeredWhen' => date('Y-m-d H:i:s')
-//            );
-//        }
+        else if ($questionArray[0]['type'] === "Coding") {
+            $dataAnsweredBy = array(
+                'userID' => $id,
+                'questionID' => $questionArray[0]['id'],
+                'answer' => $this->input->post('codeAnswer'),
+                'answeredWhen' => date('Y-m-d H:i:s')
+            );
+        }
+        else if ($questionArray[0]['type'] === "Identification") {
+            $dataAnsweredBy = array(
+                'userID' => $id,
+                'questionID' => $questionArray[0]['title'],
+                'answer' => $this->input->post('textAnswer'),
+                'answeredWhen' => date('Y-m-d H:i:s')
+            );
+        }
 
         $this->db->insert('answered_by', $dataAnsweredBy);
-        $this->update_answer($questionArray);
+        $this->update_answer($questionArray[0]['id']);
     }
 
     public function update_answer($questionArray) {
         $this->db->set('num_of_answers', 'num_of_answers+1', FALSE);
-        $this->db->where('id', $questionArray[0]['id']);
+        $this->db->where('id', $questionArray);
         $this->db->update('questions');
 
 //        $stockUpdate = array(
