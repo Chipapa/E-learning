@@ -1,6 +1,6 @@
 
 <?php
-if (isset($this->session->userdata['logged_in'])) {
+//if (isset($this->session->userdata['logged_in'])) {
 //     $username = ($this->session->userdata['logged_in']['username']);
 //       $usertype = ($this->session->userdata['logged_in']['usertype']);         
 //     $fname = ($this->session->userdata['logged_in']['fname']);
@@ -12,9 +12,9 @@ if (isset($this->session->userdata['logged_in'])) {
 //   
 // //echo site_url('profile/profilepage/'.$full_name);
 //   
-} else {
-    header("location: loginpage");
-}
+//} else {
+//    header("location: loginpage");
+//}
 ?>
 <div class="container" id="mainDiv">
 

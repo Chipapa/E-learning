@@ -11,19 +11,10 @@ if (isset($this->session->userdata['logged_in'])) {
 ?>
 
 <div class="container" id="mainDiv">
-
-    <pre>
-        <?php
-            $test = $_SESSION['currentQuestion'];
-            print_r($test); //print_r($full_name_db);
-        ?>
-    </pre>
-
     <div class="form-group">
         <?php
 //        if (validation_errors()) {
 //            echo "<div class='alert alert-danger' role='alert'>";
-//
 //            echo validation_errors();
 //            echo "</div>";
 //        }
@@ -31,11 +22,16 @@ if (isset($this->session->userdata['logged_in'])) {
 
         <?php
         $full_name = $full_name_db['fname'] . " " . $full_name_db['lname'];
-        //Questions posted by the logged in user will display a different time_asked format
+
+        $isOwnQuestion = false;
         if ($question_item[0]['who_posted'] === $session_id) {
+            $isOwnQuestion = true;
+        }
+
+        //Questions posted by the logged in user will display a different time_asked format
+        if ($isOwnQuestion) {
             $who_posted_message = "You posted this question " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago.";
         } else {
-//                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
             $who_posted_message = "Asked " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago by " . $full_name;
         }
         ?>
@@ -64,7 +60,17 @@ if (isset($this->session->userdata['logged_in'])) {
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <input type="radio" aria-label="Radio button for following text input" name="gridRadiosAnswer" id="gridRadios1" value="<?php echo $question_item[0]['option1']; ?>" checked>
+                            <input type="radio" 
+                                   aria-label="Radio button for following text input" 
+                                   name="gridRadiosAnswer" 
+                                   id="gridRadios1" 
+                                   value="<?php echo $question_item[0]['option1']; ?>" 
+                                   <?php
+                                   if ($isOwnQuestion) {
+                                       echo "disabled=''";
+                                   }
+                                   ?> 
+                                   checked>
                         </span>
                         <label type="text" class="form-control" name="choice1" id="answerChoice1"> <?php echo $question_item[0]['option1']; ?>
                     </div>
@@ -75,7 +81,16 @@ if (isset($this->session->userdata['logged_in'])) {
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <input type="radio" aria-label="Radio button for following text input" name="gridRadiosAnswer" id="gridRadios2"  value="<?php echo $question_item[0]['option2']; ?>">
+                            <input type="radio" 
+                                   aria-label="Radio button for following text input" 
+                                   name="gridRadiosAnswer" 
+                                   id="gridRadios2"  
+                                   value="<?php echo $question_item[0]['option2']; ?>"
+                                   <?php
+                                   if ($isOwnQuestion) {
+                                       echo "disabled=''";
+                                   }
+                                   ?> >
                         </span>
                         <label type="text" class="form-control" name="choice2" id="answerChoice2"> <?php echo $question_item[0]['option2']; ?>
                     </div>
@@ -86,7 +101,16 @@ if (isset($this->session->userdata['logged_in'])) {
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <input type="radio" aria-label="Radio button for following text input" name="gridRadiosAnswer" id="gridRadios3"  value="<?php echo $question_item[0]['option3']; ?>">
+                            <input type="radio" 
+                                   aria-label="Radio button for following text input" 
+                                   name="gridRadiosAnswer" 
+                                   id="gridRadios3"  
+                                   value="<?php echo $question_item[0]['option3']; ?>"
+                                   <?php
+                                   if ($isOwnQuestion) {
+                                       echo "disabled=''";
+                                   }
+                                   ?> >
                         </span>
                         <label type="text" class="form-control" name="choice3" id="answerChoice3"> <?php echo $question_item[0]['option3']; ?>
                     </div>
@@ -97,7 +121,16 @@ if (isset($this->session->userdata['logged_in'])) {
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4"  value="<?php echo $question_item[0]['option4']; ?>">
+                            <input type="radio" 
+                                   aria-label="Radio button for following text input" 
+                                   name="gridRadiosAnswer" 
+                                   id="gridRadios4"  
+                                   value="<?php echo $question_item[0]['option4']; ?>"
+                                   <?php
+                                   if ($isOwnQuestion) {
+                                       echo "disabled=''";
+                                   }
+                                   ?> >
                         </span>
                         <label type="text" class="form-control" name="choice4" id="answerChoice4"> <?php echo $question_item[0]['option4']; ?>
                     </div>
@@ -117,10 +150,28 @@ if (isset($this->session->userdata['logged_in'])) {
     <div class="form-group" id="divIdentificationAnswer">
         <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
         Identification
-        <input type="text" id="textAnswer" name="textAnswer" class="form-control">
+        <input type="text" 
+               id="textAnswer" 
+               name="textAnswer" 
+               class="form-control" 
+               <?php
+               if ($isOwnQuestion) {
+                   echo "disabled=''";
+               }
+               ?> >
     </div>
-    <br>
-    <button type="button" id="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit Answer</button>
+
+    <button type="button" 
+            id="submit" 
+            class="btn btn-primary" 
+            data-toggle="modal" 
+            data-target="#exampleModal" 
+            <?php
+            if ($isOwnQuestion) {
+                echo "disabled=''";
+            }
+            ?> >Submit Answer
+    </button>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -142,6 +193,15 @@ if (isset($this->session->userdata['logged_in'])) {
             </div>
         </div>
     </div>
+
+    <!--    FOR DEBUGGING-->
+    <pre>
+        <?php
+//        $test = $_SESSION['currentQuestion'];
+//        print_r($test); //print_r($full_name_db);
+        ?>
+    </pre>
+
 </div> <!--end main container div-->
 
 <?php echo '</form>'; ?>
@@ -170,7 +230,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();            ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();                        ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);

@@ -1,4 +1,5 @@
 <?php
+
 Class Questions extends CI_Controller {
 
     public function __construct() {
@@ -55,8 +56,16 @@ Class Questions extends CI_Controller {
 
         $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
+
+        if (isset($this->session->userdata['logged_in'])) {
+            $userType = ($this->session->userdata['logged_in']['usertype']);
+        }
         //$data["leaderboard"] = $this->profilemodel->getTopTen();
-        $this->view('LandingPage', $data);
+        if ($userType === "student") {
+            $this->view('LandingPage', $data);
+        }else if($userType === "admin"){
+            $this->view('LandingPageAdmin', $data);
+        }
     }
 
     public function view($page = false, $passData = false) {
@@ -70,7 +79,16 @@ Class Questions extends CI_Controller {
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
-            $this->load->view('pages/headerMain');
+
+            if (isset($this->session->userdata['logged_in'])) {
+                $userType = ($this->session->userdata['logged_in']['usertype']);
+            }
+
+            if ($userType === "student") {
+                $this->load->view('pages/headerMain');
+            } else if ($userType === "admin") {
+                $this->load->view('pages/headerAdmin');
+            }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }

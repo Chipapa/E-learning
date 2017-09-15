@@ -244,6 +244,16 @@ class QuestionsModel extends CI_Model {
         }
     }
 
+    public function getQuestionByID($id) {
+        $condition = "id='" . $id . "'";
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->where($condition);
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_questions($slug = FALSE) {
         if ($slug === FALSE) {
 
@@ -254,8 +264,8 @@ class QuestionsModel extends CI_Model {
 //            return $query->result_array();
         }
 
-        $condition = "questions.id ='" . $slug . "'";
-        $this->db->select('*');
+//        $condition = "questions.id ='" . $slug . "'";
+//        $this->db->select('*');
 //        $this->db->from('questions');
 //        $this->db->join('users', 'questions.who_posted = users.id');       
 //        $this->db->where($condition);
@@ -269,16 +279,16 @@ class QuestionsModel extends CI_Model {
 //                . 'questions.type, '
 //                . 'questions.who_posted, '
 //                . 'questions.answer');
-
-        $this->db->from('questions');
-        $this->db->join('users', 'users.id = questions.who_posted');
-        $this->db->where($condition);
-
+//        $this->db->from('questions');
+//        $this->db->join('users', 'users.id = questions.who_posted');
+//        $this->db->where($condition);
         //$this->db->join('users', 'users.id = questions.who_posted');
         //$this->db->limit(1);
-        $query = $this->db->get();
-        $questionArray = $query->result_array();
-        
+//        $query = $this->db->get();
+//        $questionArray = $query->result_array();
+             
+        $questionArray = $this->getQuestionByID($slug);
+
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
@@ -291,8 +301,12 @@ class QuestionsModel extends CI_Model {
             $questionArray[0]['option4'] = null;
             return $questionArray;
         }
-        if($questionType === "Identification"){
-            
+        if ($questionType === "Identification") {
+            return $questionArray;
+        }
+        
+        if ($questionType === "Coding") {
+            return $questionArray;
         }
         //return $query->result_array();
     }
@@ -346,7 +360,7 @@ class QuestionsModel extends CI_Model {
         $id = ($this->session->userdata['logged_in']['id']);
         $questionArray = $_SESSION['currentQuestion'];
         unset($_SESSION['currentQuestion']);
-        
+
         if ($questionArray[0]['type'] === "Multiple Choice") {
             $dataAnsweredBy = array(
                 'userID' => $id,
@@ -354,19 +368,17 @@ class QuestionsModel extends CI_Model {
                 'answer' => $this->input->post('gridRadiosAnswer'),
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
-        }
-        else if ($questionArray[0]['type'] === "Coding") {
+        } else if ($questionArray[0]['type'] === "Coding") {
             $dataAnsweredBy = array(
                 'userID' => $id,
                 'questionID' => $questionArray[0]['id'],
                 'answer' => $this->input->post('codeAnswer'),
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
-        }
-        else if ($questionArray[0]['type'] === "Identification") {
+        } else if ($questionArray[0]['type'] === "Identification") {
             $dataAnsweredBy = array(
                 'userID' => $id,
-                'questionID' => $questionArray[0]['title'],
+                'questionID' => $questionArray[0]['id'],
                 'answer' => $this->input->post('textAnswer'),
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
