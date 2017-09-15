@@ -153,7 +153,8 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Coding -->
     <div class="form-group" id="divCodingAnswer">
-        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea><br>
+        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea><br>
+
     </div>
 
     <button type="button"  
