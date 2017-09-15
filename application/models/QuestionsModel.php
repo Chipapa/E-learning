@@ -127,7 +127,8 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('gridRadios')
+                'answer' => $this->input->post('gridRadios'),
+                'status' => 'notverified'
             );
             $this->db->insert('questions', $data);
 
@@ -149,7 +150,8 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => ''
+                'answer' => '',
+                'status' => 'notverified'
             );
             $this->db->insert('questions', $dataIdentification);
         } else if ($this->input->post('type') === "Coding") {
@@ -160,10 +162,11 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('codingAnswer')
+                'answer' => $this->input->post('codingAnswer'),
+                'status' => 'notverified'
             );
             $this->db->insert('questions', $dataCoding);
-            
+
             $currentQuestionId = $this->db->insert_id();
             $dataCoding = array(
                 'questionID' => $currentQuestionId,
@@ -302,18 +305,14 @@ class QuestionsModel extends CI_Model {
             $questionArray[0]['answer'] = $questionArray[0][$questionArray[0]['answer']];
             $questionArray[0]['code'] = null;
             return $questionArray;
-        } 
-        
-        else if ($questionType === "Identification") {
+        } else if ($questionType === "Identification") {
             $questionArray[0]['option1'] = null;
             $questionArray[0]['option2'] = null;
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
             $questionArray[0]['code'] = null;
             return $questionArray;
-        }
-
-        else if ($questionType === "Coding") {
+        } else if ($questionType === "Coding") {
             $questionArray = $this->get_coding($slug);
             $questionArray[0]['option1'] = null;
             $questionArray[0]['option2'] = null;
@@ -361,7 +360,7 @@ class QuestionsModel extends CI_Model {
 //        );
         return $cdQuestion;
     }
-    
+
     public function get_fullname_by_id($questionID) {
 //        $condition = "id ='" . $questionID . "'";
 //        $this->db->select('users.fname, users.lname');
@@ -431,6 +430,33 @@ class QuestionsModel extends CI_Model {
         $this->db->set('unanswered', 'unanswered-1', FALSE);
         $this->db->where('category', $questionArray[0]['category']);
         $this->db->update('stockmarket', $stockUpdate);
+    }
+
+    public function set_status() {
+        $questionArray = $_SESSION['currentQuestion'];
+        unset($_SESSION['currentQuestion']);
+        if ($this->input->post('rejectComment') == null) {
+            $data = array(
+                'status' => 'verified',
+                'comment' => 'Your question has been verified!'
+            );
+        } else {
+            $data = array(
+                'status' => 'removed',
+                'comment' => $this->input->post('rejectComment')
+            );
+        }
+        $this->db->where('id', $questionArray[0]['id']);
+        $this->db->update('questions', $data);
+
+//        $dataAnsweredBy = array(
+//                'userID' => $id,
+//                'questionID' => $questionArray[0]['id'],
+//                'answer' => $this->input->post('gridRadiosAnswer'),
+//                'answeredWhen' => date('Y-m-d H:i:s')
+//            );
+//        $this->db->insert('answered_by', $dataAnsweredBy);
+        //$this->update_answer($questionArray[0]['id']);
     }
 
 }
