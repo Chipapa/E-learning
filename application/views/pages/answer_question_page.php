@@ -141,16 +141,23 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Coding -->
     <div class="form-group" id="divCodingAnswer">
-        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
-        Type the code here.
-        <textarea class="form-control codemirror-textarea-question" id="codeAnswer" name="codeAnswer"></textarea>
+        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea></br>
+
+        <div <?php
+        if ($isOwnQuestion) {
+            echo "style='display:none'";
+        }
+        ?>>
+            Type the code here.
+            <textarea class="form-control codemirror-textarea-question" id="codeAnswer" name="codeAnswer" ></textarea>
+        </div>
     </div>
 
     <!-- Identification -->
     <div class="form-group" id="divIdentificationAnswer">
         <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
         Identification
-        <input type="text" 
+        <input type="text"  
                id="textAnswer" 
                name="textAnswer" 
                class="form-control" 
@@ -230,7 +237,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();                        ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();                         ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);

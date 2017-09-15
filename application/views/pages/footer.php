@@ -17,6 +17,7 @@
     $(document).ready(function () {
         var codeQuestion = $(".codemirror-textarea-question")[0];
         var codeAnswer = $(".codemirror-textarea-answer")[0];
+        
         var editorQuestion = CodeMirror.fromTextArea(codeQuestion, {
             lineNumbers: true,
             mode: "vb"

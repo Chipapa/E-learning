@@ -149,7 +149,7 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('identificationAnswer')
+                'answer' => ''
             );
             $this->db->insert('questions', $dataIdentification);
         } else if ($this->input->post('type') === "Coding") {
@@ -163,6 +163,13 @@ class QuestionsModel extends CI_Model {
                 'answer' => $this->input->post('codingAnswer')
             );
             $this->db->insert('questions', $dataCoding);
+            
+            $currentQuestionId = $this->db->insert_id();
+            $dataCoding = array(
+                'questionID' => $currentQuestionId,
+                'code' => $this->input->post('codingAnswer'),
+            );
+            $this->db->insert('coding', $dataCoding);
         }
         $this->update_stock_market($questionCategory);
     }
@@ -286,29 +293,42 @@ class QuestionsModel extends CI_Model {
         //$this->db->limit(1);
 //        $query = $this->db->get();
 //        $questionArray = $query->result_array();
-             
+
         $questionArray = $this->getQuestionByID($slug);
 
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
             $questionArray[0]['answer'] = $questionArray[0][$questionArray[0]['answer']];
+            $questionArray[0]['code'] = null;
             return $questionArray;
-        } else {
+        } 
+        
+        else if ($questionType === "Identification") {
+            $questionArray[0]['option1'] = null;
+            $questionArray[0]['option2'] = null;
+            $questionArray[0]['option3'] = null;
+            $questionArray[0]['option4'] = null;
+            $questionArray[0]['code'] = null;
+            return $questionArray;
+        }
+
+        else if ($questionType === "Coding") {
+            $questionArray = $this->get_coding($slug);
             $questionArray[0]['option1'] = null;
             $questionArray[0]['option2'] = null;
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
             return $questionArray;
         }
-        if ($questionType === "Identification") {
-            return $questionArray;
-        }
-        
-        if ($questionType === "Coding") {
-            return $questionArray;
-        }
         //return $query->result_array();
+//        else {
+//            $questionArray[0]['option1'] = null;
+//            $questionArray[0]['option2'] = null;
+//            $questionArray[0]['option3'] = null;
+//            $questionArray[0]['option4'] = null;
+//            return $questionArray;
+//        }
     }
 
     public function get_multiple_choice($questionID) {
@@ -318,12 +338,7 @@ class QuestionsModel extends CI_Model {
         $this->db->where("questions.id = '" . $questionID . "'");
         $query = $this->db->get();
         $mcQuestion = $query->result_array();
-        $choicesArray = array(
-            "option1" => $mcQuestion[0]['option1'],
-            "option2" => $mcQuestion[0]['option1'],
-            "option3" => $mcQuestion[0]['option3'],
-            "option4" => $mcQuestion[0]['option4']
-        );
+
         //$this->shuffle($choicesArray);
 //        $choicesArray = array(
 //            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
@@ -332,6 +347,21 @@ class QuestionsModel extends CI_Model {
         return $mcQuestion;
     }
 
+    public function get_coding($questionID) {
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->join('coding', 'coding.questionID = questions.id');
+        $this->db->where("questions.id = '" . $questionID . "'");
+        $query = $this->db->get();
+        $cdQuestion = $query->result_array();
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $cdQuestion;
+    }
+    
     public function get_fullname_by_id($questionID) {
 //        $condition = "id ='" . $questionID . "'";
 //        $this->db->select('users.fname, users.lname');
