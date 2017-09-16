@@ -29,7 +29,7 @@ $isOwnQuestion = false;
 
 
         if ($isOwnQuestion) {
-            echo "<div>";
+            
             echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
             echo "<span aria-hidden='true'>&times;</span>";
             echo "</button>";
@@ -160,9 +160,8 @@ $isOwnQuestion = false;
     <!-- Coding -->
     <div class="form-group" id="divCodingAnswer">
         <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea></br>
-
         <div <?php
-        if ($isOwnQuestion) {
+        if ($isOwnQuestion || $boolanswer) {
             echo "style='display:none'";
         }
         ?>>
@@ -197,12 +196,15 @@ $isOwnQuestion = false;
             }
             ?> >Submit Answer
     </button>
-    <?php
-        
-        //echo "<script> console.log(".json_encode($answer_items)."); </script>";
-        
-    ?>
     
+    <div>
+    <?php
+        foreach ($answer_item as $otherUserAnswers):?>
+            <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly> <?php echo $otherUserAnswers['answer']; ?> </textarea></br>
+
+    <?php        endforeach;
+    ?>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -274,7 +276,7 @@ $isOwnQuestion = false;
 
 <?php
 
-echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
+echo "<script> console.log(" . (json_encode($answer_item)) . ") </script>";
 
 function time_since($since) {
     $chunks = array(

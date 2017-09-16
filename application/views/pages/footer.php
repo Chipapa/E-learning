@@ -26,11 +26,25 @@
         var editorAnswer = CodeMirror.fromTextArea(codeAnswer, {
             lineNumbers: true,
             mode: "vb",
-            readOnly: true
+            readOnly: true,
+            tabMode: "indent"
         });
     });
 
-
+    $(document).ready(function () {
+        var code_type = '';
+        $(".codemirror-textarea-answerbyotheruser").each(function (index){
+            $(this).attr('id', 'code-' + index);
+                CodeMirror.fromTextArea(document.getElementById('code-' + index), {
+                        mode: "vb",
+                        lineNumbers: true,
+                        readOnly: true
+                    }
+                );
+            
+        });
+    });
+    
     $(document).ready(function () {
         $('#divCoding').hide();
         $('#divIdentification').hide();

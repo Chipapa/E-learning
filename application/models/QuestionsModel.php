@@ -164,7 +164,7 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('codingAnswer')
+                'answer' => ''
             );
             $this->db->insert('questions', $dataCoding);
 
@@ -379,9 +379,9 @@ class QuestionsModel extends CI_Model {
 
     public function get_coding($questionID) {
         $this->db->select('*');
-        $this->db->from('questions');
-        $this->db->join('coding', 'coding.questionID = questions.id');
-        $this->db->where("questions.id = '" . $questionID . "'");
+        $this->db->from('coding');
+        $this->db->join('questions', 'questions.id = coding.questionID');
+        $this->db->where("coding.questionID = '" . $questionID . "'");
         $query = $this->db->get();
         $cdQuestion = $query->result_array();
         //$this->shuffle($choicesArray);
@@ -506,50 +506,51 @@ class QuestionsModel extends CI_Model {
     }
 
     public function display_answers($questionID, $who_posted) {
-        if ($this->session->userdata['logged_in']['id'] === $who_posted)
-            $data = array(
-                'who_posted' => 'sayo to inamo'
-            );
-        else {
+        if ($this->session->userdata['logged_in']['id'] === $who_posted) {
+            $this->db->select('*');
+            $this->db->from('answered_by');
+            $this->db->where("questionID = '".$questionID."'");
+            $query = $this->db->get();
+            $data = $query->result_array();
+            
+        } else {
             $data = array(
                 'who_posted' => 'Di sayo to bata'
             );
         }
         return $data;
     }
-    
+
     public function getDataAnswer($slug) {
         $id = ($this->session->userdata['logged_in']['id']);
-        $condition = "userID= " . "'" . $id . "'". "AND "."questionID= " . "'" . $slug . "'";
+        $condition = "userID= " . "'" . $id . "'" . "AND " . "questionID= " . "'" . $slug . "'";
         $this->db->select('id');
         $this->db->from('answered_by');
         $this->db->where($condition);
         $query = $this->db->get();
-       
-        
-         if ($query->num_rows() == 1) {
+
+
+        if ($query->num_rows() == 1) {
             return $query->row_array();
         } else {
             return "false";
         }
-        
     }
 
-     public function if_answer($slug) {
+    public function if_answer($slug) {
         $id = ($this->session->userdata['logged_in']['id']);
-        $condition = "userID= " . "'" . $id . "'". "AND "."questionID= " . "'" . $slug . "'";
+        $condition = "userID= " . "'" . $id . "'" . "AND " . "questionID= " . "'" . $slug . "'";
         $this->db->select('id');
         $this->db->from('answered_by');
         $this->db->where($condition);
         $query = $this->db->get();
-    
-        
-         if ($query->num_rows() == 1) {
+
+
+        if ($query->num_rows() == 1) {
             return true;
         } else {
             return false;
         }
-        
     }
 
 }
