@@ -91,7 +91,8 @@ Class Stockmarket extends CI_Controller {
 
     public function viewQuestion() {
         $_SESSION['categories'] = $this->QuestionsModel->get_categories();
-        $this->view('askquestionpage');
+        $data['category'] = $this->input->get('category');
+        $this->view('askquestionpage', $data);
     }
 
 // FIX ME, TIME SINCE SHOULD BE HERE, NOT IN THE VIEW
