@@ -90,6 +90,7 @@ Class Stockmarket extends CI_Controller {
     }
 
     public function viewQuestion() {
+        $_SESSION['categories'] = $this->QuestionsModel->get_categories();
         $this->view('askquestionpage');
     }
 
