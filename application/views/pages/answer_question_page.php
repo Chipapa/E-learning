@@ -13,11 +13,29 @@ if (isset($this->session->userdata['logged_in'])) {
 <div class="container" id="mainDiv">
     <div class="form-group">
         <?php
-//        if (validation_errors()) {
-//            echo "<div class='alert alert-danger' role='alert'>";
-//            echo validation_errors();
-//            echo "</div>";
-//        }
+$isOwnQuestion = false;
+        if ($question_item[0]['who_posted'] === $session_id) {
+            $isOwnQuestion = true;
+        }
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+        if ($boolanswer) {
+
+            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+            echo "<span aria-hidden='true'>&times;</span>";
+            echo "</button>";
+            echo "You have already answered this question";
+        }
+
+
+
+        if ($isOwnQuestion) {
+            echo "<div>";
+            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+            echo "<span aria-hidden='true'>&times;</span>";
+            echo "</button>";
+            echo "This is oyur own";
+        }
+        echo "</div>";
         ?>
 
         <?php
@@ -66,7 +84,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios1" 
                                    value="<?php echo $question_item[0]['option1']; ?>" 
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> 
@@ -87,7 +105,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios2"  
                                    value="<?php echo $question_item[0]['option2']; ?>"
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -107,7 +125,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios3"  
                                    value="<?php echo $question_item[0]['option3']; ?>"
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -127,7 +145,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios4"  
                                    value="<?php echo $question_item[0]['option4']; ?>"
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -162,7 +180,7 @@ if (isset($this->session->userdata['logged_in'])) {
                name="textAnswer" 
                class="form-control" 
                <?php
-               if ($isOwnQuestion) {
+               if ($isOwnQuestion||$boolanswer) {
                    echo "disabled=''";
                }
                ?> >
@@ -174,7 +192,7 @@ if (isset($this->session->userdata['logged_in'])) {
             data-toggle="modal" 
             data-target="#exampleModal" 
             <?php
-            if ($isOwnQuestion) {
+            if ($isOwnQuestion || $boolanswer) {
                 echo "disabled='' style='display:none'";
             }
             ?> >Submit Answer

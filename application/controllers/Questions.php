@@ -164,7 +164,8 @@ Class Questions extends CI_Controller {
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
         $data['full_name_db'] = $this->questionsmodel->get_fullname_by_id($slug);
-            
+        $data['dataanswer']    = $this->questionsmodel->getDataAnswer($slug);  
+        $data['boolanswer']    = $this->questionsmodel->if_answer($slug);
         //$data['answer_items'] = $this->questionsmodel->display_answers($slug, $data['question_item'][0]['who_posted']);
 
         $_SESSION['currentQuestion'] = $data['question_item'];

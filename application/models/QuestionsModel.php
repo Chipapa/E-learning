@@ -363,9 +363,9 @@ class QuestionsModel extends CI_Model {
 
     public function get_multiple_choice($questionID) {
         $this->db->select('*');
-        $this->db->from('questions');
-        $this->db->join('choices', 'choices.questionID = questions.id');
-        $this->db->where("questions.id = '" . $questionID . "'");
+        $this->db->from('choices');
+        $this->db->join('questions', 'questions.id = choices.questionID');
+        $this->db->where("choices.questionID = '" . $questionID . "'");
         $query = $this->db->get();
         $mcQuestion = $query->result_array();
 
@@ -458,12 +458,12 @@ class QuestionsModel extends CI_Model {
         }
 
         $this->db->insert('answered_by', $dataAnsweredBy);
-        $this->update_answer($questionArray[0]['id']);
+        $this->update_answer($questionArray);
     }
 
     public function update_answer($questionArray) {
         $this->db->set('num_of_answers', 'num_of_answers+1', FALSE);
-        $this->db->where('id', $questionArray);
+        $this->db->where('id', $questionArray[0]['id']);
         $this->db->update('questions');
 
 //        $stockUpdate = array(
@@ -516,6 +516,40 @@ class QuestionsModel extends CI_Model {
             );
         }
         return $data;
+    }
+    
+    public function getDataAnswer($slug) {
+        $id = ($this->session->userdata['logged_in']['id']);
+        $condition = "userID= " . "'" . $id . "'". "AND "."questionID= " . "'" . $slug . "'";
+        $this->db->select('id');
+        $this->db->from('answered_by');
+        $this->db->where($condition);
+        $query = $this->db->get();
+       
+        
+         if ($query->num_rows() == 1) {
+            return $query->row_array();
+        } else {
+            return "false";
+        }
+        
+    }
+
+     public function if_answer($slug) {
+        $id = ($this->session->userdata['logged_in']['id']);
+        $condition = "userID= " . "'" . $id . "'". "AND "."questionID= " . "'" . $slug . "'";
+        $this->db->select('id');
+        $this->db->from('answered_by');
+        $this->db->where($condition);
+        $query = $this->db->get();
+    
+        
+         if ($query->num_rows() == 1) {
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
 }
