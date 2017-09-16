@@ -38,10 +38,13 @@ class QuestionsModel extends CI_Model {
                     . 'questions.type, questions.who_posted, '
                     . 'questions.date_posted, '
                     . 'questions.num_of_answers, '
-                    . 'questions.category');
+                    . 'questions.category, '
+                    . 'verification.status, '
+                    . 'verification.comment');
 
             $this->db->from('users');
             $this->db->join('questions', 'questions.who_posted = users.id');
+            $this->db->join('verification', 'verification.questionID = questions.id');
             $this->db->order_by("date_posted", "desc");
             $query = $this->db->get();
 
@@ -152,6 +155,7 @@ class QuestionsModel extends CI_Model {
                 'answer' => $this->input->post('identificationAnswer')
             );
             $this->db->insert('questions', $dataIdentification);
+            $currentQuestionId = $this->db->insert_id();
         } else if ($this->input->post('type') === "Coding") {
             $dataCoding = array(
                 'category' => $this->input->post('category'),
@@ -163,8 +167,24 @@ class QuestionsModel extends CI_Model {
                 'answer' => $this->input->post('codingAnswer')
             );
             $this->db->insert('questions', $dataCoding);
+
+            $currentQuestionId = $this->db->insert_id();
+            $dataCoding = array(
+                'questionID' => $currentQuestionId,
+                'code' => $this->input->post('codingAnswer'),
+            );
+            $this->db->insert('coding', $dataCoding);
         }
         $this->update_stock_market($questionCategory);
+        $this->set_question_status_unverfied($currentQuestionId);
+    }
+
+    public function set_question_status_unverfied($questionId) {
+        $dataVerified = array(
+            'questionID' => $questionId,
+            'status' => 'unverified'  
+        );
+        $this->db->insert('verification', $dataVerified);
     }
 
     public function update_stock_market($questionCategory) {
@@ -286,31 +306,61 @@ class QuestionsModel extends CI_Model {
         //$this->db->limit(1);
 //        $query = $this->db->get();
 //        $questionArray = $query->result_array();
-             
-        $questionArray = $this->getQuestionByID($slug);
 
+        $questionArray = $this->getQuestionByID($slug);
+        $questionStatus = $this->getStatus($slug);
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
             $questionArray[0]['answer'] = $questionArray[0][$questionArray[0]['answer']];
+            $questionArray[0]['code'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
-        } else {
+        } else if ($questionType === "Identification") {
             $questionArray[0]['option1'] = null;
             $questionArray[0]['option2'] = null;
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
+            $questionArray[0]['code'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
+            return $questionArray;
+        } else if ($questionType === "Coding") {
+            $questionArray = $this->get_coding($slug);
+            $questionArray[0]['option1'] = null;
+            $questionArray[0]['option2'] = null;
+            $questionArray[0]['option3'] = null;
+            $questionArray[0]['option4'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
         }
-        if ($questionType === "Identification") {
-            return $questionArray;
-        }
-        
-        if ($questionType === "Coding") {
-            return $questionArray;
-        }
-        //return $query->result_array();
+//        return $query->result_array();
+//        else {
+//            $questionArray[0]['option1'] = null;
+//            $questionArray[0]['option2'] = null;
+//            $questionArray[0]['option3'] = null;
+//            $questionArray[0]['option4'] = null;
+//            return $questionArray;
+//        }
     }
+    
+    public function getStatus($questionID){
+        $this->db->select('*');
+        $this->db->from('verification');
+        $this->db->where("questionID = '" . $questionID . "'");
+        $query = $this->db->get();
+        $qStatus= $query->result_array();
 
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $qStatus;
+        
+    }
     public function get_multiple_choice($questionID) {
         $this->db->select('*');
         $this->db->from('questions');
@@ -318,18 +368,28 @@ class QuestionsModel extends CI_Model {
         $this->db->where("questions.id = '" . $questionID . "'");
         $query = $this->db->get();
         $mcQuestion = $query->result_array();
-        $choicesArray = array(
-            "option1" => $mcQuestion[0]['option1'],
-            "option2" => $mcQuestion[0]['option1'],
-            "option3" => $mcQuestion[0]['option3'],
-            "option4" => $mcQuestion[0]['option4']
-        );
+
         //$this->shuffle($choicesArray);
 //        $choicesArray = array(
 //            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
 //            
 //        );
         return $mcQuestion;
+    }
+
+    public function get_coding($questionID) {
+        $this->db->select('*');
+        $this->db->from('questions');
+        $this->db->join('coding', 'coding.questionID = questions.id');
+        $this->db->where("questions.id = '" . $questionID . "'");
+        $query = $this->db->get();
+        $cdQuestion = $query->result_array();
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $cdQuestion;
     }
 
     public function get_fullname_by_id($questionID) {
@@ -401,6 +461,35 @@ class QuestionsModel extends CI_Model {
         $this->db->set('unanswered', 'unanswered-1', FALSE);
         $this->db->where('category', $questionArray[0]['category']);
         $this->db->update('stockmarket', $stockUpdate);
+    }
+
+    public function set_status() {
+        $questionArray = $_SESSION['currentQuestion'];
+        unset($_SESSION['currentQuestion']);
+        if ($this->input->post('rejectComment') == null) {
+            $data = array(
+                'status' => 'verified',
+                'comment' => 'Your question has been verified!',
+                'verified_when' => date('Y-m-d H:i:s')
+            );
+        } else {
+            $data = array(
+                'status' => 'removed',
+                'comment' => $this->input->post('rejectComment'),
+                'verified_when' => date('Y-m-d H:i:s')
+            );
+        }
+        $this->db->where('questionID', $questionArray[0]['questionID']);
+        $this->db->update('verification', $data);
+
+//        $dataAnsweredBy = array(
+//                'userID' => $id,
+//                'questionID' => $questionArray[0]['id'],
+//                'answer' => $this->input->post('gridRadiosAnswer'),
+//                'answeredWhen' => date('Y-m-d H:i:s')
+//            );
+//        $this->db->insert('answered_by', $dataAnsweredBy);
+        //$this->update_answer($questionArray[0]['id']);
     }
 
 }

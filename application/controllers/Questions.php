@@ -56,11 +56,15 @@ Class Questions extends CI_Controller {
 
         $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
-
+        //$data["status"] = $this->questionsmodel->getStatus();
+        if (isset($_SESSION['currentQuestion']) && !empty($_SESSION['currentQuestion']))
+        {
+            unset($_SESSION['currentQuestion']);
+        }
         if (isset($this->session->userdata['logged_in'])) {
             $userType = ($this->session->userdata['logged_in']['usertype']);
         }
-        //$data["leaderboard"] = $this->profilemodel->getTopTen();
+        $data["leaderboard"] = $this->profilemodel->getTopTen();
         if ($userType === "student") {
             $this->view('LandingPage', $data);
         }else if($userType === "admin"){
@@ -182,6 +186,12 @@ Class Questions extends CI_Controller {
         //while($myQuestions != null)
         $this->view('LandingPage', $data);
         //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+    }
+    
+    public function setStatus(){
+        $this->questionsmodel->set_status();
+        $_SESSION['flash'] = 'Question has been successfully reviewed.';
+        redirect("questions/index");
     }
 
 }
