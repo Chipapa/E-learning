@@ -38,10 +38,13 @@ class QuestionsModel extends CI_Model {
                     . 'questions.type, questions.who_posted, '
                     . 'questions.date_posted, '
                     . 'questions.num_of_answers, '
-                    . 'questions.category');
+                    . 'questions.category, '
+                    . 'verification.status, '
+                    . 'verification.comment');
 
             $this->db->from('users');
             $this->db->join('questions', 'questions.who_posted = users.id');
+            $this->db->join('verification', 'verification.questionID = questions.id');
             $this->db->order_by("date_posted", "desc");
             $query = $this->db->get();
 
@@ -127,8 +130,7 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('gridRadios'),
-                'status' => 'notverified'
+                'answer' => $this->input->post('gridRadios')
             );
             $this->db->insert('questions', $data);
 
@@ -150,10 +152,10 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => '',
-                'status' => 'notverified'
+                'answer' => $this->input->post('identificationAnswer')
             );
             $this->db->insert('questions', $dataIdentification);
+            $currentQuestionId = $this->db->insert_id();
         } else if ($this->input->post('type') === "Coding") {
             $dataCoding = array(
                 'category' => $this->input->post('category'),
@@ -162,8 +164,7 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('codingAnswer'),
-                'status' => 'notverified'
+                'answer' => $this->input->post('codingAnswer')
             );
             $this->db->insert('questions', $dataCoding);
 
@@ -175,6 +176,15 @@ class QuestionsModel extends CI_Model {
             $this->db->insert('coding', $dataCoding);
         }
         $this->update_stock_market($questionCategory);
+        $this->set_question_status_unverfied($currentQuestionId);
+    }
+
+    public function set_question_status_unverfied($questionId) {
+        $dataVerified = array(
+            'questionID' => $questionId,
+            'status' => 'unverified'  
+        );
+        $this->db->insert('verification', $dataVerified);
     }
 
     public function update_stock_market($questionCategory) {
@@ -298,12 +308,14 @@ class QuestionsModel extends CI_Model {
 //        $questionArray = $query->result_array();
 
         $questionArray = $this->getQuestionByID($slug);
-
+        $questionStatus = $this->getStatus($slug);
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
             $questionArray[0]['answer'] = $questionArray[0][$questionArray[0]['answer']];
             $questionArray[0]['code'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
         } else if ($questionType === "Identification") {
             $questionArray[0]['option1'] = null;
@@ -311,6 +323,8 @@ class QuestionsModel extends CI_Model {
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
             $questionArray[0]['code'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
         } else if ($questionType === "Coding") {
             $questionArray = $this->get_coding($slug);
@@ -318,9 +332,11 @@ class QuestionsModel extends CI_Model {
             $questionArray[0]['option2'] = null;
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
         }
-        //return $query->result_array();
+//        return $query->result_array();
 //        else {
 //            $questionArray[0]['option1'] = null;
 //            $questionArray[0]['option2'] = null;
@@ -329,7 +345,22 @@ class QuestionsModel extends CI_Model {
 //            return $questionArray;
 //        }
     }
+    
+    public function getStatus($questionID){
+        $this->db->select('*');
+        $this->db->from('verification');
+        $this->db->where("questionID = '" . $questionID . "'");
+        $query = $this->db->get();
+        $qStatus= $query->result_array();
 
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $qStatus;
+        
+    }
     public function get_multiple_choice($questionID) {
         $this->db->select('*');
         $this->db->from('questions');
@@ -438,16 +469,18 @@ class QuestionsModel extends CI_Model {
         if ($this->input->post('rejectComment') == null) {
             $data = array(
                 'status' => 'verified',
-                'comment' => 'Your question has been verified!'
+                'comment' => 'Your question has been verified!',
+                'verified_when' => date('Y-m-d H:i:s')
             );
         } else {
             $data = array(
                 'status' => 'removed',
-                'comment' => $this->input->post('rejectComment')
+                'comment' => $this->input->post('rejectComment'),
+                'verified_when' => date('Y-m-d H:i:s')
             );
         }
-        $this->db->where('id', $questionArray[0]['id']);
-        $this->db->update('questions', $data);
+        $this->db->where('questionID', $questionArray[0]['questionID']);
+        $this->db->update('verification', $data);
 
 //        $dataAnsweredBy = array(
 //                'userID' => $id,

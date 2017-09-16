@@ -38,6 +38,10 @@ if (isset($this->session->userdata['logged_in'])) {
         unset($_SESSION['flash']);
         echo "</div>"
         ?>
+        
+        <pre>
+            <?php //print_r($questions);?>
+        </pre>
 
         <div class="row">
             <div class="col-sm-9 blog-main">  
@@ -59,7 +63,18 @@ if (isset($this->session->userdata['logged_in'])) {
                         <div class="list-group">
                             <a href="<?php echo site_url('admin/verifyQuestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
+                                    <h5 class="mb-1"><?php echo $question_item->title; ?> 
+                                        
+                                        <img src="<?php 
+                                        if ($question_item->status === 'unverified'){
+                                             echo base_url()."/assets/png/timer-2x.png"; 
+                                        } else if ($question_item->status === 'verified'){
+                                             echo base_url()."/assets/png/circle-check-2x.png"; 
+                                        } else if ($question_item->status === 'removed'){
+                                             echo base_url()."/assets/png/circle-x-2x.png"; 
+                                        }
+                                        ?>">
+                                    </h5> 
                                     <small><?php echo $time_asked; ?></small>
                                 </div>
         <!--                                <p class="mb-1"><?php //echo $question_item->question;    ?></p>-->

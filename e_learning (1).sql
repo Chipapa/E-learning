@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 15, 2017 at 01:18 PM
+-- Generation Time: Sep 16, 2017 at 05:56 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -66,7 +66,8 @@ CREATE TABLE `choices` (
 
 INSERT INTO `choices` (`id`, `questionID`, `option1`, `option2`, `option3`, `option4`) VALUES
 (1, 1, 'Mali to', 'Eto yung tamang sagot', 'Mali talaga to', 'Tanginamo mali to'),
-(2, 2, 'Wrong', 'Rong', 'wR0n6', 'Correct');
+(2, 2, 'Wrong', 'Rong', 'wR0n6', 'Correct'),
+(3, 8, 'Mali', 'M4l1', 'Tama', 'm4lI');
 
 -- --------------------------------------------------------
 
@@ -113,7 +114,9 @@ INSERT INTO `questions` (`id`, `category`, `title`, `question`, `type`, `date_po
 (1, 'Adapter', 'Putangina', 'Sagutan mo to', 'Multiple Choice', '2017-09-09 17:35:03', 3, '48', 'option1'),
 (2, 'Adapter', 'Testing palang to', 'Testing nga inamo', 'Multiple Choice', '2017-09-09 17:40:21', 1, '48', 'option3'),
 (5, 'Adapter', 'Test ng inamo', 'Why do birds apir suddenly', 'Coding', '2017-09-15 12:50:10', 0, '48', 'public function helloWorld()\r\n  {\r\n    string mamamo;\r\n    if(mamamo == "nanaymo")\r\n      {\r\n        cout("Suck me");\r\n      }\r\n  }'),
-(6, 'Adapter', 'Testingtitlemo', 'Testingmamamo', 'Identification', '2017-09-15 13:02:26', 0, '48', '');
+(6, 'Adapter', 'Testingtitlemo', 'Testingmamamo', 'Identification', '2017-09-15 13:02:26', 0, '48', ''),
+(7, 'Adapter', 'Test', 'Aaaaaaaaa', 'Identification', '2017-09-15 13:33:50', 0, '49', ''),
+(8, 'Adapter', 'Eto ang tanong', 'Tanong?', 'Multiple Choice', '2017-09-16 04:29:36', 0, '49', 'option4');
 
 -- --------------------------------------------------------
 
@@ -134,7 +137,7 @@ CREATE TABLE `stockmarket` (
 --
 
 INSERT INTO `stockmarket` (`id`, `category`, `slug`, `answered`, `unanswered`) VALUES
-(1, 'Adapter', 'adapter', 2, 4),
+(1, 'Adapter', 'adapter', 2, 6),
 (2, 'Composite', 'composite', 0, 0),
 (3, 'Decorator', 'decorator', 0, 0),
 (4, 'Observer', 'observer', 0, 0),
@@ -166,7 +169,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `fname`, `lname`, `userType`, `ask_points`, `answer_points`) VALUES
 (48, 'a@a.com', '$2y$10$UgV86vHt9B4NvEEhpDKavukAoJINIPz9nTLSvYIrOs8lz4aSnF3jq', 'John', 'Doe', 'student', 13, 0),
-(49, 'b@b.com', '$2y$10$wIkN7/jteb5Hfbu75JL.luqudv5Lpe4sVyrfG7QWu3cExtBJLnYLi', 'Juan', 'Doe', 'student', 1, 0),
+(49, 'b@b.com', '$2y$10$wIkN7/jteb5Hfbu75JL.luqudv5Lpe4sVyrfG7QWu3cExtBJLnYLi', 'Juan', 'Doe', 'student', 5, 0),
 (70, 'abdul_jakul_salsalani@example.com', '$2y$10$LI.HPtBnlpDTC3jFsgM1T.3KT2PsLE9.O3alSuWXwE7R3W7XPQvKm', 'Abdul Jakul', 'Salsalani', 'student', 1, 5),
 (71, 'c@c.com', '$2y$10$8qdLeU/Lu2ogL5bIIMsdEuWB9Imb71rKD1wxy/ldCgVmF1FmOsMV6', 'cat', 'dogcat', 'student', 2, 0),
 (72, 'v@v.com', '$2y$10$kK04QfoLNFJkzocjPI7EWOivO2MUXzrk19TEGQju470XRAg9/29/q', 'VIAGRANG TITAN GEL', 'viagra ', 'student', 9, 8),
@@ -177,6 +180,34 @@ INSERT INTO `users` (`id`, `username`, `password`, `fname`, `lname`, `userType`,
 (77, 'e@e.com', '$2y$10$66O0qaaXmGNYECDVAJy4BeAmUimGD1ZCTLaPSPOC8yh6Dhj6c0byq', 'ebon', 'ebony', 'student', 0, 0),
 (78, 'Tina_muran@muran.com', '$2y$10$bU2O6cs/GEzc7N/lPYjPlOguC1/VfOi4T8SFMKmQZaPHv2.t3gEIy', 'Tina', 'muran', 'student', 94, 0),
 (80, 'admin@admin.com', '$2y$10$MOpeJpMcwtMo9lawliracehdm5IIWcIHs2fg5xV.mB3pVUMAitGva', 'admin', 'admin', 'admin', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `verification`
+--
+
+CREATE TABLE `verification` (
+  `id` int(11) NOT NULL,
+  `questionID` int(11) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  `comment` varchar(100) NOT NULL,
+  `verified_by` varchar(30) NOT NULL,
+  `verified_when` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `verification`
+--
+
+INSERT INTO `verification` (`id`, `questionID`, `status`, `comment`, `verified_by`, `verified_when`) VALUES
+(1, 8, 'removed', 'Echo mo yung if 8080', '', '2017-09-16 05:08:49'),
+(2, 1, 'unverified', '', '', '0000-00-00 00:00:00'),
+(3, 2, 'unverified', '', '', '0000-00-00 00:00:00'),
+(4, 5, 'removed', 'aaaaaaaaaaaaaaaaaaaaaa', '', '2017-09-16 05:06:11'),
+(5, 6, 'removed', 'sdadfasasdffdafd', '', '2017-09-16 05:03:30'),
+(6, 8, 'removed', 'Echo mo yung if 8080', '', '2017-09-16 05:08:49'),
+(7, 7, 'verified', 'Your question has been verified!', '', '2017-09-16 04:59:30');
 
 --
 -- Indexes for dumped tables
@@ -222,6 +253,12 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `verification`
+--
+ALTER TABLE `verification`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -234,7 +271,7 @@ ALTER TABLE `answered_by`
 -- AUTO_INCREMENT for table `choices`
 --
 ALTER TABLE `choices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `coding`
 --
@@ -244,7 +281,7 @@ ALTER TABLE `coding`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `stockmarket`
 --
@@ -255,6 +292,11 @@ ALTER TABLE `stockmarket`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+--
+-- AUTO_INCREMENT for table `verification`
+--
+ALTER TABLE `verification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
