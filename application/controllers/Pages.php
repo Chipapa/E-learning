@@ -7,6 +7,7 @@ class Pages extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('loginmodel');
+        $this->load->model('questionsmodel');
         $this->load->helper('url_helper');
         $this->load->library('session');
 
@@ -17,40 +18,48 @@ class Pages extends CI_Controller {
     public function index() {
         $this->view('loginpage');
     }
-    
+
     //STILL BUGGY, FIX ME
-    public function set_titlepage($page){
-        if($page == 'loginpage'){
+    public function set_titlepage($page) {
+        if ($page == 'loginpage') {
             $data['title'] = ucfirst('Login');
-        }else if($page == 'signuppage'){
+        } else if ($page == 'signuppage') {
             $data['title'] = ucfirst('Sign up');
-        }else{
+        } else {
             $data['title'] = ucfirst('Unknown Page');
-        }     
+        }
         return $data;
     }
 
-    public function view($page = 'loginpage', $passData = false) {
+    public function view($page = '', $passData = false) {
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
             // Whoops, we don't have a page for that!
             show_404();
         }
         //$data['title'] = ucfirst($page); // Capitalize the first letter
         $dataTitle = $this->set_titlepage($page);
-        
+
         if ($page == 'loginpage') {
             $this->load->view('pages/headerLogin', $dataTitle);
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
-        }else{
-            $this->load->view('pages/headerMain', $dataTitle);
+        } else {
+
+            if (isset($this->session->userdata['logged_in'])) {
+                $userType = ($this->session->userdata['logged_in']['usertype']);
+            }
+
+            if ($userType === "student") {
+                $this->load->view('pages/headerMain', $dataTitle);
+            }else if($userType === "admin"){
+                $this->load->view('pages/headerAdmin', $dataTitle);
+            }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
     }
 
     public function user_login_process() {
-
         $this->form_validation->set_rules('username', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
@@ -71,20 +80,46 @@ class Pages extends CI_Controller {
 
                 //get the whole row in the database of the specific username then assign to session array
                 $result = $this->loginmodel->read_user_information($username);
+
+
                 if ($result != false) {
-                    $session_data = array(
-                        'username' => $result[0]->username,
-                        'usertype' => $result[0]->userType,
-                    );
+                    if ($result[0]->userType === "student") {
+                        $session_data = array(
+                            'id' => $result[0]->id,
+                            'username' => $result[0]->username,
+                            'usertype' => $result[0]->userType,
+                            'fname' => $result[0]->fname,
+                            'lname' => $result[0]->lname,
+                            'ask_points' => $result[0]->ask_points,
+                            'answer_points' => $result[0]->answer_points
+                        );
 
-                    // Add user data in session
-                    if (!isset($_SESSION)) {
-                        session_start();
+                        // Add user data in session
+                        if (!isset($_SESSION)) {
+                            session_start();
+                        }
+
+                        $this->session->set_userdata('logged_in', $session_data);
+                        redirect("questions/index");
+                    } else if ($result[0]->userType === "admin") {
+                        $session_data = array(
+                            'id' => $result[0]->id,
+                            'username' => $result[0]->username,
+                            'usertype' => $result[0]->userType,
+                            'fname' => $result[0]->fname,
+                            'lname' => $result[0]->lname,
+                            'ask_points' => $result[0]->ask_points,
+                            'answer_points' => $result[0]->answer_points
+                        );
+
+                        // Add user data in session
+                        if (!isset($_SESSION)) {
+                            session_start();
+                        }
+
+                        $this->session->set_userdata('logged_in', $session_data);
+                        redirect("admin/index");
                     }
-                    $this->session->set_userdata('logged_in', $session_data);
-
-                    $this->view('success');
-                    //$this->load->view('pages/success');
                 }
             } else {
                 $data = array(
@@ -102,6 +137,10 @@ class Pages extends CI_Controller {
             'username' => ''
         );
         $this->session->unset_userdata('logged_in', $sess_array);
+
+        unset($_SESSION['categories']);
+        unset($_SESSION['currentQuestion']);
+
         $data['message_display'] = 'Logged out successfully';
 
         $this->view('loginpage', $data);
