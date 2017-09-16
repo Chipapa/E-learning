@@ -182,7 +182,7 @@ class QuestionsModel extends CI_Model {
     public function set_question_status_unverfied($questionId) {
         $dataVerified = array(
             'questionID' => $questionId,
-            'status' => 'unverified'  
+            'status' => 'unverified'
         );
         $this->db->insert('verification', $dataVerified);
     }
@@ -345,13 +345,13 @@ class QuestionsModel extends CI_Model {
 //            return $questionArray;
 //        }
     }
-    
-    public function getStatus($questionID){
+
+    public function getStatus($questionID) {
         $this->db->select('*');
         $this->db->from('verification');
         $this->db->where("questionID = '" . $questionID . "'");
         $query = $this->db->get();
-        $qStatus= $query->result_array();
+        $qStatus = $query->result_array();
 
         //$this->shuffle($choicesArray);
 //        $choicesArray = array(
@@ -359,8 +359,8 @@ class QuestionsModel extends CI_Model {
 //            
 //        );
         return $qStatus;
-        
     }
+
     public function get_multiple_choice($questionID) {
         $this->db->select('*');
         $this->db->from('questions');
@@ -422,10 +422,16 @@ class QuestionsModel extends CI_Model {
         unset($_SESSION['currentQuestion']);
 
         if ($questionArray[0]['type'] === "Multiple Choice") {
+            if ($questionArray[0]['answer'] === $this->input->post('gridRadiosAnswer')) {
+                $correctAnswer = true;
+            } else {
+                $correctAnswer = false;
+            }
             $dataAnsweredBy = array(
                 'userID' => $id,
                 'questionID' => $questionArray[0]['id'],
                 'answer' => $this->input->post('gridRadiosAnswer'),
+                'correct' => $correctAnswer,
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
         } else if ($questionArray[0]['type'] === "Coding") {
@@ -433,13 +439,20 @@ class QuestionsModel extends CI_Model {
                 'userID' => $id,
                 'questionID' => $questionArray[0]['id'],
                 'answer' => $this->input->post('codeAnswer'),
+                'correct' => false,
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
         } else if ($questionArray[0]['type'] === "Identification") {
+            if ($questionArray[0]['answer'] === $this->input->post('textAnswer')) {
+                $correctAnswer = true;
+            } else {
+                $correctAnswer = false;
+            }
             $dataAnsweredBy = array(
                 'userID' => $id,
                 'questionID' => $questionArray[0]['id'],
                 'answer' => $this->input->post('textAnswer'),
+                'correct' => $correctAnswer,
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
         }
@@ -490,6 +503,19 @@ class QuestionsModel extends CI_Model {
 //            );
 //        $this->db->insert('answered_by', $dataAnsweredBy);
         //$this->update_answer($questionArray[0]['id']);
+    }
+
+    public function display_answers($questionID, $who_posted) {
+        if ($this->session->userdata['logged_in']['id'] === $who_posted)
+            $data = array(
+                'who_posted' => 'sayo to inamo'
+            );
+        else {
+            $data = array(
+                'who_posted' => 'Di sayo to bata'
+            );
+        }
+        return $data;
     }
 
 }

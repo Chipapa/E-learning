@@ -175,11 +175,16 @@ if (isset($this->session->userdata['logged_in'])) {
             data-target="#exampleModal" 
             <?php
             if ($isOwnQuestion) {
-                echo "disabled=''";
+                echo "disabled='' style='display:none'";
             }
             ?> >Submit Answer
     </button>
-
+    <?php
+        
+        //echo "<script> console.log(".json_encode($answer_items)."); </script>";
+        
+    ?>
+    
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -251,7 +256,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
 <?php
 
-//echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
+echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
 
 function time_since($since) {
     $chunks = array(
