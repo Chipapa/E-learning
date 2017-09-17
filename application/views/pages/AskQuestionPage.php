@@ -30,7 +30,22 @@
             <label for="exampleFormControlSelect1">Question Category</label>
             <select name="category" class="form-control" onmousedown="this.value = '';" onchange="selectDiv(this.value);">
                 <?php foreach ($categories as $category_item): ?>
-                    <option><?php echo $category_item['category']; ?></option>
+                    <option<?php
+                    
+                    if (isset($category)) {
+                        if($category_item['category'] === $category){
+                            echo " selected='selected'>".$category;
+                        }
+                        else
+                        {
+                            echo ">".$category_item['category'];
+                        }
+                    }
+                    else
+                    {
+                        echo ">".$category_item['category'];
+                    }
+                    ?></option>
 
                     <?php
                 endforeach;
@@ -44,7 +59,7 @@
         <span style="color:red" ng-show="askForm.title.$invalid && askForm.title.$touched">
             <span ng-show="askForm.title.$error.required">Title is required.</span>
         </span>
-        
+
     </div>
 
     <div class="form-group">
@@ -177,7 +192,7 @@
 //                    jQuery("div#testJson").show();
 //                    //alert("Choices cannot have duplicates.");
 //                    //var javascriptVariable = "John";
-//                    //window.location.href = "<?php //echo base_url();                    ?>" + "index.php/questions/create?dups=" + dups;
+//                    //window.location.href = "<?php //echo base_url();                     ?>" + "index.php/questions/create?dups=" + dups;
 //                }
 //            }
 //        });
@@ -189,7 +204,7 @@
 //            var question = $("#inputQuestion").val();
 //            jQuery.ajax({
 //                type: "POST",
-//                url: "<?php //echo base_url();           ?>" + "index.php/questions/create",
+//                url: "<?php //echo base_url();            ?>" + "index.php/questions/create",
 //                dataType: 'json',
 //                data: {
 //                    inputTitle: title, 
@@ -207,7 +222,7 @@
 
 //            jQuery.ajax({
 //                type: "POST",
-//                url: "<?php //echo base_url();          ?>" + "index.php/questions/create",
+//                url: "<?php //echo base_url();           ?>" + "index.php/questions/create",
 //                dataType: 'json',
 //                data: {
 //                    inputTitle: title, 
@@ -220,5 +235,5 @@
 //        });
     </script>
 
-    <?php echo '</form>'; ?>
+<?php echo '</form>'; ?>
 </div>

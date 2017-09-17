@@ -34,9 +34,22 @@ if (isset($this->session->userdata['logged_in'])) {
         } else {
             $who_posted_message = "Asked " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago by " . $full_name;
         }
+        echo "<script> console.log(".json_encode($_SESSION['currentQuestion']).") </script>";
         ?>
 
-        <?php echo form_open('questions/setAnswer'); ?>  
+        <?php echo form_open('questions/setStatus'); ?>  
+        <div <?php if($question_item[0]['status'] === 'unverified'){
+            echo "class='alert alert-warning alert-dismissible fade show' role='alert'> This question is not yet verified";
+            } else if($question_item[0]['status'] === 'removed'){
+            echo "class='alert alert-danger alert-dismissible fade show' role='alert'> This question has been removed";   
+            } else if($question_item[0]['status'] === 'verified'){
+            echo "class='alert alert-success alert-dismissible fade show' role='alert'> This question is verified";  
+            }
+            ?>
+            <ul>
+                <li><?php echo $question_item[0]['comment'];?></li>
+            </ul>
+        </div>
         <h5 class="mb-1"><?php echo $question_item[0]['title']; ?></h5>
         <small> <?php echo $who_posted_message; ?></br>  </small>
 
@@ -51,6 +64,8 @@ if (isset($this->session->userdata['logged_in'])) {
             <?php echo $question_item[0]['question']; ?>
         </div>
     </div>
+    <br>
+    <label for="answerTitle">The Answer</label>
     <br>
     <!-- Multiple Choice -->
     <div class="form-group" id="divMultipleChoiceAnswer">
@@ -141,11 +156,14 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Coding -->
     <div class="form-group" id="divCodingAnswer">
-        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea><br>
+        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea><br>
+
     </div>
 
     <button type="button"  
             class="btn btn-primary"
+            data-toggle="modal" 
+            data-target="#acceptModal"
             <?php
             if ($isOwnQuestion) {
                 echo "disabled=''";
@@ -177,11 +195,27 @@ if (isset($this->session->userdata['logged_in'])) {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <textarea class="form-control" placeholder="Enter the reason for rejecting the question"></textarea>
+                    <textarea class="form-control" placeholder="Enter the reason for rejecting the question" name="rejectComment"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button class="btn btn-primary">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="acceptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Mark Question as verified?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">Accept</button>
                 </div>
             </div>
         </div>
@@ -222,6 +256,7 @@ if (isset($this->session->userdata['logged_in'])) {
 </script>
 
 <?php
+echo "<script> console.log(" . json_encode($question_item) . "); </script>";
 
 function time_since($since) {
     $chunks = array(

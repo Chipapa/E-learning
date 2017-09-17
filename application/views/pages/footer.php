@@ -9,26 +9,42 @@
 
 <script type="text/javascript">
     //$('#needs-validation').validator();
-    
+
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
-
     $(document).ready(function () {
         var codeQuestion = $(".codemirror-textarea-question")[0];
-        var codeAnswer = $(".codemirror-textarea-answer")[0];
         var editorQuestion = CodeMirror.fromTextArea(codeQuestion, {
             lineNumbers: true,
             mode: "vb"
 
         });
+    });
+    $(document).ready(function () {
+        var codeAnswer = $(".codemirror-textarea-answer")[0];
         var editorAnswer = CodeMirror.fromTextArea(codeAnswer, {
             lineNumbers: true,
             mode: "vb",
-            readOnly: true
+            readOnly: true,
+            tabMode: "indent"
         });
     });
 
+    $(document).ready(function () {
+        var code_type = '';
+        $(".codemirror-textarea-answerbyotheruser").each(function (index){
+            $(this).attr('id', 'code-' + index);
+                CodeMirror.fromTextArea(document.getElementById('code-' + index), {
+                        mode: "vb",
+                        lineNumbers: true,
+                        readOnly: true
+                    }
+                );
+            
+        });
+    });
+    
     $(document).ready(function () {
         $('#divCoding').hide();
         $('#divIdentification').hide();
@@ -75,7 +91,7 @@
 //                alert("Choices cannot have duplicates.");
 //
 //                //var javascriptVariable = "John";
-//                //window.location.href = "<?php //echo base_url();       ?>" + "index.php/questions/create?dups=" + dups;
+//                //window.location.href = "<?php //echo base_url();                         ?>" + "index.php/questions/create?dups=" + dups;
 //            }
 //        }
 //    });

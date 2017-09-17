@@ -122,7 +122,7 @@ if (isset($this->session->userdata['logged_in'])) {
             </div><!-- /.blog-sidebar -->
 
             <pre>
-                <?php //print_r($questions) ?>
+                <?php print_r($questions); ?>
             </pre>
         </div>
     </div>

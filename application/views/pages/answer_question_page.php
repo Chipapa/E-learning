@@ -13,11 +13,29 @@ if (isset($this->session->userdata['logged_in'])) {
 <div class="container" id="mainDiv">
     <div class="form-group">
         <?php
-//        if (validation_errors()) {
-//            echo "<div class='alert alert-danger' role='alert'>";
-//            echo validation_errors();
-//            echo "</div>";
-//        }
+$isOwnQuestion = false;
+        if ($question_item[0]['who_posted'] === $session_id) {
+            $isOwnQuestion = true;
+        }
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+        if ($boolanswer) {
+
+            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+            echo "<span aria-hidden='true'>&times;</span>";
+            echo "</button>";
+            echo "You have already answered this question";
+        }
+
+
+
+        if ($isOwnQuestion) {
+            
+            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+            echo "<span aria-hidden='true'>&times;</span>";
+            echo "</button>";
+            echo "This is oyur own";
+        }
+        echo "</div>";
         ?>
 
         <?php
@@ -66,7 +84,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios1" 
                                    value="<?php echo $question_item[0]['option1']; ?>" 
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> 
@@ -87,7 +105,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios2"  
                                    value="<?php echo $question_item[0]['option2']; ?>"
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -107,7 +125,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios3"  
                                    value="<?php echo $question_item[0]['option3']; ?>"
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -127,7 +145,7 @@ if (isset($this->session->userdata['logged_in'])) {
                                    id="gridRadios4"  
                                    value="<?php echo $question_item[0]['option4']; ?>"
                                    <?php
-                                   if ($isOwnQuestion) {
+                                   if ($isOwnQuestion || $boolanswer) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -141,21 +159,27 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Coding -->
     <div class="form-group" id="divCodingAnswer">
-        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['question']; ?></textarea></br>
-        Type the code here.
-        <textarea class="form-control codemirror-textarea-question" id="codeAnswer" name="codeAnswer"></textarea>
+        <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea></br>
+        <div <?php
+        if ($isOwnQuestion || $boolanswer) {
+            echo "style='display:none'";
+        }
+        ?>>
+            Type the code here.
+            <textarea class="form-control codemirror-textarea-question" id="codeAnswer" name="codeAnswer" ></textarea>
+        </div>
     </div>
 
     <!-- Identification -->
     <div class="form-group" id="divIdentificationAnswer">
         <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
         Identification
-        <input type="text" 
+        <input type="text"  
                id="textAnswer" 
                name="textAnswer" 
                class="form-control" 
                <?php
-               if ($isOwnQuestion) {
+               if ($isOwnQuestion||$boolanswer) {
                    echo "disabled=''";
                }
                ?> >
@@ -167,12 +191,20 @@ if (isset($this->session->userdata['logged_in'])) {
             data-toggle="modal" 
             data-target="#exampleModal" 
             <?php
-            if ($isOwnQuestion) {
-                echo "disabled=''";
+            if ($isOwnQuestion || $boolanswer) {
+                echo "disabled='' style='display:none'";
             }
             ?> >Submit Answer
     </button>
+    
+    <div>
+    <?php
+        foreach ($answer_item as $otherUserAnswers):?>
+            <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly> <?php echo $otherUserAnswers['answer']; ?> </textarea></br>
 
+    <?php        endforeach;
+    ?>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -230,7 +262,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();                        ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();                         ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);
@@ -244,7 +276,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
 <?php
 
-//echo "<script> console.log(" . (json_encode($question_item)) . ") </script>";
+echo "<script> console.log(" . (json_encode($answer_item)) . ") </script>";
 
 function time_since($since) {
     $chunks = array(
