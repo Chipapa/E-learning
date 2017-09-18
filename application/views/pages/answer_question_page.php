@@ -199,10 +199,14 @@ $isOwnQuestion = false;
     
     <div>
     <?php
+        if($question_item[0]['type'] === 'Coding' && $isOwnQuestion)
+        {
         foreach ($answer_item as $otherUserAnswers):?>
             <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly> <?php echo $otherUserAnswers['answer']; ?> </textarea></br>
 
-    <?php        endforeach;
+        <?php        endforeach;
+        
+        }
     ?>
     </div>
     <!-- Modal -->

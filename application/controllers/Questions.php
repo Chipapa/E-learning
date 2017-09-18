@@ -167,7 +167,7 @@ Class Questions extends CI_Controller {
         $data['dataanswer']    = $this->questionsmodel->getDataAnswer($slug);  
         $data['boolanswer']    = $this->questionsmodel->if_answer($slug);
         $data['answer_item'] = $this->questionsmodel->display_answers($slug, $data['question_item'][0]['who_posted']);
-
+        
         $_SESSION['currentQuestion'] = $data['question_item'];
 
         //$data['test_data'] = $this->questionsmodel->test_func($slug);
