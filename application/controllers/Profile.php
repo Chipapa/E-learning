@@ -24,22 +24,30 @@ Class Profile extends CI_Controller {
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
-            $this->load->view('pages/headerMain');
+            if (isset($this->session->userdata['logged_in'])) {
+                $userType = ($this->session->userdata['logged_in']['usertype']);
+            }
+
+            if ($userType === "student") {
+                $this->load->view('pages/headerMain');
+            } else if ($userType === "admin") {
+                $this->load->view('pages/headerAdmin');
+            }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
     }
 
     public function viewProfile($slug = NULL) {
-        
+
         //$id = ($this->session->userdata['logged_in']['id']);
         $id = $slug;
         //$username = ($this->session->userdata['logged_in']['username']);
         $data['id'] = $id;
-        $data['userInfo'] = $this->ProfileModel->read_user_info_byID($id);
-        $data['userQuestions'] = $this->ProfileModel->getQuestionByID($id);
-        $data['num_of_question'] = $this->ProfileModel->count_answers_by_user($id);
-        
+        $data['userInfo'] = $this->ProfileModel->read_user_info_by_slug($slug);
+        $data['userQuestions'] = $this->ProfileModel->getQuestionBySlug($slug);
+        $data['num_of_question'] = $this->ProfileModel->count_questions_by_user($id);
+
         if (empty($slug) || empty($data['userInfo'])) {
             show_404();
             //$this->load->view('pages/about');
@@ -51,4 +59,5 @@ Class Profile extends CI_Controller {
     public function viewQuestions($slug = NULL) {
         
     }
+
 }

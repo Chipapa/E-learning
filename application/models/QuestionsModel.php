@@ -28,13 +28,23 @@ class QuestionsModel extends CI_Model {
         if ($category === FALSE) {
             $this->db->limit($limit, $start);
 
-            // $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
-            $this->db->select('*');
+            //$this->db->select('*');
+            $this->db->select(
+                    'users.fname, '
+                    . 'users.lname, '
+                    . 'questions.id, '
+                    . 'questions.title,  '
+                    . 'questions.question, '
+                    . 'questions.type, questions.who_posted, '
+                    . 'questions.date_posted, '
+                    . 'questions.num_of_answers, '
+                    . 'questions.category, '
+                    . 'verification.status, '
+                    . 'verification.comment');
+
             $this->db->from('users');
             $this->db->join('questions', 'questions.who_posted = users.id');
-//        
-//            $this->db->select('*');
-//            $this->db->from('questions');
+            $this->db->join('verification', 'verification.questionID = questions.id');
             $this->db->order_by("date_posted", "desc");
             $query = $this->db->get();
 
@@ -46,13 +56,20 @@ class QuestionsModel extends CI_Model {
             }
             return false;
         }
-//        $this->db->select('users.fname', 'users.lname', 'questions.question', 'questions.title', 'questions.type', 'questions.date_posted', 'questions.category');
-
-
 
         $condition = "category ='" . $category . "'";
         $this->db->limit($limit, $start);
-        $this->db->select('*');
+        $this->db->select(
+                'users.fname, '
+                . 'users.lname, '
+                . 'questions.id, '
+                . 'questions.title,  '
+                . 'questions.question, '
+                . 'questions.type, questions.who_posted, '
+                . 'questions.date_posted, '
+                . 'questions.num_of_answers, '
+                . 'questions.category');
+
         $this->db->from('users');
         $this->db->join('questions', 'questions.who_posted = users.id');
         // $this->db->select('*');
@@ -102,11 +119,6 @@ class QuestionsModel extends CI_Model {
         if (isset($this->session->userdata['logged_in'])) {
             $id = ($this->session->userdata['logged_in']['id']);
             $username = ($this->session->userdata['logged_in']['username']);
-            //$usertype = ($this->session->userdata['logged_in']['usertype']);
-            $fname = ($this->session->userdata['logged_in']['fname']);
-            $lname = ($this->session->userdata['logged_in']['lname']);
-            $id = ($this->session->userdata['logged_in']['id']);
-            $full_name = $fname . " " . $lname;
         } else {
             $username = "unknown";
         }
@@ -122,6 +134,7 @@ class QuestionsModel extends CI_Model {
             );
             $this->db->insert('questions', $data);
 
+            //get id of the last insert then use as FK to the next table
             $currentQuestionId = $this->db->insert_id();
             $dataChoices = array(
                 'questionID' => $currentQuestionId,
@@ -142,6 +155,7 @@ class QuestionsModel extends CI_Model {
                 'answer' => $this->input->post('identificationAnswer')
             );
             $this->db->insert('questions', $dataIdentification);
+            $currentQuestionId = $this->db->insert_id();
         } else if ($this->input->post('type') === "Coding") {
             $dataCoding = array(
                 'category' => $this->input->post('category'),
@@ -150,11 +164,27 @@ class QuestionsModel extends CI_Model {
                 'type' => $this->input->post('type'),
                 'date_posted' => date('Y-m-d H:i:s'),
                 'who_posted' => $id,
-                'answer' => $this->input->post('codingAnswer')
+                'answer' => ''
             );
             $this->db->insert('questions', $dataCoding);
+
+            $currentQuestionId = $this->db->insert_id();
+            $dataCoding = array(
+                'questionID' => $currentQuestionId,
+                'code' => $this->input->post('codingAnswer'),
+            );
+            $this->db->insert('coding', $dataCoding);
         }
         $this->update_stock_market($questionCategory);
+        $this->set_question_status_unverfied($currentQuestionId);
+    }
+
+    public function set_question_status_unverfied($questionId) {
+        $dataVerified = array(
+            'questionID' => $questionId,
+            'status' => 'unverified'
+        );
+        $this->db->insert('verification', $dataVerified);
     }
 
     public function update_stock_market($questionCategory) {
@@ -234,51 +264,111 @@ class QuestionsModel extends CI_Model {
         }
     }
 
-    public function get_questions($slug = FALSE) {
-        if ($slug === FALSE) {
-
-            $this->db->select('*');
-            $this->db->from('questions');
-            $this->db->order_by("date_posted", "desc");
-            $query = $this->db->get();
-            return $query->result_array();
-        }
-
-        $condition = "id ='" . $slug . "'";
+    public function getQuestionByID($id) {
+        $condition = "id='" . $id . "'";
         $this->db->select('*');
         $this->db->from('questions');
         $this->db->where($condition);
-        //$this->db->limit(1);
+
         $query = $this->db->get();
-        $questionArray = $query->result_array();
+        return $query->result_array();
+    }
+
+    public function get_questions($slug = FALSE) {
+        if ($slug === FALSE) {
+
+//            $this->db->select('*');
+//            $this->db->from('questions');
+//            $this->db->order_by("date_posted", "desc");
+//            $query = $this->db->get();
+//            return $query->result_array();
+        }
+
+//        $condition = "questions.id ='" . $slug . "'";
+//        $this->db->select('*');
+//        $this->db->from('questions');
+//        $this->db->join('users', 'questions.who_posted = users.id');       
+//        $this->db->where($condition);
+//        $this->db->select(
+//                'users.fname, '
+//                . 'users.lname, '
+//                . 'questions.title, '
+//                . 'questions.question, '
+//                . 'questions.date_posted, '
+//                . 'questions.category, '
+//                . 'questions.type, '
+//                . 'questions.who_posted, '
+//                . 'questions.answer');
+//        $this->db->from('questions');
+//        $this->db->join('users', 'users.id = questions.who_posted');
+//        $this->db->where($condition);
+        //$this->db->join('users', 'users.id = questions.who_posted');
+        //$this->db->limit(1);
+//        $query = $this->db->get();
+//        $questionArray = $query->result_array();
+
+        $questionArray = $this->getQuestionByID($slug);
+        $questionStatus = $this->getStatus($slug);
         $questionType = $questionArray[0]['type'];
         if ($questionType === "Multiple Choice") {
             $questionArray = $this->get_multiple_choice($slug);
             $questionArray[0]['answer'] = $questionArray[0][$questionArray[0]['answer']];
+            $questionArray[0]['code'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
-        } else {
+        } else if ($questionType === "Identification") {
             $questionArray[0]['option1'] = null;
             $questionArray[0]['option2'] = null;
             $questionArray[0]['option3'] = null;
             $questionArray[0]['option4'] = null;
+            $questionArray[0]['code'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
+            return $questionArray;
+        } else if ($questionType === "Coding") {
+            $questionArray = $this->get_coding($slug);
+            $questionArray[0]['option1'] = null;
+            $questionArray[0]['option2'] = null;
+            $questionArray[0]['option3'] = null;
+            $questionArray[0]['option4'] = null;
+            $questionArray[0]['status'] = $questionStatus[0]['status'];
+            $questionArray[0]['comment'] = $questionStatus[0]['comment'];
             return $questionArray;
         }
-        //return $query->result_array();
+//        return $query->result_array();
+//        else {
+//            $questionArray[0]['option1'] = null;
+//            $questionArray[0]['option2'] = null;
+//            $questionArray[0]['option3'] = null;
+//            $questionArray[0]['option4'] = null;
+//            return $questionArray;
+//        }
+    }
+
+    public function getStatus($questionID) {
+        $this->db->select('*');
+        $this->db->from('verification');
+        $this->db->where("questionID = '" . $questionID . "'");
+        $query = $this->db->get();
+        $qStatus = $query->result_array();
+
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $qStatus;
     }
 
     public function get_multiple_choice($questionID) {
         $this->db->select('*');
-        $this->db->from('questions');
-        $this->db->join('choices', 'choices.questionID = questions.id');
-        $this->db->where("questions.id = '" . $questionID . "'");
+        $this->db->from('choices');
+        $this->db->join('questions', 'questions.id = choices.questionID');
+        $this->db->where("choices.questionID = '" . $questionID . "'");
         $query = $this->db->get();
         $mcQuestion = $query->result_array();
-        $choicesArray = array(
-            "option1" => $mcQuestion[0]['option1'],
-            "option2" => $mcQuestion[0]['option1'],
-            "option3" => $mcQuestion[0]['option3'],
-            "option4" => $mcQuestion[0]['option4']
-        );
+
         //$this->shuffle($choicesArray);
 //        $choicesArray = array(
 //            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
@@ -287,46 +377,85 @@ class QuestionsModel extends CI_Model {
         return $mcQuestion;
     }
 
-    public function get_fullname_by_id($userID) {
-        //$condition = "questions.id ='" . $questionID . "'";
-        $this->db->select('fname, lname');
-        $this->db->from('users');
-        $this->db->join('questions', 'questions.who_posted = users.id');
-        $this->db->where_in('users.id', $userID);
-
-
+    public function get_coding($questionID) {
+        $this->db->select('*');
+        $this->db->from('coding');
+        $this->db->join('questions', 'questions.id = coding.questionID');
+        $this->db->where("coding.questionID = '" . $questionID . "'");
         $query = $this->db->get();
-        return $query->row_array();
+        $cdQuestion = $query->result_array();
+        //$this->shuffle($choicesArray);
+//        $choicesArray = array(
+//            "answer" => $mcQuestion[0][$mcQuestion[0]['answer']],
+//            
+//        );
+        return $cdQuestion;
+    }
+
+    public function get_fullname_by_id($questionID) {
+//        $condition = "id ='" . $questionID . "'";
+//        $this->db->select('users.fname, users.lname');
+//        $this->db->from('users');
+//        $this->db->join('questions', 'questions.who_posted = users.id');
+//        $this->db->where_in('users.id', $userID);
+
+        $condition = "id ='" . $questionID . "'";
+        $this->db->select('who_posted');
+        $this->db->from('questions');
+        $this->db->where($condition);
+        $query = $this->db->get();
+        $userId = $query->row();
+
+        if (isset($userId)) {
+            $condition = "id ='" . $userId->who_posted . "'";
+            $this->db->select('fname, lname');
+            $this->db->from('users');
+            $this->db->where($condition);
+            $query = $this->db->get();
+            return $query->row_array();
+        }
     }
 
     public function set_answer() {
         $id = ($this->session->userdata['logged_in']['id']);
         $questionArray = $_SESSION['currentQuestion'];
         unset($_SESSION['currentQuestion']);
+
         if ($questionArray[0]['type'] === "Multiple Choice") {
+            if ($questionArray[0]['answer'] === $this->input->post('gridRadiosAnswer')) {
+                $correctAnswer = true;
+            } else {
+                $correctAnswer = false;
+            }
             $dataAnsweredBy = array(
                 'userID' => $id,
                 'questionID' => $questionArray[0]['id'],
                 'answer' => $this->input->post('gridRadiosAnswer'),
+                'correct' => $correctAnswer,
+                'answeredWhen' => date('Y-m-d H:i:s')
+            );
+        } else if ($questionArray[0]['type'] === "Coding") {
+            $dataAnsweredBy = array(
+                'userID' => $id,
+                'questionID' => $questionArray[0]['id'],
+                'answer' => $this->input->post('codeAnswer'),
+                'correct' => false,
+                'answeredWhen' => date('Y-m-d H:i:s')
+            );
+        } else if ($questionArray[0]['type'] === "Identification") {
+            if ($questionArray[0]['answer'] === $this->input->post('textAnswer')) {
+                $correctAnswer = true;
+            } else {
+                $correctAnswer = false;
+            }
+            $dataAnsweredBy = array(
+                'userID' => $id,
+                'questionID' => $questionArray[0]['id'],
+                'answer' => $this->input->post('textAnswer'),
+                'correct' => $correctAnswer,
                 'answeredWhen' => date('Y-m-d H:i:s')
             );
         }
-//        else if ($question_item[0]['type'] === "Coding") {
-//            $dataAnsweredBy = array(
-//                'userID' => $id,
-//                'questionID' => $question_item[0]['id'],
-//                'answer' => $this->input->post('gridRadiosAnswer'),
-//                'answeredWhen' => date('Y-m-d H:i:s')
-//            );
-//        }
-//        else if ($question_item[0]['type'] === "Identification") {
-//            $dataAnsweredBy = array(
-//                'userID' => $id,
-//                'questionID' => $question_item[0]['id'],
-//                'answer' => $this->input->post('gridRadiosAnswer'),
-//                'answeredWhen' => date('Y-m-d H:i:s')
-//            );
-//        }
 
         $this->db->insert('answered_by', $dataAnsweredBy);
         $this->update_answer($questionArray);
@@ -345,6 +474,83 @@ class QuestionsModel extends CI_Model {
         $this->db->set('unanswered', 'unanswered-1', FALSE);
         $this->db->where('category', $questionArray[0]['category']);
         $this->db->update('stockmarket', $stockUpdate);
+    }
+
+    public function set_status() {
+        $questionArray = $_SESSION['currentQuestion'];
+        unset($_SESSION['currentQuestion']);
+        if ($this->input->post('rejectComment') == null) {
+            $data = array(
+                'status' => 'verified',
+                'comment' => 'Your question has been verified!',
+                'verified_when' => date('Y-m-d H:i:s')
+            );
+        } else {
+            $data = array(
+                'status' => 'removed',
+                'comment' => $this->input->post('rejectComment'),
+                'verified_when' => date('Y-m-d H:i:s')
+            );
+        }
+        $this->db->where('questionID', $questionArray[0]['questionID']);
+        $this->db->update('verification', $data);
+
+//        $dataAnsweredBy = array(
+//                'userID' => $id,
+//                'questionID' => $questionArray[0]['id'],
+//                'answer' => $this->input->post('gridRadiosAnswer'),
+//                'answeredWhen' => date('Y-m-d H:i:s')
+//            );
+//        $this->db->insert('answered_by', $dataAnsweredBy);
+        //$this->update_answer($questionArray[0]['id']);
+    }
+
+    public function display_answers($questionID, $who_posted) {
+        if ($this->session->userdata['logged_in']['id'] === $who_posted) {
+            $this->db->select('*');
+            $this->db->from('answered_by');
+            $this->db->where("questionID = '".$questionID."'");
+            $query = $this->db->get();
+            $data = $query->result_array();
+            
+        } else {
+            $data = array(
+                'who_posted' => 'Di sayo to bata'
+            );
+        }
+        return $data;
+    }
+
+    public function getDataAnswer($slug) {
+        $id = ($this->session->userdata['logged_in']['id']);
+        $condition = "userID= " . "'" . $id . "'" . "AND " . "questionID= " . "'" . $slug . "'";
+        $this->db->select('id');
+        $this->db->from('answered_by');
+        $this->db->where($condition);
+        $query = $this->db->get();
+
+
+        if ($query->num_rows() == 1) {
+            return $query->row_array();
+        } else {
+            return "false";
+        }
+    }
+
+    public function if_answer($slug) {
+        $id = ($this->session->userdata['logged_in']['id']);
+        $condition = "userID= " . "'" . $id . "'" . "AND " . "questionID= " . "'" . $slug . "'";
+        $this->db->select('id');
+        $this->db->from('answered_by');
+        $this->db->where($condition);
+        $query = $this->db->get();
+
+
+        if ($query->num_rows() == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

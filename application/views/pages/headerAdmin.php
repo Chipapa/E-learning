@@ -32,7 +32,7 @@ if (isset($this->session->userdata['logged_in'])) {
     </head>
     <body ng-app="">
         <nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
-            <a class="navbar-brand" href="<?php echo site_url('questions/index'); ?>">CQV E-Learning</a>
+            <a class="navbar-brand" href="<?php echo site_url('questions/index'); ?>">CQV E-Learning Administrator</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon border border-primary"></span>
             </button>
@@ -41,7 +41,7 @@ if (isset($this->session->userdata['logged_in'])) {
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Questions </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Verify Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
                         <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market    <span class="sr-only">(current)</span></a>

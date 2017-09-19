@@ -18,16 +18,16 @@ class Pages extends CI_Controller {
     public function index() {
         $this->view('loginpage');
     }
-    
+
     //STILL BUGGY, FIX ME
-    public function set_titlepage($page){
-        if($page == 'loginpage'){
+    public function set_titlepage($page) {
+        if ($page == 'loginpage') {
             $data['title'] = ucfirst('Login');
-        }else if($page == 'signuppage'){
+        } else if ($page == 'signuppage') {
             $data['title'] = ucfirst('Sign up');
-        }else{
+        } else {
             $data['title'] = ucfirst('Unknown Page');
-        }     
+        }
         return $data;
     }
 
@@ -38,13 +38,22 @@ class Pages extends CI_Controller {
         }
         //$data['title'] = ucfirst($page); // Capitalize the first letter
         $dataTitle = $this->set_titlepage($page);
-        
+
         if ($page == 'loginpage') {
             $this->load->view('pages/headerLogin', $dataTitle);
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
-        }else{
-            $this->load->view('pages/headerMain', $dataTitle);
+        } else {
+
+            if (isset($this->session->userdata['logged_in'])) {
+                $userType = ($this->session->userdata['logged_in']['usertype']);
+            }
+
+            if ($userType === "student") {
+                $this->load->view('pages/headerMain', $dataTitle);
+            }else if($userType === "admin"){
+                $this->load->view('pages/headerAdmin', $dataTitle);
+            }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
@@ -71,30 +80,46 @@ class Pages extends CI_Controller {
 
                 //get the whole row in the database of the specific username then assign to session array
                 $result = $this->loginmodel->read_user_information($username);
-                if ($result != false) {
-                    $session_data = array(
-                        'id' => $result[0]->id,
-                        'username' => $result[0]->username,
-                        'usertype' => $result[0]->userType,
-                        'fname' => $result[0]->fname,
-                        'lname' => $result[0]->lname,
-                        'ask_points' => $result[0]->ask_points,
-                        'answer_points' => $result[0]->answer_points 
-                    );
 
-                    // Add user data in session
-                    if (!isset($_SESSION)) {
-                        session_start();
+
+                if ($result != false) {
+                    if ($result[0]->userType === "student") {
+                        $session_data = array(
+                            'id' => $result[0]->id,
+                            'username' => $result[0]->username,
+                            'usertype' => $result[0]->userType,
+                            'fname' => $result[0]->fname,
+                            'lname' => $result[0]->lname,
+                            'ask_points' => $result[0]->ask_points,
+                            'answer_points' => $result[0]->answer_points
+                        );
+
+                        // Add user data in session
+                        if (!isset($_SESSION)) {
+                            session_start();
+                        }
+
+                        $this->session->set_userdata('logged_in', $session_data);
+                        redirect("questions/index");
+                    } else if ($result[0]->userType === "admin") {
+                        $session_data = array(
+                            'id' => $result[0]->id,
+                            'username' => $result[0]->username,
+                            'usertype' => $result[0]->userType,
+                            'fname' => $result[0]->fname,
+                            'lname' => $result[0]->lname,
+                            'ask_points' => $result[0]->ask_points,
+                            'answer_points' => $result[0]->answer_points
+                        );
+
+                        // Add user data in session
+                        if (!isset($_SESSION)) {
+                            session_start();
+                        }
+
+                        $this->session->set_userdata('logged_in', $session_data);
+                        redirect("admin/index");
                     }
-                    
-                    $this->session->set_userdata('logged_in', $session_data);
-                    redirect("questions/index");
-                    //$this->load->view("pages\LandingPage.php");
-//                        $data['questions'] = $this->questionsmodel->get_questions();
-//                          
-//                        $this->load->view('pages/footer');
-//                    $this->view("LandingPage");
-                    //site_url("questions/index");
                 }
             } else {
                 $data = array(
@@ -109,15 +134,17 @@ class Pages extends CI_Controller {
 
     public function logout() {
         $sess_array = array(
-            'username' => ''    
+            'username' => ''
         );
         $this->session->unset_userdata('logged_in', $sess_array);
-        
+
         unset($_SESSION['categories']);
-        
+        unset($_SESSION['currentQuestion']);
+
         $data['message_display'] = 'Logged out successfully';
 
         $this->view('loginpage', $data);
         //$this->load->view('pages/loginpage', $data);
-    }   
+    }
+
 }

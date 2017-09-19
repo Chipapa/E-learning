@@ -23,7 +23,15 @@ Class Stockmarket extends CI_Controller {
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
-            $this->load->view('pages/headerMain');
+            if (isset($this->session->userdata['logged_in'])) {
+                $userType = ($this->session->userdata['logged_in']['usertype']);
+            }
+
+            if ($userType === "student") {
+                $this->load->view('pages/headerMain');
+            } else if ($userType === "admin") {
+                $this->load->view('pages/headerAdmin');
+            }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
@@ -40,7 +48,7 @@ Class Stockmarket extends CI_Controller {
     public function viewCategory($slug = NULL) {
         //$data['category_item'] = $this->QuestionsModel->get_categories($slug);
         //$slug = url_title($slugParam, 'dash', TRUE);
-        
+
         $config = array();
         $config["base_url"] = base_url() . "index.php/stockmarket/viewcategory/" . $slug;
         $config["total_rows"] = $this->QuestionsModel->record_count($slug);
@@ -82,7 +90,9 @@ Class Stockmarket extends CI_Controller {
     }
 
     public function viewQuestion() {
-        $this->view('askquestionpage');
+        $_SESSION['categories'] = $this->QuestionsModel->get_categories();
+        $data['category'] = $this->input->get('category');
+        $this->view('askquestionpage', $data);
     }
 
 // FIX ME, TIME SINCE SHOULD BE HERE, NOT IN THE VIEW

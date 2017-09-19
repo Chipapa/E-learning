@@ -15,7 +15,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
         <div class="row">
             <div class="col-sm-8">
-                <h3>Most Recent Questions</h3>
+                <h3>Most Recent Questions to be Verified</h3>
             </div>
             <div class="col-sm-4 text-right">
                 <p><a class="btn btn-large btn-info" href="<?php echo site_url('questions/viewAskQuestion'); ?>">Ask a Question</a></p>
@@ -38,6 +38,10 @@ if (isset($this->session->userdata['logged_in'])) {
         unset($_SESSION['flash']);
         echo "</div>"
         ?>
+        
+        <pre>
+            <?php //print_r($questions);?>
+        </pre>
 
         <div class="row">
             <div class="col-sm-9 blog-main">  
@@ -57,9 +61,20 @@ if (isset($this->session->userdata['logged_in'])) {
                         <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
                         <!-- REPLACED WITH: echo $question_item->question; -->
                         <div class="list-group">
-                            <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <a href="<?php echo site_url('admin/verifyQuestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
+                                    <h5 class="mb-1"><?php echo $question_item->title; ?> 
+                                        
+                                        <img src="<?php 
+                                        if ($question_item->status === 'unverified'){
+                                             echo base_url()."/assets/png/timer-2x.png"; 
+                                        } else if ($question_item->status === 'verified'){
+                                             echo base_url()."/assets/png/circle-check-2x.png"; 
+                                        } else if ($question_item->status === 'removed'){
+                                             echo base_url()."/assets/png/circle-x-2x.png"; 
+                                        }
+                                        ?>">
+                                    </h5> 
                                     <small><?php echo $time_asked; ?></small>
                                 </div>
         <!--                                <p class="mb-1"><?php //echo $question_item->question;    ?></p>-->
@@ -122,12 +137,12 @@ if (isset($this->session->userdata['logged_in'])) {
             </div><!-- /.blog-sidebar -->
 
             <pre>
-                <?php print_r($questions); ?>
+                <?php //print_r($questions) ?>
             </pre>
         </div>
     </div>
 
-    <?php echo '</form>'; ?>
+</form>
 <!--<script type="text/javascript">
 $(document).ready(function () {
     //alert();

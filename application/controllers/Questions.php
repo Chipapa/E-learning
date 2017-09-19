@@ -50,14 +50,26 @@ Class Questions extends CI_Controller {
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-        $data['leaderboard'] = $this->profilemodel->getTopTen();
-        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
-        // $sampleData = $data["questions"];
+        //$sampleData = $data["questions"];
         //$data["name"] = $this->questionsmodel->get_fullname_by_id($data["questions"][0]);
-        // $data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
+        //$data["name"] = $this->questionsmodel->get_fullname_by_id($data['id']);
+
+        $data["questions"] = $this->questionsmodel->fetch_questions($config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
+        //$data["status"] = $this->questionsmodel->getStatus();
+        if (isset($_SESSION['currentQuestion']) && !empty($_SESSION['currentQuestion']))
+        {
+            unset($_SESSION['currentQuestion']);
+        }
+        if (isset($this->session->userdata['logged_in'])) {
+            $userType = ($this->session->userdata['logged_in']['usertype']);
+        }
         $data["leaderboard"] = $this->profilemodel->getTopTen();
-        $this->view('LandingPage', $data);
+        if ($userType === "student") {
+            $this->view('LandingPage', $data);
+        }else if($userType === "admin"){
+            $this->view('LandingPageAdmin', $data);
+        }
     }
 
     public function view($page = false, $passData = false) {
@@ -71,7 +83,16 @@ Class Questions extends CI_Controller {
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
-            $this->load->view('pages/headerMain');
+
+            if (isset($this->session->userdata['logged_in'])) {
+                $userType = ($this->session->userdata['logged_in']['usertype']);
+            }
+
+            if ($userType === "student") {
+                $this->load->view('pages/headerMain');
+            } else if ($userType === "admin") {
+                $this->load->view('pages/headerAdmin');
+            }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         }
@@ -85,10 +106,9 @@ Class Questions extends CI_Controller {
         $this->view('AskQuestionPage');
     }
 
-    public function setanswer() {
+    public function setAnswer() {
         $this->questionsmodel->set_answer();
-
-        $_SESSION['flash'] = 'Your question has been successfully posted.';
+        $_SESSION['flash'] = 'Your answer has been submitted for checking and verification.';
         redirect("questions/index");
     }
 
@@ -106,9 +126,15 @@ Class Questions extends CI_Controller {
         } else if ($this->input->post('type') === "Identification") {
             $this->form_validation->set_rules('identificationAnswer', 'Answer to Identification', 'required');
         }
-
         if ($this->form_validation->run() === FALSE) {
             $this->view("askquestionpage");
+//            $data = array(
+//                'title' => form_error('title'),
+//                'question' => form_error('question')
+//            );
+////            $data['titlePHP'] = $this->input->post('inputTitle');
+//            echo json_encode($data);
+//            echo validation_errors();
         } else {
             $this->questionsmodel->ask_question();
 
@@ -119,7 +145,6 @@ Class Questions extends CI_Controller {
             $_SESSION['flash'] = 'Your question has been successfully posted.';
             redirect("questions/index");
         }
-
 //          TESTING PART AJAX     
 //        if ($this->input->post('title') == "") {
 //            $message = "You can't send empty text";
@@ -138,6 +163,10 @@ Class Questions extends CI_Controller {
 
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
+        $data['full_name_db'] = $this->questionsmodel->get_fullname_by_id($slug);
+        $data['dataanswer']    = $this->questionsmodel->getDataAnswer($slug);  
+        $data['boolanswer']    = $this->questionsmodel->if_answer($slug);
+        $data['answer_item'] = $this->questionsmodel->display_answers($slug, $data['question_item'][0]['who_posted']);
         
         $_SESSION['currentQuestion'] = $data['question_item'];
 
@@ -151,4 +180,21 @@ Class Questions extends CI_Controller {
 
         $this->view('answer_question_page', $data);
     }
+
+    public function getleaderboard() {
+        //$data = $this->input->post('sampleData');
+        // $username = ($this->session->userdata['logged_in']['username']);
+        //echo json_encode($data['Leaderboards']);    
+        //$this->view('LandingPage', $data);  
+        //while($myQuestions != null)
+        $this->view('LandingPage', $data);
+        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+    }
+    
+    public function setStatus(){
+        $this->questionsmodel->set_status();
+        $_SESSION['flash'] = 'Question has been successfully reviewed.';
+        redirect("questions/index");
+    }
+
 }
