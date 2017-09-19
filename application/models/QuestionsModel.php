@@ -392,14 +392,22 @@ class QuestionsModel extends CI_Model {
         return $cdQuestion;
     }
 
-    public function get_fullname_by_id($questionID) {
+    public function get_fullname_by_id($ID, $direct = FALSE) {
 //        $condition = "id ='" . $questionID . "'";
 //        $this->db->select('users.fname, users.lname');
 //        $this->db->from('users');
 //        $this->db->join('questions', 'questions.who_posted = users.id');
 //        $this->db->where_in('users.id', $userID);
+        if($direct === TRUE){
+            $condition = "id ='" . $ID . "'";
+            $this->db->select('fname, lname');
+            $this->db->from('users');
+            $this->db->where($condition);
+            $query = $this->db->get();
+            return $query->row_array();
+        }
 
-        $condition = "id ='" . $questionID . "'";
+        $condition = "id ='" . $ID . "'";
         $this->db->select('who_posted');
         $this->db->from('questions');
         $this->db->where($condition);
@@ -505,14 +513,23 @@ class QuestionsModel extends CI_Model {
         //$this->update_answer($questionArray[0]['id']);
     }
 
-    public function display_answers($questionID, $who_posted) {
+    public function display_answers($questionID, $who_posted, $count = FALSE) {
+        if ($count === TRUE) {
+            if ($this->session->userdata['logged_in']['id'] === $who_posted) {
+                $this->db->select('*');
+                $this->db->from('answered_by');
+                $this->db->where("questionID = '" . $questionID . "'");
+                $query = $this->db->get();
+                return $query->num_rows();
+            }
+        }
+
         if ($this->session->userdata['logged_in']['id'] === $who_posted) {
             $this->db->select('*');
             $this->db->from('answered_by');
-            $this->db->where("questionID = '".$questionID."'");
+            $this->db->where("questionID = '" . $questionID . "'");
             $query = $this->db->get();
             $data = $query->result_array();
-            
         } else {
             $data = array(
                 'who_posted' => 'Di sayo to bata'

@@ -12,7 +12,6 @@ if (isset($this->session->userdata['logged_in'])) {
 ?>
 <form type="post">
     <div class="container" id="mainDiv">
-
         <div class="row">
             <div class="col-sm-8">
                 <h3>Most Recent Questions</h3>
@@ -40,8 +39,7 @@ if (isset($this->session->userdata['logged_in'])) {
         ?>
 
         <div class="row">
-            <div class="col-sm-9 blog-main">  
-
+            <div class="col-sm-8 blog-main">  
                 <?php
                 if ($questions != NULL) {
                     foreach ($questions as $question_item):
@@ -59,10 +57,31 @@ if (isset($this->session->userdata['logged_in'])) {
                         <div class="list-group">
                             <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
+                                    <h5 class="mb-1"><?php echo $question_item->title; ?>
+
+                <!--                                        <img src="<?php
+//                                        if ($question_item->status === 'unverified') {
+//                                            echo base_url() . "/assets/png/timer-2x.png";
+//                                        } else 
+//                                        if ($question_item->status === 'verified') {
+//                                            echo base_url() . "/assets/png/circle-check-2x.png";
+//                                        } else if ($question_item->status === 'removed') {
+//                                            echo base_url() . "/assets/png/circle-x-2x.png";
+//                                        }
+                                        ?>">-->
+
+                                        <?php
+                                        if ($question_item->status === 'verified') {
+                                            echo "<img src='" . base_url() . "/assets/png/circle-check-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Verified'>";
+                                        } else if ($question_item->status === 'removed') {
+                                            echo "<img src='" . base_url() . "/assets/png/circle-x-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Rejected'>";
+                                        }
+                                        ?>
+
+                                    </h5>
                                     <small><?php echo $time_asked; ?></small>
                                 </div>
-        <!--                                <p class="mb-1"><?php //echo $question_item->question;    ?></p>-->
+        <!--                                <p class="mb-1"><?php //echo $question_item->question;             ?></p>-->
 
                                 <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          
                                 <div>
@@ -103,26 +122,50 @@ if (isset($this->session->userdata['logged_in'])) {
                         </ol>
                     </div>-->
 
-            <div class="col-sm-auto offset-sm-1 blog-sidebar">
+            <div class="col-sm-3 offset-sm-1 blog-sidebar">
                 <hr>
-                <div class="sidebar-module col-sm-auto">
-                    <h4>Leaderboards</h4>
-                    <div class="list-group col-sm-auto">
+                <div class="sidebar-module">
+                    <h4 class="text-center">Top 10</h4>
+                    <div class="list-group">
 
                         <?php
                         if (isset($leaderboard)) {
                             foreach ($leaderboard as $test_item) {
-                                echo "<a href='#' class='list-group-item list-group-item-action'>" . $test_item[0] . "-" . $test_item[1] . "</a>";
+                                //echo "<a href='#' class='list-group-item list-group-item-action'>" . $test_item[0] . "-" . $test_item[1] . "</a>";
                             }
                         }
-                        ?>      
-
+                        ?>                                              
                     </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (isset($leaderboard)) {
+                                foreach ($leaderboard as $test_item) {
+                                    echo "<tr> ";
+                                    echo "<td> <a href='" . site_url("profile/viewprofile/" . $test_item[2]) . "'>" . $test_item[0] . "</a></td>";
+                                    echo "<td>" . $test_item[1] . "</td>";
+                                    echo "</tr> ";
+                                }
+//                                echo "<pre>";
+//                                print_r($leaderboard);
+//                                echo "</pre>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+
                 </div>
             </div><!-- /.blog-sidebar -->
 
             <pre>
-                <?php print_r($questions); ?>
+                <?php //print_r($questions); ?>
             </pre>
         </div>
     </div>
@@ -133,7 +176,7 @@ $(document).ready(function () {
     //alert();
     $.ajax({
         type: "POST",
-        url: "<?php //echo base_url();  ?>" + "index.php/profile/getleaderboard",
+        url: "<?php //echo base_url();           ?>" + "index.php/profile/getleaderboard",
         dataType: 'json',
         data: {sampleData: 'HELLO'},
         success: function (data) {

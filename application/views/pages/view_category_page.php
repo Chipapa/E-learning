@@ -48,7 +48,7 @@
                         <h5 class="mb-1"><?php echo $question_item->title; ?></h5>
                         <small><?php echo $time_asked; ?></small>
                     </div>
-                    <p class="mb-1"><?php echo $question_item->question; ?></p>
+<!--                    <p class="mb-1"><?php //echo $question_item->question; ?></p>-->
                     <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          
                     <div>
                         <span class="badge badge-default "><?php echo $question_item->category; ?> </span>
