@@ -77,7 +77,16 @@ Class Questions extends CI_Controller {
             // Whoops, we don't have a page for that!
             show_404();
         }
-        //$data['title'] = ucfirst($page); // Capitalize the first letter
+
+        if ($page === "LandingPage") {
+            $data['title'] = "Home"; // Capitalize the first letter
+        }else if($page === "answer_question_page"){
+            $data['title'] = "Answer Question";          
+        }else if($page === "AskQuestionPage"){
+            $data['title'] = "Ask a Question";       
+        }
+        
+
         if ($page == 'loginpage' || $page == 'signuppage') {
             $this->load->view('pages/headerLogin');
             $this->load->view('pages/' . $page, $passData);
@@ -89,7 +98,7 @@ Class Questions extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/headerMain');
+                $this->load->view('pages/headerMain', $data);
             } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }

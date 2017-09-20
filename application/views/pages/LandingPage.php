@@ -10,6 +10,7 @@ if (isset($this->session->userdata['logged_in'])) {
     header("location: loginpage");
 }
 ?>
+<title><?php echo $title; ?></title>
 <form type="post">
     <div class="container" id="mainDiv">
         <div class="row">
@@ -17,7 +18,7 @@ if (isset($this->session->userdata['logged_in'])) {
                 <h3>Most Recent Questions</h3>
             </div>
             <div class="col-sm-4 text-right">
-                <p><a class="btn btn-large btn-info" href="<?php echo site_url('questions/viewAskQuestion'); ?>">Ask a Question</a></p>
+                <p><a class="btn btn-large btn-outline-primary" href="<?php echo site_url('questions/viewAskQuestion'); ?>">Ask a Question</a></p>
             </div>
         </div>
 
