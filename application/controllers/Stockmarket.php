@@ -17,7 +17,13 @@ Class Stockmarket extends CI_Controller {
             // Whoops, we don't have a page for that!
             show_404();
         }
-        //$data['title'] = ucfirst($page); // Capitalize the first letter
+        if($page === "stockmarketpage"){
+            $data['title'] = "Stock Market";
+        }else if($page === "view_category_page"){
+            //$data['title'] = $passData['category_title'];
+            $data['title'] = "Stock Market";
+        }
+        
         if ($page == 'loginpage' || $page == 'signuppage') {
             $this->load->view('pages/headerLogin');
             $this->load->view('pages/' . $page, $passData);
@@ -28,7 +34,7 @@ Class Stockmarket extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/headerMain');
+                $this->load->view('pages/headerMain', $data);
             } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }
