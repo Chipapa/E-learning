@@ -13,38 +13,39 @@ if (isset($this->session->userdata['logged_in'])) {
 <div class="container" id="mainDiv">
     <div class="form-group">
         <?php
-$isOwnQuestion = false;
-        if ($question_item[0]['who_posted'] === $session_id) {
-            $isOwnQuestion = true;
-        }
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-        if ($boolanswer) {
-
-            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-            echo "<span aria-hidden='true'>&times;</span>";
-            echo "</button>";
-            echo "You have already answered this question";
-        }
-
-
-
-        if ($isOwnQuestion) {
-            
-            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-            echo "<span aria-hidden='true'>&times;</span>";
-            echo "</button>";
-            echo "This is oyur own";
-        }
-        echo "</div>";
-        ?>
-
-        <?php
-        $full_name = $full_name_db['fname'] . " " . $full_name_db['lname'];
-
         $isOwnQuestion = false;
         if ($question_item[0]['who_posted'] === $session_id) {
             $isOwnQuestion = true;
         }
+
+        if ($question_item[0]['status'] === 'removed') {
+            echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'> This question was rejected for the following reason(s): ";
+            echo "<hr>";
+            echo $question_item[0]['comment'];
+            echo "</div>";
+        }
+
+        if ($isAnswered) {
+            echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>";
+            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+            echo "<span aria-hidden='true'>&times;</span>";
+            echo "</button>";
+            echo "You already have answered this question";
+            echo "</div>";
+        }
+
+        if ($isOwnQuestion) {
+            echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>";
+            echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+            echo "<span aria-hidden='true'>&times;</span>";
+            echo "</button>";
+            echo "You are now viewing your own question.";
+            echo "</div>";
+        }
+        ?>
+
+        <?php
+        $full_name = $full_name_db['fname'] . " " . $full_name_db['lname'];
 
         //Questions posted by the logged in user will display a different time_asked format
         if ($isOwnQuestion) {
@@ -55,7 +56,18 @@ $isOwnQuestion = false;
         ?>
 
         <?php echo form_open('questions/setAnswer'); ?>  
-        <h5 class="mb-1"><?php echo $question_item[0]['title']; ?></h5>
+        <h5 class="mb-1">
+            <?php echo $question_item[0]['title']; ?> 
+
+            <?php
+            if ($question_item[0]['status'] === 'verified') {
+                echo "<img src='" . base_url() . "/assets/png/circle-check-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Verified'>";
+            } else if ($question_item[0]['status'] === 'removed') {
+                echo "<img src='" . base_url() . "/assets/png/circle-x-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Rejected'>";
+            }
+            ?>
+        </h5>
+
         <small> <?php echo $who_posted_message; ?></br>  </small>
 
         <span class="badge badge-default "><?php echo $question_item[0]['category']; ?> </span>
@@ -84,7 +96,7 @@ $isOwnQuestion = false;
                                    id="gridRadios1" 
                                    value="<?php echo $question_item[0]['option1']; ?>" 
                                    <?php
-                                   if ($isOwnQuestion || $boolanswer) {
+                                   if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
                                    }
                                    ?> 
@@ -105,7 +117,7 @@ $isOwnQuestion = false;
                                    id="gridRadios2"  
                                    value="<?php echo $question_item[0]['option2']; ?>"
                                    <?php
-                                   if ($isOwnQuestion || $boolanswer) {
+                                   if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -125,7 +137,7 @@ $isOwnQuestion = false;
                                    id="gridRadios3"  
                                    value="<?php echo $question_item[0]['option3']; ?>"
                                    <?php
-                                   if ($isOwnQuestion || $boolanswer) {
+                                   if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -145,7 +157,7 @@ $isOwnQuestion = false;
                                    id="gridRadios4"  
                                    value="<?php echo $question_item[0]['option4']; ?>"
                                    <?php
-                                   if ($isOwnQuestion || $boolanswer) {
+                                   if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
                                    }
                                    ?> >
@@ -161,7 +173,7 @@ $isOwnQuestion = false;
     <div class="form-group" id="divCodingAnswer">
         <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea></br>
         <div <?php
-        if ($isOwnQuestion || $boolanswer) {
+        if ($isOwnQuestion || $isAnswered) {
             echo "style='display:none'";
         }
         ?>>
@@ -179,7 +191,7 @@ $isOwnQuestion = false;
                name="textAnswer" 
                class="form-control" 
                <?php
-               if ($isOwnQuestion||$boolanswer) {
+               if ($isOwnQuestion || $isAnswered) {
                    echo "disabled=''";
                }
                ?> >
@@ -191,23 +203,46 @@ $isOwnQuestion = false;
             data-toggle="modal" 
             data-target="#exampleModal" 
             <?php
-            if ($isOwnQuestion || $boolanswer) {
+            if ($isOwnQuestion || $isAnswered) {
                 echo "disabled='' style='display:none'";
             }
             ?> >Submit Answer
     </button>
-    
-    <div>
-    <?php
-        if($question_item[0]['type'] === 'Coding' && $isOwnQuestion)
-        {
-        foreach ($answer_item as $otherUserAnswers):?>
-            <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly> <?php echo $otherUserAnswers['answer']; ?> </textarea></br>
 
-        <?php        endforeach;
+    <!--    Section for showing all answers to the the one posted the question-->
+    <div>
+        <?php
+
         
+
+
+        if (isset($answer_item) && $isOwnQuestion) {
+            
+            echo "<h6>" . $answer_count . " Answer(s) to your Question.</h6>";
+            foreach ($answer_item as $otherUserAnswers):
+                $fullname_of_who_answered = $otherUserAnswers['fname'] . " " . $otherUserAnswers['lname'];
+                ?>
+                <br>               
+                <div class="card">
+                    <div class="card-body">
+                        <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly><?php echo $otherUserAnswers['answer']; ?></textarea>              
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Answered <?php echo time_since(time() - strtotime($otherUserAnswers['answeredWhen'])); ?> ago by <?php echo $fullname_of_who_answered; ?> 
+                            </small>
+                        </p>
+                        <a href="#" class="btn btn-success">Mark as Correct</a>
+                    </div>
+                </div>
+                <?php
+            endforeach;
         }
-    ?>
+
+        echo "<pre>";
+        print_r($answer_item);
+        //print_r($who_answered);
+        echo "</pre>";
+        ?>
     </div>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -266,7 +301,7 @@ $isOwnQuestion = false;
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();                         ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();                                                               ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);
@@ -279,7 +314,6 @@ $isOwnQuestion = false;
 </script>
 
 <?php
-
 echo "<script> console.log(" . (json_encode($answer_item)) . ") </script>";
 
 function time_since($since) {

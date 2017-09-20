@@ -34,23 +34,36 @@ if (isset($this->session->userdata['logged_in'])) {
         } else {
             $who_posted_message = "Asked " . time_since(time() - strtotime($question_item[0]['date_posted'])) . " ago by " . $full_name;
         }
-        echo "<script> console.log(".json_encode($_SESSION['currentQuestion']).") </script>";
+        echo "<script> console.log(" . json_encode($_SESSION['currentQuestion']) . ") </script>";
         ?>
 
         <?php echo form_open('questions/setStatus'); ?>  
-        <div <?php if($question_item[0]['status'] === 'unverified'){
-            echo "class='alert alert-warning alert-dismissible fade show' role='alert'> This question is not yet verified";
-            } else if($question_item[0]['status'] === 'removed'){
-            echo "class='alert alert-danger alert-dismissible fade show' role='alert'> This question has been removed";   
-            } else if($question_item[0]['status'] === 'verified'){
-            echo "class='alert alert-success alert-dismissible fade show' role='alert'> This question is verified";  
+
+        <?php
+        if ($question_item[0]['status'] === 'unverified') {
+            echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'> This question is not yet verified </div>";
+        } else if ($question_item[0]['status'] === 'removed') {
+            echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'> This question was rejected for the following reason(s): ";
+            echo "<hr>";
+            echo $question_item[0]['comment'];
+            echo " </div>";
+        } 
+//        else if ($question_item[0]['status'] === 'verified') {
+//            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'> This question is verified </div>";
+//        }
+        ?>
+
+        <h5 class="mb-1">
+            <?php echo $question_item[0]['title']; ?>
+
+            <?php
+            if ($question_item[0]['status'] === 'verified') {
+                echo "<img src='" . base_url() . "/assets/png/circle-check-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Verified'>";
+            } else if ($question_item[0]['status'] === 'removed') {
+                echo "<img src='" . base_url() . "/assets/png/circle-x-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Rejected'>";
             }
             ?>
-            <ul>
-                <li><?php echo $question_item[0]['comment'];?></li>
-            </ul>
-        </div>
-        <h5 class="mb-1"><?php echo $question_item[0]['title']; ?></h5>
+        </h5>
         <small> <?php echo $who_posted_message; ?></br>  </small>
 
         <span class="badge badge-default "><?php echo $question_item[0]['category']; ?> </span>
@@ -228,7 +241,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //        print_r($test); //print_r($full_name_db);
         ?>
     </pre>
-
+</div>
 </div> <!--end main container div-->
 
 <?php echo '</form>'; ?>

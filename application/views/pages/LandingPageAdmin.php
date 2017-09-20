@@ -38,13 +38,13 @@ if (isset($this->session->userdata['logged_in'])) {
         unset($_SESSION['flash']);
         echo "</div>"
         ?>
-        
+
         <pre>
             <?php //print_r($questions);?>
         </pre>
 
         <div class="row">
-            <div class="col-sm-9 blog-main">  
+            <div class="col-sm-8 blog-main">  
 
                 <?php
                 if ($questions != NULL) {
@@ -54,30 +54,28 @@ if (isset($this->session->userdata['logged_in'])) {
                         if ($question_item->who_posted === $session_id) {
                             $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
                         } else {
-//                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
                             $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $full_name_db;
                         }
                         ?>     
                         <!-- OLD STYLE OF CALLING COLUMNS: echo $question_item['question']; -->
                         <!-- REPLACED WITH: echo $question_item->question; -->
                         <div class="list-group">
-                            <a href="<?php echo site_url('admin/verifyQuestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <a href="<?php echo site_url('admin/verifyQuestion/' . $question_item->id); ?>" 
+                               class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1"><?php echo $question_item->title; ?> 
-                                        
-                                        <img src="<?php 
-                                        if ($question_item->status === 'unverified'){
-                                             echo base_url()."/assets/png/timer-2x.png"; 
-                                        } else if ($question_item->status === 'verified'){
-                                             echo base_url()."/assets/png/circle-check-2x.png"; 
-                                        } else if ($question_item->status === 'removed'){
-                                             echo base_url()."/assets/png/circle-x-2x.png"; 
+
+                                        <?php
+                                        if ($question_item->status === 'verified') {
+                                            echo "<img src='" . base_url() . "/assets/png/circle-check-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Verified'>";
+                                        } else if ($question_item->status === 'removed') {
+                                            echo "<img src='" . base_url() . "/assets/png/circle-x-2x.png" . "'data-toggle='tooltip' data-placement='bottom' title='Rejected'>";
                                         }
-                                        ?>">
+                                        ?>
                                     </h5> 
                                     <small><?php echo $time_asked; ?></small>
                                 </div>
-        <!--                                <p class="mb-1"><?php //echo $question_item->question;    ?></p>-->
+        <!--                                <p class="mb-1"><?php //echo $question_item->question;            ?></p>-->
 
                                 <small>This question was answered by <?php echo $question_item->num_of_answers; ?> student(s)</small>                          
                                 <div>
@@ -118,21 +116,33 @@ if (isset($this->session->userdata['logged_in'])) {
                         </ol>
                     </div>-->
 
-            <div class="col-sm-auto offset-sm-1 blog-sidebar">
+            <div class="col-sm-3 offset-sm-1 blog-sidebar">
                 <hr>
                 <div class="sidebar-module col-sm-auto">
-                    <h4>Leaderboards</h4>
-                    <div class="list-group col-sm-auto">
-
-                        <?php
-                        if (isset($leaderboard)) {
-                            foreach ($leaderboard as $test_item) {
-                                echo "<a href='#' class='list-group-item list-group-item-action'>" . $test_item[0] . "-" . $test_item[1] . "</a>";
+                    <h4>Top 10</h4>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (isset($leaderboard)) {
+                                foreach ($leaderboard as $test_item) {
+                                    echo "<tr> ";
+                                    echo "<td> <a href='" . site_url("profile/viewprofile/" . $test_item[2]) . "'>" . $test_item[0] . "</a></td>";
+                                    echo "<td>" . $test_item[1] . "</td>";
+                                    echo "</tr> ";
+                                }
+//                                echo "<pre>";
+//                                print_r($leaderboard);
+//                                echo "</pre>";
                             }
-                        }
-                        ?>      
-
-                    </div>
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div><!-- /.blog-sidebar -->
 
@@ -148,7 +158,7 @@ $(document).ready(function () {
     //alert();
     $.ajax({
         type: "POST",
-        url: "<?php //echo base_url();  ?>" + "index.php/profile/getleaderboard",
+        url: "<?php //echo base_url();          ?>" + "index.php/profile/getleaderboard",
         dataType: 'json',
         data: {sampleData: 'HELLO'},
         success: function (data) {
@@ -163,29 +173,27 @@ $(document).ready(function () {
 </script>-->
 
 
-    <?php
+<?php
 
-    function time_since($since) {
-        $chunks = array(
-            array(60 * 60 * 24 * 365, 'year'),
-            array(60 * 60 * 24 * 30, 'month'),
-            array(60 * 60 * 24 * 7, 'week'),
-            array(60 * 60 * 24, 'day'),
-            array(60 * 60, 'hour'),
-            array(60, 'minute'),
-            array(1, 'second')
-        );
+function time_since($since) {
+    $chunks = array(
+        array(60 * 60 * 24 * 365, 'year'),
+        array(60 * 60 * 24 * 30, 'month'),
+        array(60 * 60 * 24 * 7, 'week'),
+        array(60 * 60 * 24, 'day'),
+        array(60 * 60, 'hour'),
+        array(60, 'minute'),
+        array(1, 'second')
+    );
 
-        for ($i = 0, $j = count($chunks); $i < $j; $i++) {
-            $seconds = $chunks[$i][0];
-            $name = $chunks[$i][1];
-            if (($count = floor($since / $seconds)) != 0) {
-                break;
-            }
+    for ($i = 0, $j = count($chunks); $i < $j; $i++) {
+        $seconds = $chunks[$i][0];
+        $name = $chunks[$i][1];
+        if (($count = floor($since / $seconds)) != 0) {
+            break;
         }
-
-        $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
-        return $print;
     }
-    ?>    
 
+    $print = ($count == 1) ? '1 ' . $name : "$count {$name}s";
+    return $print;
+}
