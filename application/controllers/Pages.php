@@ -37,10 +37,11 @@ class Pages extends CI_Controller {
             show_404();
         }
         //$data['title'] = ucfirst($page); // Capitalize the first letter
-        $dataTitle = $this->set_titlepage($page);
-
+        //$dataTitle = $this->set_titlepage($page);
+        $data['title'] = "Login";
+        
         if ($page == 'loginpage') {
-            $this->load->view('pages/headerLogin', $dataTitle);
+            $this->load->view('pages/headerLogin', $data);
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
@@ -49,10 +50,12 @@ class Pages extends CI_Controller {
                 $userType = ($this->session->userdata['logged_in']['usertype']);
             }
 
+            
+            
             if ($userType === "student") {
-                $this->load->view('pages/headerMain', $dataTitle);
+                $this->load->view('pages/headerMain');
             }else if($userType === "admin"){
-                $this->load->view('pages/headerAdmin', $dataTitle);
+                $this->load->view('pages/headerAdmin');
             }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
