@@ -160,7 +160,12 @@ Class Questions extends CI_Controller {
 ////Either you can print value or you can send value to database
 //        echo json_encode($data);
     }
-
+    public function markCorrectCode($slug = NULL)
+    {
+        $data['mark_correct'] = $this->questionsmodel->mark_correct_code($slug);
+        $_SESSION['flash'] = 'Question has been marked as answered!.';
+        redirect("questions/index");
+    }
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->questionsmodel->get_questions($slug);
         $data['full_name_db'] = $this->questionsmodel->get_fullname_by_id($slug);
@@ -168,7 +173,7 @@ Class Questions extends CI_Controller {
         $data['isAnswered'] = $this->questionsmodel->if_answer($slug);
         $data['answer_item'] = $this->questionsmodel->display_answers($slug, $data['question_item'][0]['who_posted']);
         $data['answer_count'] = $this->questionsmodel->display_answers($slug, $data['question_item'][0]['who_posted'], TRUE);
-
+        $data['view_correct_code'] = $this->questionsmodel->view_correct_code($slug);
         if (isset($data['answer_item'][0]['userID'])) {
             $data['who_answered'] = $this->questionsmodel->get_fullname_by_id($data['answer_item'][0]['userID'], TRUE);
         }

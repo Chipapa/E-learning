@@ -65,36 +65,37 @@
         }
     }
 
-//    $("#submitQuestion").click(function () {
-//        if ($("#questionType").val() === "Multiple Choice") {
-//            var values = [];
-//            $("input[id='inputChoice']").each(function () {
-//                values.push($.trim($(this).val()));
-//            });
-//
-//            var dups = false;
-//            var emptyChoices = false;
-//            for (var i = 0; i < values.length - 1; i++) {
-//                if (values[i + 1] === values[i]) {
-//                    //results.push(values[i]);
-//                    dups = true;
-//                }
-//                if (values[i] === "") {
-//                    emptyChoices = true;
-//                }
-//            }
-//            //alert(results.join("\n"));
-////            if (emptyChoices === true) {
-////                alert("Choices cannot have blank answers.");
-////            } else
-//            if (dups === true && emptyChoices === false) {
-//                alert("Choices cannot have duplicates.");
-//
-//                //var javascriptVariable = "John";
-//                //window.location.href = "<?php //echo base_url();                         ?>" + "index.php/questions/create?dups=" + dups;
-//            }
-//        }
-//    });
+    $("#submitQuestion").click(function (e) {
+        if ($("#questionType").val() === "Multiple Choice") {
+            var values = [];
+            $("input[id='inputChoice']").each(function () {
+                values.push($.trim($(this).val()));
+            });
+
+            var dups = false;
+            var emptyChoices = false;
+            for (var i = 0; i < values.length - 1; i++) {
+                if (values[i + 1] === values[i]) {
+                    //results.push(values[i]);
+                    dups = true;
+                }
+                if (values[i] === "") {
+                    emptyChoices = true;
+                }
+            }
+            //alert(results.join("\n"));
+//            if (emptyChoices === true) {
+//                alert("Choices cannot have blank answers.");
+//            } else
+            if (dups === true && emptyChoices === false) {
+                e.preventDefault();
+                alert("Choices cannot have duplicates.");
+
+                //var javascriptVariable = "John";
+                //window.location.href = "<?php //echo base_url();                         ?>" + "index.php/questions/create?dups=" + dups;
+            }
+        }
+    });
 
 </script>
 

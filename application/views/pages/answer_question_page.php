@@ -75,7 +75,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
     </div>
 
-    <label for="questionTitle">The Question</label>
+    <label for="questionTitle"><h5>Question</h5></label>
     <div class="card">      
         <div class="card-body bg-faded">
             <?php echo $question_item[0]['question']; ?>
@@ -84,7 +84,15 @@ if (isset($this->session->userdata['logged_in'])) {
     <br>
     <!-- Multiple Choice -->
     <div class="form-group" id="divMultipleChoiceAnswer">
-        <label for="answerInstruction">Select the correct answer to the question.</label>
+        <label for="answerInstruction">
+            <?php
+            if ($isAnswered) {
+                echo "Review your answer.";
+            } else {
+                echo "Select the correct answer to the question.";
+            }
+            ?>
+        </label>
         <div class="col-sm-10">
             <div class="form-check">
                 <div class="col-lg-6">
@@ -98,9 +106,12 @@ if (isset($this->session->userdata['logged_in'])) {
                                    <?php
                                    if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
+                                       if (isset($dataanswer['answer']) && $question_item[0]['option1'] === $dataanswer['answer']) {
+                                           echo " checked";
+                                       }
                                    }
                                    ?> 
-                                   checked>
+                                   >
                         </span>
                         <label type="text" class="form-control" name="choice1" id="answerChoice1"> <?php echo $question_item[0]['option1']; ?>
                     </div>
@@ -119,8 +130,12 @@ if (isset($this->session->userdata['logged_in'])) {
                                    <?php
                                    if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
+                                       if (isset($dataanswer['answer']) && $question_item[0]['option2'] === $dataanswer['answer']) {
+                                           echo " checked";
+                                       }
                                    }
-                                   ?> >
+                                   ?> 
+                                   >
                         </span>
                         <label type="text" class="form-control" name="choice2" id="answerChoice2"> <?php echo $question_item[0]['option2']; ?>
                     </div>
@@ -139,8 +154,12 @@ if (isset($this->session->userdata['logged_in'])) {
                                    <?php
                                    if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
+                                       if (isset($dataanswer['answer']) && $question_item[0]['option3'] === $dataanswer['answer']) {
+                                           echo " checked";
+                                       }
                                    }
-                                   ?> >
+                                   ?> 
+                                   >
                         </span>
                         <label type="text" class="form-control" name="choice3" id="answerChoice3"> <?php echo $question_item[0]['option3']; ?>
                     </div>
@@ -159,8 +178,12 @@ if (isset($this->session->userdata['logged_in'])) {
                                    <?php
                                    if ($isOwnQuestion || $isAnswered) {
                                        echo "disabled=''";
+                                       if (isset($dataanswer['answer']) && $question_item[0]['option4'] === $dataanswer['answer']) {
+                                           echo " checked";
+                                       }
                                    }
-                                   ?> >
+                                   ?> 
+                                   >
                         </span>
                         <label type="text" class="form-control" name="choice4" id="answerChoice4"> <?php echo $question_item[0]['option4']; ?>
                     </div>
@@ -173,7 +196,7 @@ if (isset($this->session->userdata['logged_in'])) {
     <div class="form-group" id="divCodingAnswer">
         <textarea class="form-control codemirror-textarea-answer bg-faded" id="codeQuestion" readonly><?php echo $question_item[0]['code']; ?></textarea></br>
         <div <?php
-        if ($isOwnQuestion || $isAnswered) {
+        if ($isOwnQuestion || $isAnswered || $view_correct_code != "false") {
             echo "style='display:none'";
         }
         ?>>
@@ -184,17 +207,14 @@ if (isset($this->session->userdata['logged_in'])) {
 
     <!-- Identification -->
     <div class="form-group" id="divIdentificationAnswer">
-        <p class="mb-1"><?php echo $question_item[0]['question']; ?></p>
-        Identification
-        <input type="text"  
-               id="textAnswer" 
-               name="textAnswer" 
-               class="form-control" 
-               <?php
-               if ($isOwnQuestion || $isAnswered) {
-                   echo "disabled=''";
-               }
-               ?> >
+
+        <div <?php
+        if ($isOwnQuestion || $isAnswered) {
+            echo "style='display:none'";
+        }
+        ?>>
+            <input type="text" id="textAnswer" name="textAnswer" class="form-control" >
+        </div>
     </div>
 
     <button type="button" 
@@ -203,7 +223,7 @@ if (isset($this->session->userdata['logged_in'])) {
             data-toggle="modal" 
             data-target="#exampleModal" 
             <?php
-            if ($isOwnQuestion || $isAnswered) {
+            if ($isOwnQuestion || $isAnswered || ($view_correct_code != "false" && $question_item[0]['type'] === 'Coding')) {
                 echo "disabled='' style='display:none'";
             }
             ?> >Submit Answer
@@ -212,35 +232,110 @@ if (isset($this->session->userdata['logged_in'])) {
     <!--    Section for showing all answers to the the one posted the question-->
     <div>
         <?php
+        if ($isAnswered) {
+            if ($view_correct_code['userID'] != $session_id) {
+                echo "<h5>Review your answer</h5>";
+            }      
+            if ($question_item[0]['type'] === 'Coding') {
+                ?>
+                <br>               
+                <div class="card" <?php
+                if ($view_correct_code['userID'] == $session_id) {
+                    echo "style='display:none'";
+                }
+                ?>>
+                    <div class="card-body">
 
-        
+                        <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly><?php echo $dataanswer['answer']; ?></textarea>              
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Answered <?php echo time_since(time() - strtotime($dataanswer['answeredWhen'])); ?> ago
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                <br>
 
-
-        if (isset($answer_item) && $isOwnQuestion) {
-            
-            echo "<h6>" . $answer_count . " Answer(s) to your Question.</h6>";
-            foreach ($answer_item as $otherUserAnswers):
-                $fullname_of_who_answered = $otherUserAnswers['fname'] . " " . $otherUserAnswers['lname'];
+                <?php
+                if (($view_correct_code == "false")) {
+                    echo "<h5> User has not selected an answer yet.</h5>";
+                } else {
+                    $fullname_of_who_answered = $view_correct_code['fname'] . " " . $view_correct_code['lname'];
+                    
+                    if ($view_correct_code['userID'] == $session_id) {
+                        echo "<h5>Your answer is correct</h5>";
+                    }
+                    else
+                    {
+                        echo "<h5> Correct Answer</h5>";
+                    }
+                    ?>
+                    <div class="card" style='background-color:#98DD6B'>
+                        <div class="card-body">
+                            <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly><?php echo $view_correct_code['answer']; ?></textarea>              
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Answered <?php echo time_since(time() - strtotime($view_correct_code['answeredWhen'])); ?> ago by <?php echo $fullname_of_who_answered; ?> 
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } else if ($question_item[0]['type'] === 'Identification') {
                 ?>
                 <br>               
                 <div class="card">
                     <div class="card-body">
-                        <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly><?php echo $otherUserAnswers['answer']; ?></textarea>              
+
+                        <div class="card-body bg-faded"><?php echo $dataanswer['answer']; ?></div>
                         <p class="card-text">
                             <small class="text-muted">
-                                Answered <?php echo time_since(time() - strtotime($otherUserAnswers['answeredWhen'])); ?> ago by <?php echo $fullname_of_who_answered; ?> 
+                                Answered <?php echo time_since(time() - strtotime($dataanswer['answeredWhen'])); ?> ago
                             </small>
                         </p>
-                        <a href="#" class="btn btn-success">Mark as Correct</a>
+
                     </div>
-                </div>
+                </div>  
                 <?php
-            endforeach;
+            }
+        } else if (isset($answer_item) && $isOwnQuestion) {
+
+            echo "<h6>" . $answer_count . " Answer(s) to your Question.</h6>";
+            if ($question_item[0]['type'] === 'Coding') {
+                foreach ($answer_item as $otherUserAnswers):
+                    $fullname_of_who_answered = $otherUserAnswers['fname'] . " " . $otherUserAnswers['lname'];
+                    ?>
+                    <br>              
+                    <div class="card"<?php
+                    if (($view_correct_code != "false") && ($view_correct_code['userID'] == $otherUserAnswers['userID']))
+                        echo "style='background-color:#98DD6B'";
+                    ?>>
+                        <div class="card-body">
+                            <textarea class="form-control codemirror-textarea-answerbyotheruser bg-faded" readonly><?php echo $otherUserAnswers['answer']; ?></textarea>              
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Answered <?php echo time_since(time() - strtotime($otherUserAnswers['answeredWhen'])); ?> ago by <?php echo $fullname_of_who_answered; ?> 
+                                </small>
+                            </p>
+                            <?php
+                            if (($view_correct_code == "false")) {
+                                ?>
+                                <a href="<?php echo site_url('questions/markCorrectCode/' . $otherUserAnswers['id']); ?>" class="btn btn-success">Mark as Correct</a>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+                endforeach;
+            }
         }
 
         echo "<pre>";
+        print_r($view_correct_code);
         print_r($answer_item);
-        //print_r($who_answered);
+//print_r($who_answered);
         echo "</pre>";
         ?>
     </div>
@@ -301,7 +396,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();                                                               ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();                                                                       ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);

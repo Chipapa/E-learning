@@ -91,7 +91,8 @@ class Pages extends CI_Controller {
                             'fname' => $result[0]->fname,
                             'lname' => $result[0]->lname,
                             'ask_points' => $result[0]->ask_points,
-                            'answer_points' => $result[0]->answer_points
+                            'answer_points' => $result[0]->answer_points,
+                            'slug' => $result[0]->slug
                         );
 
                         // Add user data in session

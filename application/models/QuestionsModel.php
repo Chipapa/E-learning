@@ -224,7 +224,8 @@ class QuestionsModel extends CI_Model {
             'fname' => $query_point->fname,
             'lname' => $query_point->lname,
             'ask_points' => $query_point->ask_points,
-            'answer_points' => $query_point->answer_points
+            'answer_points' => $query_point->answer_points,
+            'slug' => $query_point->slug
         );
 
         $this->session->set_userdata('logged_in', $session_data);
@@ -398,7 +399,7 @@ class QuestionsModel extends CI_Model {
 //        $this->db->from('users');
 //        $this->db->join('questions', 'questions.who_posted = users.id');
 //        $this->db->where_in('users.id', $userID);
-        if($direct === TRUE){
+        if ($direct === TRUE) {
             $condition = "id ='" . $ID . "'";
             $this->db->select('fname, lname');
             $this->db->from('users');
@@ -544,10 +545,10 @@ class QuestionsModel extends CI_Model {
                     . 'users.lname, '
                     . 'users.fname');
             $this->db->from('answered_by');
-            $this->db->join('users','users.id = answered_by.userID');
+            $this->db->join('users', 'users.id = answered_by.userID');
             $this->db->where("questionID = '" . $questionID . "'");
             $query = $this->db->get();
-            $data = $query->result_array(); 
+            $data = $query->result_array();
         } else {
             $data = array(
                 'who_posted' => 'Di sayo to bata'
@@ -559,7 +560,7 @@ class QuestionsModel extends CI_Model {
     public function getDataAnswer($slug) {
         $id = ($this->session->userdata['logged_in']['id']);
         $condition = "userID= " . "'" . $id . "'" . "AND " . "questionID= " . "'" . $slug . "'";
-        $this->db->select('id');
+        $this->db->select('*');
         $this->db->from('answered_by');
         $this->db->where($condition);
         $query = $this->db->get();
@@ -588,4 +589,35 @@ class QuestionsModel extends CI_Model {
         }
     }
 
+    public function mark_correct_code($slug) {
+        $this->db->set('correct', true);
+        $this->db->where('id', $slug);
+        $this->db->update('answered_by');
+    }
+    
+    public function view_correct_code($slug) {
+        $condition = "questionID= " . "'" . $slug . "'" . "AND " . "correct=true";
+        $this->db->select('answered_by.id, '
+                    . 'answered_by.userID, '
+                    . 'answered_by.questionID, '
+                    . 'answered_by.answer, '
+                    . 'answered_by.correct, '
+                    . 'answered_by.answeredWhen, '
+                    . 'users.lname, '
+                    . 'users.fname');
+        $this->db->from('answered_by');
+        $this->db->join('users', 'answered_by.userID = users.id');
+        $this->db->where($condition);
+        $query = $this->db->get();
+
+
+        if ($query->num_rows() == 1) {
+            return $query->row_array();
+        } else {
+            return "false";
+        }
+        
+        
+    }
+    
 }
