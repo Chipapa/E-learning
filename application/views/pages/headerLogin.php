@@ -13,8 +13,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
         <script text="type/javascript" src="<?php echo base_url();?>assets/plugin/codemirror/lib/codemirror.js" ></script>
         <script text="type/javascript" src="<?php echo base_url();?>assets/plugin/codemirror/mode/vb/vb.js" ></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> 
     </head>
-    <body>
+    <body ng-app="loginApp">
 
         <div class="jumbotron jumbotron-fluid text-center" style="background:transparent !important">
             <div class="container" >

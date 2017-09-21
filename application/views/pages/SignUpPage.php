@@ -5,7 +5,7 @@ if (isset($this->session->userdata['logged_in'])) {
 }
 ?>
 
-<div class="container" id="mainDivSignup">
+<div class="container" id="mainDivSignup" >
     <?php
     if (validation_errors()) {
         echo "<div class='alert alert-danger' role='alert'>";
@@ -14,34 +14,48 @@ if (isset($this->session->userdata['logged_in'])) {
     }
     ?>
 
-    <?php echo form_open('accounts/signup'); ?>
+    <form>
 
-    <div class="form-group row">
-        <label for="email" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <input type="email" name="username" placeholder= "Your email" class="form-control">
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" name="username" placeholder= "Your email" class="form-control">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="password" class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
-            <input type="password" name="password" class="form-control">
+        <div class="form-group row">
+            <label for="password" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" name="password" class="form-control">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="rePassword" class="col-sm-2 col-form-label">Re-type Password</label>
-        <div class="col-sm-10">
-            <input type="password" name="rePassword" class="form-control">
+        <div class="form-group row">
+            <label for="rePassword" class="col-sm-2 col-form-label">Re-type Password</label>
+            <div class="col-sm-10">
+                <input type="password" name="rePassword" class="form-control">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" name = "submit">Sign up</button>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" name = "submit" ng-click="signUpButton()" >Sign up now</button>
+            </div>
         </div>
-    </div>
 
-</form>        
+    </form>        
 </div>
+<script>
+    //alert();
+//    var app = angular.module("app", []);
+//
+//    app.controller("signupController", function ($scope)
+//    {
+//        alert();
+////        $scope.signUpButton = function()
+////        {
+////            console.log('testData');
+////            
+////        }
+//    });
+</script>

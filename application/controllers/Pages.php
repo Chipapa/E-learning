@@ -39,7 +39,7 @@ class Pages extends CI_Controller {
         //$data['title'] = ucfirst($page); // Capitalize the first letter
         //$dataTitle = $this->set_titlepage($page);
         $data['title'] = "Login";
-        
+
         if ($page == 'loginpage') {
             $this->load->view('pages/headerLogin', $data);
             $this->load->view('pages/' . $page, $passData);
@@ -50,11 +50,11 @@ class Pages extends CI_Controller {
                 $userType = ($this->session->userdata['logged_in']['usertype']);
             }
 
-            
-            
+
+
             if ($userType === "student") {
                 $this->load->view('pages/headerMain');
-            }else if($userType === "admin"){
+            } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }
             $this->load->view('pages/' . $page, $passData);
@@ -62,28 +62,82 @@ class Pages extends CI_Controller {
         }
     }
 
+    public function user_login_process_angular() {
+        $post = json_decode(file_get_contents("php://input"));
+        $username = $post->Username;
+        $password = $post->Password;
+
+        $data = array(
+            'username' => $username,
+            'password' => $password
+        );
+        //check if login inputs has a match in the database
+        $result = $this->loginmodel->login($data);
+        if ($result == TRUE) {
+            //$username = $post->Username;
+            //get the whole row in the database of the specific username then assign to session array
+            $result = $this->loginmodel->read_user_information($username);
+            //echo json_encode($result);
+            if ($result != false) {
+                if ($result[0]->userType === "student") {
+                    $session_data = array(
+                        'id' => $result[0]->id,
+                        'username' => $result[0]->username,
+                        'usertype' => $result[0]->userType,
+                        'fname' => $result[0]->fname,
+                        'lname' => $result[0]->lname,
+                        'ask_points' => $result[0]->ask_points,
+                        'answer_points' => $result[0]->answer_points,
+                        'slug' => $result[0]->slug
+                    );
+
+                    // Add user data in session
+                    if (!isset($_SESSION)) {
+                        session_start();
+                    }
+                    //echo $session_data;
+                    $this->session->set_userdata('logged_in', $session_data);
+                    
+                    //redirect("questions/index");
+                } 
+            }
+        } else {
+            $data = array(
+                'error_message' => 'Invalid Username or Password.'
+            );
+            //$this->load->view('pages/loginpage', $data);
+
+            $this->view('loginpage', $data);
+            
+        }
+    }
+
     public function user_login_process() {
+        $post = json_decode(file_get_contents("php://input"));
+        $username = $post->Username;
+        $password = $post->Password;
+
+
         $this->form_validation->set_rules('username', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
-
+        //echo $username;
         //check if the inputs are valid
         if ($this->form_validation->run() === FALSE) {
             //$this->load->view('pages/loginpage');
+            //echo "tangina";
             $this->view('loginpage');
+            //echo "error";
         } else {
             $data = array(
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password')
+                'username' => $username,
+                'password' => $password
             );
-
             //check if login inputs has a match in the database
             $result = $this->loginmodel->login($data);
             if ($result == TRUE) {
-                $username = $this->input->post('username');
-
+                //$username = $post->Username;
                 //get the whole row in the database of the specific username then assign to session array
                 $result = $this->loginmodel->read_user_information($username);
-
 
                 if ($result != false) {
                     if ($result[0]->userType === "student") {
@@ -102,9 +156,9 @@ class Pages extends CI_Controller {
                         if (!isset($_SESSION)) {
                             session_start();
                         }
-
+                        //echo $session_data;
                         $this->session->set_userdata('logged_in', $session_data);
-                        redirect("questions/index");
+                        //redirect("questions/index");
                     } else if ($result[0]->userType === "admin") {
                         $session_data = array(
                             'id' => $result[0]->id,

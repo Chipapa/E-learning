@@ -8,7 +8,7 @@ if (isset($this->session->userdata['logged_in'])) {
 }
 ?>
 
-<div class="container" id="mainDivLogin">
+<div class="container" id="mainDivLogin"  >
     <?php
     echo "<div>";
     if (isset($error_message)) {
@@ -34,40 +34,41 @@ if (isset($this->session->userdata['logged_in'])) {
     echo "</div>"
     ?>
 
-    <?php echo form_open('pages/user_login_process'); ?>
-    <div class="form-group row">
+    <?php //echo form_open('pages/user_login_process'); ?>
+    <form method="post"  ng-controller="loginNgController">
+        <div  class="form-group row">
 
-        <label for="username" class="col-sm-2 col-form-label">Username</label>
-        <div class="col-sm-10">
-            <input type="email" name="username" placeholder= "Your email" class="form-control">
+            <label for="username" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                <input type="email" name='username' ng-model="username" placeholder= "Your email" class="form-control">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
-            <input name="password" class="form-control" id="inputPassword" placeholder="Password" type="password">
+        <div class="form-group row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input ng-model="password" name='password' class="form-control" id="inputPassword" placeholder="Password" type="password">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <div class="col-sm-10">
-            Stay Logged in? <input type="checkbox" name="stayLoggedIn" value="1">
+        <div class="form-group row">
+            <div class="col-sm-10">
+                Stay Logged in? <input type="checkbox" name="stayLoggedIn" value="1">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" name = "submit">Sign in</button>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" name = "submit" ng-click="loginAccount(username, password)" >Sign in</button>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <div class="col-sm-10">
-            No Account? Sign up <a href="<?php echo site_url('accounts/signup'); ?>">here</a>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                No Account? Sign up <a href="accounts/signUp">here</a>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
 <!--</body>
 </html>-->
