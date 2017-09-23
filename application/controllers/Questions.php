@@ -84,6 +84,8 @@ Class Questions extends CI_Controller {
             $data['title'] = "Answer Question";          
         }else if($page === "AskQuestionPage"){
             $data['title'] = "Ask a Question";       
+        }else{
+            $data['title'] = "Ask a Question";    
         }
         
 

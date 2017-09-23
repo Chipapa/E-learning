@@ -228,6 +228,7 @@ if (isset($this->session->userdata['logged_in'])) {
                     </button>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button class="btn btn-primary">Accept</button>
                 </div>
             </div>

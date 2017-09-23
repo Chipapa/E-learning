@@ -235,7 +235,7 @@ if (isset($this->session->userdata['logged_in'])) {
         if ($isAnswered) {
             if ($view_correct_code['userID'] != $session_id) {
                 echo "<h5>Review your answer</h5>";
-            }      
+            }
             if ($question_item[0]['type'] === 'Coding') {
                 ?>
                 <br>               
@@ -261,12 +261,10 @@ if (isset($this->session->userdata['logged_in'])) {
                     echo "<h5> User has not selected an answer yet.</h5>";
                 } else {
                     $fullname_of_who_answered = $view_correct_code['fname'] . " " . $view_correct_code['lname'];
-                    
+
                     if ($view_correct_code['userID'] == $session_id) {
                         echo "<h5>Your answer is correct</h5>";
-                    }
-                    else
-                    {
+                    } else {
                         echo "<h5> Correct Answer</h5>";
                     }
                     ?>
@@ -340,22 +338,11 @@ if (isset($this->session->userdata['logged_in'])) {
         ?>
     </div>
     <!-- Modal -->
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Rate This Question</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    PLS. RATE ME DADY
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Rate and Submit</button>
-                </div>
+                <?php include "Rating_modal.php"; ?>
             </div>
         </div>
     </div>
@@ -396,7 +383,7 @@ if (isset($this->session->userdata['logged_in'])) {
 //    $("#submit").click(function () {
 //        $.ajax({
 //            type: "post",
-//            url: "<?php //echo base_url();                                                                       ?>"+"index.php/questions/setanswer",
+//            url: "<?php //echo base_url();                                                                         ?>"+"index.php/questions/setanswer",
 //            data: {arrayAnswer: answerArray},
 //            success: function (data) {
 //                alert(data);
