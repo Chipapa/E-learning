@@ -17,7 +17,7 @@ Class Questions extends CI_Controller {
 //    public function index() {
 //        $data['questions'] = $this->questionsmodel->get_questions();
 //
-//        $this->view('LandingPage', $data);
+//        $this->view('Landing_page', $data);
 //    }
 
     public function index() {
@@ -66,9 +66,9 @@ Class Questions extends CI_Controller {
         $data["leaderboard"] = $this->profilemodel->getTopTen();
 
         if ($userType === "student") {
-            $this->view('LandingPage', $data);
+            $this->view('Landing_page', $data);
         } else if ($userType === "admin") {
-            $this->view('LandingPageAdmin', $data);
+            $this->view('Landing_pageAdmin', $data);
         }
     }
 
@@ -78,7 +78,7 @@ Class Questions extends CI_Controller {
             show_404();
         }
 
-        if ($page === "LandingPage") {
+        if ($page === "Landing_page") {
             $data['title'] = "Home"; // Capitalize the first letter
         }else if($page === "answer_question_page"){
             $data['title'] = "Answer Question";          
@@ -100,7 +100,7 @@ Class Questions extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/headerMain', $data);
+                $this->load->view('pages/Headermain', $data);
             } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }
@@ -206,9 +206,9 @@ Class Questions extends CI_Controller {
         //$data = $this->input->post('sampleData');
         // $username = ($this->session->userdata['logged_in']['username']);
         //echo json_encode($data['Leaderboards']);    
-        //$this->view('LandingPage', $data);  
+        //$this->view('Landing_page', $data);  
         //while($myQuestions != null)
-        $this->view('LandingPage', $data);
+        $this->view('Landing_page', $data);
         //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
     }
 

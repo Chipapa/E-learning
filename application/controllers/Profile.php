@@ -32,7 +32,7 @@ Class Profile extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/headerMain', $data);
+                $this->load->view('pages/Headermain', $data);
             } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }

@@ -26,7 +26,7 @@ class Accounts extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/headerMain');
+                $this->load->view('pages/Headermain');
             } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }
