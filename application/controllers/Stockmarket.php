@@ -34,7 +34,7 @@ Class Stockmarket extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/Headermain', $data);
+                $this->load->view('pages/headerMain', $data);
             } else if ($userType === "admin") {
                 $this->load->view('pages/headerAdmin');
             }
