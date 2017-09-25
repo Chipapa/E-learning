@@ -10,10 +10,10 @@
 //        $total_points = $ask_points."".$answer_points;
 //        $full_name = $fname."".$lname;
 //   
-// //echo site_url('profile/profilepage/'.$full_name);
+// //echo site_url('profile/profile_page/'.$full_name);
 //   
 //} else {
-//    header("location: loginpage");
+//    header("location: login_page");
 //}
 ?>
 <div class="container" id="mainDiv">

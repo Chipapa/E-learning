@@ -7,7 +7,7 @@ if (isset($this->session->userdata['logged_in'])) {
     $lname = ($this->session->userdata['logged_in']['lname']);
     $full_name = $fname . " " . $lname;
 } else {
-    header("location: loginpage");
+    header("location: login_page");
 }
 ?>
 <form type="post">
@@ -15,7 +15,7 @@ if (isset($this->session->userdata['logged_in'])) {
 
         <div class="row">
             <div class="col-sm-8">
-                <h3>Most Recent Questions to be Verified</h3>
+                <h3>Most Recent Questions to be Verified test binago</h3>
             </div>
             <div class="col-sm-4 text-right">
                 <p><a class="btn btn-large btn-info" href="<?php echo site_url('questions/viewAskQuestion'); ?>">Ask a Question</a></p>

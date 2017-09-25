@@ -8,7 +8,7 @@ if (isset($this->session->userdata['logged_in'])) {
     $slug_profile = ($this->session->userdata['logged_in']['slug']);
 
 } else {
-    header("location: loginpage");
+    header("location: login_page");
 }
 ?>
 <html lang="en">
@@ -23,7 +23,7 @@ if (isset($this->session->userdata['logged_in'])) {
         ?>
 
         <?php
-        include "DesignScript.php";
+        include "design_script.php";
         $this->load->helper('url');
         ?>      
 
@@ -48,16 +48,16 @@ if (isset($this->session->userdata['logged_in'])) {
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');         ?>">Questions </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/test_page');         ?>">Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
                         <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market    <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');         ?>">Leaderboards </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/test_page');         ?>">Leaderboards </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');         ?>">Rewards  <?php //echo base_url();         ?></a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/test_page');         ?>">Rewards  <?php //echo base_url();         ?></a>
                     </li>
                 </ul>
 
@@ -72,7 +72,7 @@ if (isset($this->session->userdata['logged_in'])) {
                 </div>
 
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('pages/view/success'); ?>" data-toggle="tooltip" data-placement="bottom" title="Rewards">
+                    <a href="<?php echo site_url('pages/view/test_page'); ?>" data-toggle="tooltip" data-placement="bottom" title="Rewards">
                         <img src="<?php echo base_url(); ?>/assets/png/badge-3x.png">
                     </a>
                 </div>

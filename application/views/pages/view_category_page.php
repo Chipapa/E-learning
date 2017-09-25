@@ -6,7 +6,7 @@
         $lname = ($this->session->userdata['logged_in']['lname']);        
         $full_name = $fname." ".$lname;
     } else {
-        header("location: loginpage");
+        header("location: login_page");
     }
 ?>
 <div class="container" id="mainDiv">

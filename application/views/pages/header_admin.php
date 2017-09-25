@@ -7,7 +7,7 @@ if (isset($this->session->userdata['logged_in'])) {
     $slug_fullname = $fname . "." . $lname;
 
 } else {
-    header("location: loginpage");
+    header("location: login_page");
 }
 ?>
 <html lang="en">
@@ -16,7 +16,7 @@ if (isset($this->session->userdata['logged_in'])) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!--        <title>Login</title>-->
 
-        <?php include "DesignScript.php"; 
+        <?php include "design_script.php"; 
         $this->load->helper('url');?>      
         
         <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
@@ -41,16 +41,16 @@ if (isset($this->session->userdata['logged_in'])) {
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Verify Questions </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/test_page');      ?>">Verify Questions </a>
                     </li>
                     <li class="nav-item" id="stockmarket">
                         <a class="nav-link"  href="<?php echo site_url('stockmarket/index'); ?>">Stock Market    <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Leaderboards </a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/test_page');      ?>">Leaderboards </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="<?php //echo site_url('pages/view/success');      ?>">Rewards  <?php //echo base_url();      ?></a>
+                        <a class="nav-link"  href="<?php //echo site_url('pages/view/test_page');      ?>">Rewards  <?php //echo base_url();      ?></a>
                     </li>
                 </ul>
                 <div id="iconHeaderMargin">
@@ -60,7 +60,7 @@ if (isset($this->session->userdata['logged_in'])) {
                 </div>
 
                 <div id="iconHeaderMargin">
-                    <a href="<?php echo site_url('pages/view/success'); ?>" data-toggle="tooltip" data-placement="bottom" title="Rewards">
+                    <a href="<?php echo site_url('pages/view/test_page'); ?>" data-toggle="tooltip" data-placement="bottom" title="Rewards">
                         <img src="<?php echo base_url(); ?>/assets/png/badge-3x.png">
                     </a>
                 </div>
