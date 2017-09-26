@@ -49,7 +49,6 @@ if (isset($this->session->userdata['logged_in'])) {
                         if ($question_item->who_posted === $session_id) {
                             $time_asked = "You posted this question " . time_since(time() - strtotime($question_item->date_posted)) . " ago";
                         } else {
-//                        $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $question_item->who_posted;
                             $time_asked = "Asked " . time_since(time() - strtotime($question_item->date_posted)) . " ago by " . $full_name_db;
                         }
                         ?>     
@@ -59,17 +58,6 @@ if (isset($this->session->userdata['logged_in'])) {
                             <a href="<?php echo site_url('questions/viewquestion/' . $question_item->id); ?>" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1"><?php echo $question_item->title; ?>
-
-                <!--                                        <img src="<?php
-//                                        if ($question_item->status === 'unverified') {
-//                                            echo base_url() . "/assets/png/timer-2x.png";
-//                                        } else 
-//                                        if ($question_item->status === 'verified') {
-//                                            echo base_url() . "/assets/png/circle-check-2x.png";
-//                                        } else if ($question_item->status === 'removed') {
-//                                            echo base_url() . "/assets/png/circle-x-2x.png";
-//                                        }
-                                        ?>">-->
 
                                         <?php
                                         if ($question_item->status === 'verified') {
