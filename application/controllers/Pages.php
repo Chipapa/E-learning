@@ -1,57 +1,41 @@
 <?php
 
-//defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pages extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('loginmodel');
-        $this->load->model('questionsmodel');
-        $this->load->helper('url_helper');
+        $this->load->model('Login_model');
         $this->load->library('session');
-
-        $this->load->helper('form');
         $this->load->library('form_validation');
+        $this->load->helper('form');
+        $this->load->helper('url_helper');
     }
 
     public function index() {
-        $this->view('loginpage');
-    }
-
-    //STILL BUGGY, FIX ME
-    public function set_titlepage($page) {
-        if ($page == 'loginpage') {
-            $data['title'] = ucfirst('Login');
-        } else if ($page == 'signuppage') {
-            $data['title'] = ucfirst('Sign up');
-        } else {
-            $data['title'] = ucfirst('Unknown Page');
-        }
-        return $data;
+        $this->view('Loginpage');
     }
 
     public function view($page = '', $passData = false) {
+        //Shows error 404 if pages does not exist
         if (!file_exists(APPPATH . 'views/pages/' . $page . '.php')) {
-            // Whoops, we don't have a page for that!
             show_404();
         }
-        //$data['title'] = ucfirst($page); // Capitalize the first letter
-        //$dataTitle = $this->set_titlepage($page);
+
+        //Checkes if page is login
         $data['title'] = "Login";
-
-        if ($page == 'loginpage') {
-            $this->load->view('pages/headerLogin', $data);
+        if ($page == 'Loginpage') {
+            $this->load->view('headers/Header_Login', $data);
             $this->load->view('pages/' . $page, $passData);
-            $this->load->view('pages/footer');
-        } else {
-
+            $this->load->view('headers/Footer');
+        }
+        
+        //Else redirect to another page
+        else {
             if (isset($this->session->userdata['logged_in'])) {
                 $userType = ($this->session->userdata['logged_in']['usertype']);
             }
-
-
-
             if ($userType === "student") {
                 $this->load->view('pages/headerMain');
             } else if ($userType === "admin") {
@@ -59,25 +43,23 @@ class Pages extends CI_Controller {
             }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
+            //redirect('questions/index');
         }
     }
 
-    public function user_login_process_angular() {
+    public function user_login_process() {
         $post = json_decode(file_get_contents("php://input"));
         $username = $post->Username;
-        $password = $post->Password;
-
+        $password = $post->Password;       
         $data = array(
             'username' => $username,
             'password' => $password
         );
-        //check if login inputs has a match in the database
-        $result = $this->loginmodel->login($data);
+
+        $result = $this->Login_model->login($data);
         if ($result == TRUE) {
-            //$username = $post->Username;
-            //get the whole row in the database of the specific username then assign to session array
-            $result = $this->loginmodel->read_user_information($username);
-            //echo json_encode($result);
+            $result = $this->Login_model->read_user_information($username);
+
             if ($result != false) {
                 if ($result[0]->userType === "student") {
                     $session_data = array(
@@ -95,114 +77,25 @@ class Pages extends CI_Controller {
                     if (!isset($_SESSION)) {
                         session_start();
                     }
-                    //echo $session_data;
                     $this->session->set_userdata('logged_in', $session_data);
-                    
-                    //redirect("questions/index");
-                } 
+                }
             }
         } else {
             $data = array(
                 'error_message' => 'Invalid Username or Password.'
             );
             //$this->load->view('pages/loginpage', $data);
-
-            $this->view('loginpage', $data);
             
+            $this->view('Loginpage', $data);
         }
     }
-
-    public function user_login_process() {
-        $post = json_decode(file_get_contents("php://input"));
-        $username = $post->Username;
-        $password = $post->Password;
-
-
-        $this->form_validation->set_rules('username', 'Email', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required');
-        //echo $username;
-        //check if the inputs are valid
-        if ($this->form_validation->run() === FALSE) {
-            //$this->load->view('pages/loginpage');
-            //echo "tangina";
-            $this->view('loginpage');
-            //echo "error";
-        } else {
-            $data = array(
-                'username' => $username,
-                'password' => $password
-            );
-            //check if login inputs has a match in the database
-            $result = $this->loginmodel->login($data);
-            if ($result == TRUE) {
-                //$username = $post->Username;
-                //get the whole row in the database of the specific username then assign to session array
-                $result = $this->loginmodel->read_user_information($username);
-
-                if ($result != false) {
-                    if ($result[0]->userType === "student") {
-                        $session_data = array(
-                            'id' => $result[0]->id,
-                            'username' => $result[0]->username,
-                            'usertype' => $result[0]->userType,
-                            'fname' => $result[0]->fname,
-                            'lname' => $result[0]->lname,
-                            'ask_points' => $result[0]->ask_points,
-                            'answer_points' => $result[0]->answer_points,
-                            'slug' => $result[0]->slug
-                        );
-
-                        // Add user data in session
-                        if (!isset($_SESSION)) {
-                            session_start();
-                        }
-                        //echo $session_data;
-                        $this->session->set_userdata('logged_in', $session_data);
-                        //redirect("questions/index");
-                    } else if ($result[0]->userType === "admin") {
-                        $session_data = array(
-                            'id' => $result[0]->id,
-                            'username' => $result[0]->username,
-                            'usertype' => $result[0]->userType,
-                            'fname' => $result[0]->fname,
-                            'lname' => $result[0]->lname,
-                            'ask_points' => $result[0]->ask_points,
-                            'answer_points' => $result[0]->answer_points
-                        );
-
-                        // Add user data in session
-                        if (!isset($_SESSION)) {
-                            session_start();
-                        }
-
-                        $this->session->set_userdata('logged_in', $session_data);
-                        redirect("admin/index");
-                    }
-                }
-            } else {
-                $data = array(
-                    'error_message' => 'Invalid Username or Password.'
-                );
-                //$this->load->view('pages/loginpage', $data);
-
-                $this->view('loginpage', $data);
-            }
-        }
-    }
-
-    public function logout() {
+    
+    public function logout(){
         $sess_array = array(
             'username' => ''
         );
         $this->session->unset_userdata('logged_in', $sess_array);
-
-        unset($_SESSION['categories']);
-        unset($_SESSION['currentQuestion']);
-
-        $data['message_display'] = 'Logged out successfully';
-
-        $this->view('loginpage', $data);
-        //$this->load->view('pages/loginpage', $data);
+        $this->index();
+        
     }
-
 }

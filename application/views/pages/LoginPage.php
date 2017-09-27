@@ -1,53 +1,50 @@
 <?php
-//defined('BASEPATH') OR exit('No direct script access allowed');
-?>      
-<?php
 if (isset($this->session->userdata['logged_in'])) {
 //            header("location: index.php/success");
     redirect('questions/index');
 }
 ?>
 
-<div class="container" id="mainDivLogin"  >
+<div class="container" id="mainDivLogin" ng-controller="loginController">
     <?php
-    echo "<div>";
-    if (isset($error_message)) {
-        echo "<div class='alert alert-danger' role='alert'>";
-        echo $error_message;
-        echo "</div>";
-    }
-
-    if (isset($message_display)) {
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-        echo "<span aria-hidden='true'>&times;</span>";
-        echo "</button>";
-        echo $message_display;
-        echo "</div>";
-    }
-    if (validation_errors()) {
-        echo "<div class='alert alert-danger' role='alert'>";
-
-        echo validation_errors();
-        echo "</div>";
-    }
-    echo "</div>"
+//    echo "<div>";
+//    if (isset($error_message)) {
+//        echo "<div class='alert alert-danger' role='alert'>";
+//        echo $error_message;
+//        echo "</div>";
+//    }
+//
+//    if (isset($message_display)) {
+//        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+//        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+//        echo "<span aria-hidden='true'>&times;</span>";
+//        echo "</button>";
+//        echo $message_display;
+//        echo "</div>";
+//    }
+//    if (validation_errors()) {
+//        echo "<div class='alert alert-danger' role='alert'>";
+//
+//        echo validation_errors();
+//        echo "</div>";
+//    }
+//    echo "</div>"
     ?>
 
     <?php //echo form_open('pages/user_login_process'); ?>
-    <form method="post"  ng-controller="loginNgController">
+    <form role="form" ng-submit="login(username, password)">
         <div  class="form-group row">
 
             <label for="username" class="col-sm-2 col-form-label">Username</label>
             <div class="col-sm-10">
-                <input type="email" name='username' ng-model="username" placeholder= "Your email" class="form-control">
+                <input type="email" name='username' placeholder= "Your email" class="form-control" ng-model="username">
             </div>
         </div>
 
         <div class="form-group row">
             <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-10">
-                <input ng-model="password" name='password' class="form-control" id="inputPassword" placeholder="Password" type="password">
+                <input name='password' class="form-control" id="inputPassword" placeholder="Password" type="password" ng-model="password">
             </div>
         </div>
 
@@ -59,16 +56,21 @@ if (isset($this->session->userdata['logged_in'])) {
 
         <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary" name = "submit" ng-click="loginAccount(username, password)" >Sign in</button>
+                <button type="submit" class="btn btn-primary" name = "submit" >Sign in</button>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-sm-10">
-                No Account? Sign up <a href="accounts/signUp">here</a>
+                No Account? Sign up <a href="">here</a>
             </div>
         </div>
     </form>
 </div>
+
+<script>
+
+</script>
 <!--</body>
 </html>-->
+
