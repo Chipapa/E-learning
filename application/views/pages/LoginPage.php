@@ -6,32 +6,12 @@ if (isset($this->session->userdata['logged_in'])) {
 ?>
 
 <div class="container" id="mainDivLogin" ng-controller="loginController">
-    <?php
-//    echo "<div>";
-//    if (isset($error_message)) {
-//        echo "<div class='alert alert-danger' role='alert'>";
-//        echo $error_message;
-//        echo "</div>";
-//    }
-//
-//    if (isset($message_display)) {
-//        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-//        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-//        echo "<span aria-hidden='true'>&times;</span>";
-//        echo "</button>";
-//        echo $message_display;
-//        echo "</div>";
-//    }
-//    if (validation_errors()) {
-//        echo "<div class='alert alert-danger' role='alert'>";
-//
-//        echo validation_errors();
-//        echo "</div>";
-//    }
-//    echo "</div>"
-    ?>
+    <div>
+        <div class='alert alert-danger' role='alert' ng-show='errorMessage'>
+            Validation errors here
+        </div>
+    </div>
 
-    <?php //echo form_open('pages/user_login_process'); ?>
     <form role="form" ng-submit="login(username, password)">
         <div  class="form-group row">
 
@@ -68,9 +48,6 @@ if (isset($this->session->userdata['logged_in'])) {
     </form>
 </div>
 
-<script>
-
-</script>
 <!--</body>
 </html>-->
 

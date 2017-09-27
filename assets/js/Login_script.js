@@ -7,8 +7,15 @@ app.controller("loginController", function ($scope, $http, $rootScope)
         var loginData = {Username: username, Password: password};
         //console.log(loginData);
         $http.post('pages/user_login_process', loginData).then(function (response) {
-            alert(response.data);
-            window.location.href = "questions/index";
+            //alert(response.data);
+            if(response.data == "success")
+            {
+                window.location.href = "questions/index";
+            }
+            else if (response.data == "validation_error")
+            {
+                errorMessage = false;
+            }
         });
     }
 });

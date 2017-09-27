@@ -30,7 +30,7 @@ class Pages extends CI_Controller {
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('headers/Footer');
         }
-        
+
         //Else redirect to another page
         else {
             if (isset($this->session->userdata['logged_in'])) {
@@ -50,12 +50,13 @@ class Pages extends CI_Controller {
     public function user_login_process() {
         $post = json_decode(file_get_contents("php://input"));
         $username = $post->Username;
-        $password = $post->Password;       
+        $password = $post->Password;
+
         $data = array(
             'username' => $username,
             'password' => $password
         );
-
+        
         $result = $this->Login_model->login($data);
         if ($result == TRUE) {
             $result = $this->Login_model->read_user_information($username);
@@ -78,24 +79,21 @@ class Pages extends CI_Controller {
                         session_start();
                     }
                     $this->session->set_userdata('logged_in', $session_data);
+                    echo "success";
                 }
             }
         } else {
-            $data = array(
-                'error_message' => 'Invalid Username or Password.'
-            );
-            //$this->load->view('pages/loginpage', $data);
-            
-            $this->view('Loginpage', $data);
+            //echo "User does nto exist!";
+            echo "invalid";
         }
     }
-    
-    public function logout(){
+
+    public function logout() {
         $sess_array = array(
             'username' => ''
         );
         $this->session->unset_userdata('logged_in', $sess_array);
         $this->index();
-        
     }
+
 }
