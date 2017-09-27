@@ -67,7 +67,5 @@ if (isset($this->session->userdata['logged_in'])) {
             No Account? Sign up <a href="<?php echo site_url('accounts/signup'); ?>">here</a>
         </div>
     </div>
-</form>
+<?php echo "</form>" ?>
 </div>
-<!--</body>
-</html>-->

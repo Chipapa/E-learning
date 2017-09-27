@@ -113,6 +113,27 @@ class Questions_model extends CI_Model {
         return $query->num_rows();
     }
 
+    public function insert_question($category, $title, $question, $type) {
+        if (isset($this->session->userdata['logged_in'])) {
+            $id = ($this->session->userdata['logged_in']['id']);
+        }
+
+        $data = array(
+            'category' => $category,
+            'title' => $title,
+            'question' => $question,
+            'type' => $type,
+            'date_posted' => date('Y-m-d H:i:s'),
+            'who_posted' => $id,
+            'answer' => "TEST ANSWER GENERIC"
+        );      
+        $this->db->insert('questions', $data);
+        $currentQuestionId = $this->db->insert_id();
+        
+        $this->update_stock_market($category);
+        $this->set_question_status_unverfied($currentQuestionId);
+    }
+
     public function ask_question() {
         //    $slug = url_title($this->input->post('title'), 'dash', TRUE);
         $questionCategory = $this->input->post('category');
@@ -594,17 +615,17 @@ class Questions_model extends CI_Model {
         $this->db->where('id', $slug);
         $this->db->update('answered_by');
     }
-    
+
     public function view_correct_code($slug) {
         $condition = "questionID= " . "'" . $slug . "'" . "AND " . "correct=true";
         $this->db->select('answered_by.id, '
-                    . 'answered_by.userID, '
-                    . 'answered_by.questionID, '
-                    . 'answered_by.answer, '
-                    . 'answered_by.correct, '
-                    . 'answered_by.answeredWhen, '
-                    . 'users.lname, '
-                    . 'users.fname');
+                . 'answered_by.userID, '
+                . 'answered_by.questionID, '
+                . 'answered_by.answer, '
+                . 'answered_by.correct, '
+                . 'answered_by.answeredWhen, '
+                . 'users.lname, '
+                . 'users.fname');
         $this->db->from('answered_by');
         $this->db->join('users', 'answered_by.userID = users.id');
         $this->db->where($condition);
@@ -616,8 +637,6 @@ class Questions_model extends CI_Model {
         } else {
             return "false";
         }
-        
-        
     }
-    
+
 }

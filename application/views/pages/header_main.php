@@ -37,7 +37,7 @@ if (isset($this->session->userdata['logged_in'])) {
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> 
 
     </head>
-    <body ng-app="">
+    <body ng-app="elearning">
         <nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
             <a class="navbar-brand" href="<?php echo site_url('questions/index'); ?>">CQV E-Learning</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">

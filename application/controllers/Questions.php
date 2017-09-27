@@ -80,14 +80,14 @@ Class Questions extends CI_Controller {
 
         if ($page === "landing_page") {
             $data['title'] = "Home"; // Capitalize the first letter
-        }else if($page === "answer_question_page"){
-            $data['title'] = "Answer Question";          
-        }else if($page === "ask_question_page"){
-            $data['title'] = "Ask a Question";       
-        }else{
-            $data['title'] = "Ask a Question";    
+        } else if ($page === "answer_question_page") {
+            $data['title'] = "Answer Question";
+        } else if ($page === "ask_question_page") {
+            $data['title'] = "Ask a Question";
+        } else {
+            $data['title'] = "Ask a Question";
         }
-        
+
 
         if ($page == 'login_page' || $page == 'signup_page') {
             $this->load->view('pages/header_login');
@@ -123,6 +123,39 @@ Class Questions extends CI_Controller {
         redirect("questions/index");
     }
 
+    public function testangular() {
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        
+        $category = $request->category;
+        $title = $request->title;
+        $question = $request->question;
+        $type = $request->type;
+        
+        $this->Questions_model->insert_question($category, $title, $question, $type);
+        $_SESSION['flash'] = 'Your question has been successfully posted.';
+//        TEST ECHO
+//        $dataArray = array(
+//            "category" => $request->category,
+//            "title" => $request->title,
+//            "question" => $request->question,
+//            "type" => $request->type
+//        );
+//
+//        foreach ($dataArray as $wew) {
+//            echo $wew." ";
+//        }
+
+//        $test_title= $request->title;       
+//        echo $test_title;
+//       
+//        if ($test_title === "ogag") {
+//            echo $result = '{"status" : "ogag brad gumana"}';
+//        } else {
+//            echo $result = '{"status" : "failure"}';
+//        }
+    }
+
     public function create() {
         $this->form_validation->set_rules('title', 'Title', 'required');
         $this->form_validation->set_rules('question', 'Question', 'required');
@@ -133,26 +166,19 @@ Class Questions extends CI_Controller {
             $this->form_validation->set_rules('inputChoice3', 'Choice 3', 'required');
             $this->form_validation->set_rules('inputChoice4', 'Choice 4', 'required');
         } else if ($this->input->post('type') === "Coding") {
-            $this->form_validation->set_rules('codingAnswer', 'Code Text Area', 'required');
+            $this->form_validation->set_rules('codingAnswer', 'code text area', 'required');
         } else if ($this->input->post('type') === "Identification") {
-            $this->form_validation->set_rules('identificationAnswer', 'Answer to Identification', 'required');
+            $this->form_validation->set_rules('identificationAnswer', 'answer to identification', 'required');
         }
         if ($this->form_validation->run() === FALSE) {
             $this->view("ask_question_page");
-//            $data = array(
-//                'title' => form_error('title'),
-//                'question' => form_error('question')
-//            );
-////            $data['titlePHP'] = $this->input->post('inputTitle');
-//            echo json_encode($data);
-//            echo validation_errors();
         } else {
             $this->Questions_model->ask_question();
 
             $this->Questions_model->set_points();
 
-            //cannot use view('page', $data) function here because the method is being called instead of the page
-            //so session is used, after calling in the method, session is immediately unset
+//cannot use view('page', $data) function here because the method is being called instead of the page
+//so session is used, after calling in the method, session is immediately unset
             $_SESSION['flash'] = 'Your question has been successfully posted.';
             redirect("questions/index");
         }
@@ -171,12 +197,13 @@ Class Questions extends CI_Controller {
 ////Either you can print value or you can send value to database
 //        echo json_encode($data);
     }
-    public function markCorrectCode($slug = NULL)
-    {
+
+    public function markCorrectCode($slug = NULL) {
         $data['mark_correct'] = $this->Questions_model->mark_correct_code($slug);
         $_SESSION['flash'] = 'Question has been marked as answered!.';
         redirect("questions/index");
     }
+
     public function viewquestion($slug = NULL) {
         $data['question_item'] = $this->Questions_model->get_questions($slug);
         $data['full_name_db'] = $this->Questions_model->get_fullname_by_id($slug);
@@ -191,25 +218,25 @@ Class Questions extends CI_Controller {
 
         $_SESSION['currentQuestion'] = $data['question_item'];
 
-        //$data['test_data'] = $this->Questions_model->test_func($slug);
+//$data['test_data'] = $this->Questions_model->test_func($slug);
         if (empty($data['question_item'])) {
             show_404();
-            //$this->load->view('pages/about');
+//$this->load->view('pages/about');
         }
 
-        //$data['title'] = $data['news_item']['title'];
+//$data['title'] = $data['news_item']['title'];
 
         $this->view('answer_question_page', $data);
     }
 
     public function getleaderboard() {
-        //$data = $this->input->post('sampleData');
-        // $username = ($this->session->userdata['logged_in']['username']);
-        //echo json_encode($data['Leaderboards']);    
-        //$this->view('landing_page', $data);  
-        //while($myQuestions != null)
+//$data = $this->input->post('sampleData');
+// $username = ($this->session->userdata['logged_in']['username']);
+//echo json_encode($data['Leaderboards']);    
+//$this->view('landing_page', $data);  
+//while($myQuestions != null)
         $this->view('landing_page', $data);
-        //$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
+//$totalpoints = $myQuestions->ask_points. + $myQuestions->answer_points;
     }
 
     public function setStatus() {
