@@ -6,7 +6,7 @@ if (isset($this->session->userdata['logged_in'])) {
     $fname = ($this->session->userdata['logged_in']['fname']);
     $lname = ($this->session->userdata['logged_in']['lname']);
 } else {
-    header("location: loginpage");
+    header("location: login_page");
 }
 ?>
 

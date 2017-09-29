@@ -6,7 +6,7 @@ if (isset($this->session->userdata['logged_in'])) {
     $fname = ($this->session->userdata['logged_in']['fname']);
     $lname = ($this->session->userdata['logged_in']['lname']);
 } else {
-    header("location: loginpage");
+    header("location: login_page");
 }
 ?>
 
@@ -342,7 +342,7 @@ if (isset($this->session->userdata['logged_in'])) {
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <?php include "Rating_modal.php"; ?>
+                <?php include "rating_modal.php"; ?>
             </div>
         </div>
     </div>

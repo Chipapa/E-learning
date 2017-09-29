@@ -6,8 +6,8 @@ class Pages extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('loginmodel');
-        $this->load->model('questionsmodel');
+        $this->load->model('Login_model');
+        $this->load->model('Questions_model');
         $this->load->helper('url_helper');
         $this->load->library('session');
 
@@ -16,14 +16,14 @@ class Pages extends CI_Controller {
     }
 
     public function index() {
-        $this->view('loginpage');
+        $this->view('login_page');
     }
 
     //STILL BUGGY, FIX ME
     public function set_titlepage($page) {
-        if ($page == 'loginpage') {
+        if ($page == 'login_page') {
             $data['title'] = ucfirst('Login');
-        } else if ($page == 'signuppage') {
+        } else if ($page == 'signup_page') {
             $data['title'] = ucfirst('Sign up');
         } else {
             $data['title'] = ucfirst('Unknown Page');
@@ -40,8 +40,8 @@ class Pages extends CI_Controller {
         //$dataTitle = $this->set_titlepage($page);
         $data['title'] = "Login";
         
-        if ($page == 'loginpage') {
-            $this->load->view('pages/headerLogin', $data);
+        if ($page == 'login_page') {
+            $this->load->view('pages/header_login', $data);
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
@@ -53,9 +53,9 @@ class Pages extends CI_Controller {
             
             
             if ($userType === "student") {
-                $this->load->view('pages/headerMain');
+                $this->load->view('pages/header_main');
             }else if($userType === "admin"){
-                $this->load->view('pages/headerAdmin');
+                $this->load->view('pages/header_admin');
             }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
@@ -68,8 +68,8 @@ class Pages extends CI_Controller {
 
         //check if the inputs are valid
         if ($this->form_validation->run() === FALSE) {
-            //$this->load->view('pages/loginpage');
-            $this->view('loginpage');
+            //$this->load->view('pages/login_page');
+            $this->view('login_page');
         } else {
             $data = array(
                 'username' => $this->input->post('username'),
@@ -77,12 +77,12 @@ class Pages extends CI_Controller {
             );
 
             //check if login inputs has a match in the database
-            $result = $this->loginmodel->login($data);
+            $result = $this->Login_model->login($data);
             if ($result == TRUE) {
                 $username = $this->input->post('username');
 
                 //get the whole row in the database of the specific username then assign to session array
-                $result = $this->loginmodel->read_user_information($username);
+                $result = $this->Login_model->read_user_information($username);
 
 
                 if ($result != false) {
@@ -129,9 +129,9 @@ class Pages extends CI_Controller {
                 $data = array(
                     'error_message' => 'Invalid Username or Password.'
                 );
-                //$this->load->view('pages/loginpage', $data);
+                //$this->load->view('pages/login_page', $data);
 
-                $this->view('loginpage', $data);
+                $this->view('login_page', $data);
             }
         }
     }
@@ -147,8 +147,8 @@ class Pages extends CI_Controller {
 
         $data['message_display'] = 'Logged out successfully';
 
-        $this->view('loginpage', $data);
-        //$this->load->view('pages/loginpage', $data);
+        $this->view('login_page', $data);
+        //$this->load->view('pages/login_page', $data);
     }
 
 }

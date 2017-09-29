@@ -6,7 +6,7 @@ class Accounts extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('loginmodel');
+        $this->load->model('Login_model');
         $this->load->helper('url_helper');
     }
 
@@ -16,8 +16,8 @@ class Accounts extends CI_Controller {
             show_404();
         }
         //$data['title'] = ucfirst($page); // Capitalize the first letter
-        if ($page == 'loginpage' || $page == 'signuppage') {
-            $this->load->view('pages/headerLogin');
+        if ($page == 'login_page' || $page == 'signup_page') {
+            $this->load->view('pages/header_login');
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
         } else {
@@ -26,9 +26,9 @@ class Accounts extends CI_Controller {
             }
 
             if ($userType === "student") {
-                $this->load->view('pages/headerMain');
+                $this->load->view('pages/header_main');
             } else if ($userType === "admin") {
-                $this->load->view('pages/headerAdmin');
+                $this->load->view('pages/header_admin');
             }
             $this->load->view('pages/' . $page, $passData);
             $this->load->view('pages/footer');
@@ -45,17 +45,17 @@ class Accounts extends CI_Controller {
 
 
         if ($this->form_validation->run() === FALSE) {
-            $this->view('signuppage');
+            $this->view('signup_page');
         } else {
 
             $data['message_display'] = 'Signup successful!';
-            $this->loginmodel->registerUser();
-            $this->view('loginpage', $data);
+            $this->Login_model->registerUser();
+            $this->view('login_page', $data);
         }
     }
 
     public function username_check($username) {
-        if ($this->loginmodel->checkUserExists($username)) {
+        if ($this->Login_model->checkUserExists($username)) {
             $this->form_validation->set_message('username_check', 'That email already exists.');
             return FALSE;
         } else {
