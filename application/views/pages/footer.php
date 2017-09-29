@@ -45,6 +45,8 @@
         });
     });
     
+    //test
+    
 //    $(document).ready(function () {
 //        $('#divCoding').hide();
 //        $('#divIdentification').hide();
