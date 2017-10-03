@@ -1,6 +1,6 @@
 <div class="container" id="mainDiv" ng-controller="askCtrl" >
     <form method="post" ng-submit="submit()" name="askForm" novalidate>
-        
+
         <!--CATEGORIES-->
         <?php $categories = $_SESSION['categories']; ?>     
         <div class="form-group">
@@ -50,7 +50,7 @@
         <!--TYPE OF QUESTION-->
         <div class="form-group">
             <label for="exampleFormControlSelect1">Type of Question</label>
-            <select name="type" class="form-control" id="questionType" ng-model="ngquestion_type" required>
+            <select name="type" class="form-control" id="questionType" ng-model="ngquestion_type" onmousedown="this.value = '';" onchange="selectDiv(this.value);" required>
                 <option value="Multiple Choice" selected>Multiple Choice</option>
                 <option value="Coding">Coding</option>
                 <option value="Identification">Identification</option>
@@ -60,74 +60,75 @@
             </span>
         </div>
 
+        <!--        <div ng-switch="ngquestion_type">-->
         <!--MULTIPLE CHOICE-->
-        <div ng-switch="ngquestion_type">
-            <div class="form-group" id="divMultipleChoice" ng-switch-when="Multiple Choice">            
-                <fieldset class="form-group">
-                    <!--            <div class="row">-->
-                    <legend class="col-form-legend">Enter four potential answers then select the correct answer to the given question.</legend>
-                    <div class="col-sm-10">
-                        <div class="form-check">
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="option1" ng-model="ngradio1" checked>
-                                    </span>
-                                    <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice1" id="inputChoice">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-check">
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios2" value="option2" ng-model="ngradio2">
-                                    </span>
-                                    <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice2" id="inputChoice">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-check">
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios3" ng-model="ngradio3" value="option3">
-                                    </span>
-                                    <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice3" id="inputChoice">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-check">
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4" ng-model="ngradio4" value="option4">
-                                    </span>
-                                    <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice4" id="inputChoice">
-                                </div>
+        <div class="form-group" id="divMultipleChoice">            
+            <fieldset class="form-group">
+                <!--            <div class="row">-->
+                <legend class="col-form-legend">Enter four potential answers then select the correct answer to the given question.</legend>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios1" value="option1" ng-model="ngradio1" checked>
+                                </span>
+                                <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice1" id="inputChoice">
                             </div>
                         </div>
                     </div>
 
-                    <!--            </div>-->
-                </fieldset>
-            </div>
+                    <div class="form-check">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios2" value="option2" ng-model="ngradio2">
+                                </span>
+                                <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice2" id="inputChoice">
+                            </div>
+                        </div>
+                    </div>
 
-            <!--CODING-->
-            <div class="form-group" id="divCoding" ng-switch-when="Coding">
-                <label>Type the code below.</label>
-                <textarea class="form-control codemirror-textarea-question" name="codingAnswer" ng-model="ngcoding_answer"></textarea>
-            </div>
+                    <div class="form-check">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios3" ng-model="ngradio3" value="option3">
+                                </span>
+                                <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice3" id="inputChoice">
+                            </div>
+                        </div>
+                    </div>
 
-            <!--IDENTIFICATION-->
-            <div class="form-group" id="divIdentification" ng-switch-when="Identification">
-                <label>Enter the answer to the question.</label>
-                <input type="text" class="form-control" name="identificationAnswer" placeholder="Answer to the question" ng-model="ngidentification_answer">   
-            </div>
+                    <div class="form-check">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" aria-label="Radio button for following text input" name="gridRadios" id="gridRadios4" ng-model="ngradio4" value="option4">
+                                </span>
+                                <input type="text" class="form-control" aria-label="Text input with radio button" name="inputChoice4" id="inputChoice">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
         </div>
+
+        <!--CODING-->
+        <div class="form-group" id="divCoding">
+            <label>Type the code below.</label>
+            <textarea class="form-control codemirror-textarea-question" name="codingAnswer" ng-model="ngcoding_answer"></textarea>
+        </div>
+
+        <!--IDENTIFICATION-->
+        <div class="form-group" id="divIdentification">
+            <label>Enter the answer to the question.</label>
+            <input type="text" class="form-control" name="identificationAnswer" placeholder="Answer to the question" ng-model="ngidentification_answer" required="">
+            <span style="color:red" ng-show="(askForm.identificationAnswer.$touched || submitted) && askForm.identificationAnswer.$error.required">
+                Identification is required.
+            </span>
+        </div>
+        <!--        </div>-->
 
         <!--SUBMIT-->
         <div class="form-group row">
@@ -141,38 +142,36 @@
         <p><pre>{{message}}</pre></p>
 
         <script>
-            var app = angular.module('elearning', []);
-            app.controller('askCtrl', function ($scope, $http) {
-
-                $scope.submit = function () {
-                    $scope.submitted = true;
-                    $http({
-                        method: 'POST',
-                        url: '<?php echo base_url(); ?>Questions/testangular',
-                        headers: {'Content-Type': 'application/json'},
-                        data: JSON.stringify({
-                            category: $scope.ngcategory,
-                            title: $scope.ngtitle,
-                            question: $scope.ngquestion,
-                            type: $scope.ngquestion_type
+                    var app = angular.module('elearning', []);
+                    app.controller('askCtrl', function ($scope, $http) {
+                        $scope.submit = function () {
+                            $scope.submitted = true;
+                            $http({
+                                method: 'POST',
+                                url: '<?php echo base_url(); ?>Questions/testangular',
+                                headers: {'Content-Type': 'application/json'},
+                                data: JSON.stringify({
+                                    category: $scope.ngcategory,
+                                    title: $scope.ngtitle,
+                                    question: $scope.ngquestion,
+                                    type: $scope.ngquestion_type
 //                            choice1_answer: $scope.ngradio1,
 //                            choice2_answer: $scope.ngradio2,
 //                            choice3_answer: $scope.ngradio3,
 //                            choice4_answer: $scope.ngradio4,
 //                            coding_answer: $scope.ngcoding_answer,
 //                            identification_answer: $scope.ngidentification_answer
-                        })
-                    }).then(function (response) {
-                        window.location.href = "<?php echo site_url("questions/index"); ?>"
+                                })
+                            }).then(function (response) {
+                                window.location.href = "<?php echo site_url("questions/index");  ?>"
 
-                        //debugging purposes, remove me
-                        console.log(response);
-                        $scope.message = response.data;
+                                //debugging purposes, remove me
+                                console.log(response);
+                                $scope.message = response.data;
+                            });
+                        };
                     });
-                };
-            });
         </script>
-
     </form>
     <?php //echo '</form>'; ?>
 </div>

@@ -48,10 +48,7 @@ class Pages extends CI_Controller {
 
             if (isset($this->session->userdata['logged_in'])) {
                 $userType = ($this->session->userdata['logged_in']['usertype']);
-            }
-
-            
-            
+            }           
             if ($userType === "student") {
                 $this->load->view('pages/header_main');
             }else if($userType === "admin"){

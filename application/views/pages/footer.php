@@ -45,12 +45,11 @@
         });
     });
     
-    //test
-    
-//    $(document).ready(function () {
-//        $('#divCoding').hide();
-//        $('#divIdentification').hide();
-//    });
+    $(document).ready(function () {
+        $('#divMultipleChoice').hide();
+        $('#divCoding').hide();
+        $('#divIdentification').hide();
+    });
     
     function selectDiv(value) {
         if (value === "Multiple Choice") {

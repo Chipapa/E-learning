@@ -232,10 +232,14 @@ if (isset($this->session->userdata['logged_in'])) {
     <!--    Section for showing all answers to the the one posted the question-->
     <div>
         <?php
-        if ($isAnswered) {
+        if ($isAnswered  ) {
+            if($question_item[0]['type'] === 'Coding')
+            {
             if ($view_correct_code['userID'] != $session_id) {
                 echo "<h5>Review your answer</h5>";
             }
+            }
+            
             if ($question_item[0]['type'] === 'Coding') {
                 ?>
                 <br>               
@@ -351,7 +355,8 @@ if (isset($this->session->userdata['logged_in'])) {
     <pre>
         <?php
 //        $test = $_SESSION['currentQuestion'];
-//        print_r($test); //print_r($full_name_db);
+//        print_r($dataanswer); //print_r($full_name_db);
+//        print_r($question_item);
         ?>
     </pre>
 

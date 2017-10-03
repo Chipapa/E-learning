@@ -139,11 +139,13 @@ Class Questions extends CI_Controller {
 //            "category" => $request->category,
 //            "title" => $request->title,
 //            "question" => $request->question,
-//            "type" => $request->type
+//            "type" => $request->type,
+//            "coding_answer" => $request->coding_answer,
+//            "identification_answer" => $request->identification_answer
 //        );
 //
 //        foreach ($dataArray as $wew) {
-//            echo $wew." ";
+//            echo $wew."\n";
 //        }
 
 //        $test_title= $request->title;       
