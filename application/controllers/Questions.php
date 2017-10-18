@@ -144,15 +144,15 @@ Class Questions extends CI_Controller {
 //            "identification_answer" => $request->identification_answer
 //        );
 //
-//        foreach ($dataArray as $wew) {
-//            echo $wew."\n";
+//        foreach ($dataArray as $test) {
+//            echo $test."\n";
 //        }
 
 //        $test_title= $request->title;       
 //        echo $test_title;
 //       
-//        if ($test_title === "ogag") {
-//            echo $result = '{"status" : "ogag brad gumana"}';
+//        if ($test_title === "test") {
+//            echo $result = '{"status" : "test success"}';
 //        } else {
 //            echo $result = '{"status" : "failure"}';
 //        }
