@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2017 at 03:59 PM
+-- Generation Time: Oct 22, 2017 at 04:32 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -78,7 +78,7 @@ CREATE TABLE `questions` (
   `type` text NOT NULL,
   `date_posted` datetime NOT NULL,
   `num_of_answers` int(11) NOT NULL,
-  `who_posted` text NOT NULL,
+  `who_posted` int(11) NOT NULL,
   `answer` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -87,7 +87,7 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`id`, `category`, `title`, `question`, `type`, `date_posted`, `num_of_answers`, `who_posted`, `answer`) VALUES
-(1, 'Adapter', 'Test Question', 'Test Question', 'Identification', '2017-10-18 15:55:07', 0, '48', 'the answer');
+(1, 'Adapter', 'Test Question', 'Test question?', 'Identification', '2017-10-22 16:31:52', 0, 48, 'test answer');
 
 -- --------------------------------------------------------
 
@@ -108,14 +108,14 @@ CREATE TABLE `stockmarket` (
 --
 
 INSERT INTO `stockmarket` (`id`, `category`, `slug`, `answered`, `unanswered`) VALUES
-(1, 'Adapter', 'adapter', 0, 3),
-(2, 'Composite', 'composite', 0, 6),
-(3, 'Decorator', 'decorator', 0, 4),
-(4, 'Observer', 'observer', 0, 5),
-(5, 'Strategy', 'strategy', 0, 6),
-(6, 'Abstract-Factory', 'abstract-factory', 0, 4),
-(7, 'Factory-Method', 'factory-method', 0, 3),
-(8, 'Template-Method', 'template-method', 1, 2);
+(1, 'Adapter', 'adapter', 0, 1),
+(2, 'Composite', 'composite', 0, 0),
+(3, 'Decorator', 'decorator', 0, 0),
+(4, 'Observer', 'observer', 0, 0),
+(5, 'Strategy', 'strategy', 0, 0),
+(6, 'Abstract-Factory', 'abstract-factory', 0, 0),
+(7, 'Factory-Method', 'factory-method', 0, 0),
+(8, 'Template-Method', 'template-method', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -140,8 +140,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `fname`, `lname`, `slug`, `userType`, `ask_points`, `answer_points`) VALUES
-(48, 'a@a.com', '$2y$10$UgV86vHt9B4NvEEhpDKavukAoJINIPz9nTLSvYIrOs8lz4aSnF3jq', 'John', 'Doe', 'John.Doe', 'student', 27, 0),
-(49, 'b@b.com', '$2y$10$wIkN7/jteb5Hfbu75JL.luqudv5Lpe4sVyrfG7QWu3cExtBJLnYLi', 'Juan', 'Doe', 'Juan.Doe', 'student', 13, 0),
+(48, 'a@a.com', '$2y$10$UgV86vHt9B4NvEEhpDKavukAoJINIPz9nTLSvYIrOs8lz4aSnF3jq', 'John', 'Doe', 'John.Doe', 'student', 2, 0),
+(49, 'b@b.com', '$2y$10$wIkN7/jteb5Hfbu75JL.luqudv5Lpe4sVyrfG7QWu3cExtBJLnYLi', 'Juan', 'Doe', 'Juan.Doe', 'student', 0, 0),
 (80, 'admin@admin.com', '$2y$10$MOpeJpMcwtMo9lawliracehdm5IIWcIHs2fg5xV.mB3pVUMAitGva', 'admin', 'admin', 'admin.admin', 'admin', 0, 0),
 (94, 'c@c.com', '$2y$10$dTbDyMYVeIT3pbXR.CN5leAW0t43vhEOCSiGTW79K3Hdstb3wQ9Yi', 'John', 'Juan', 'John.Juan', 'student', 0, 0);
 
@@ -190,13 +190,15 @@ ALTER TABLE `choices`
 -- Indexes for table `coding`
 --
 ALTER TABLE `coding`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `questionID` (`questionID`);
 
 --
 -- Indexes for table `questions`
 --
 ALTER TABLE `questions`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `who_posted` (`who_posted`);
 
 --
 -- Indexes for table `stockmarket`
@@ -214,7 +216,8 @@ ALTER TABLE `users`
 -- Indexes for table `verification`
 --
 ALTER TABLE `verification`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `questionID` (`questionID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -254,7 +257,41 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `verification`
 --
 ALTER TABLE `verification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `answered_by`
+--
+ALTER TABLE `answered_by`
+  ADD CONSTRAINT `answered_by_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `choices`
+--
+ALTER TABLE `choices`
+  ADD CONSTRAINT `choices_ibfk_1` FOREIGN KEY (`questionID`) REFERENCES `questions` (`id`);
+
+--
+-- Constraints for table `coding`
+--
+ALTER TABLE `coding`
+  ADD CONSTRAINT `coding_ibfk_1` FOREIGN KEY (`questionID`) REFERENCES `questions` (`id`);
+
+--
+-- Constraints for table `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`who_posted`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `verification`
+--
+ALTER TABLE `verification`
+  ADD CONSTRAINT `verification_ibfk_1` FOREIGN KEY (`questionID`) REFERENCES `questions` (`id`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
